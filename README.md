@@ -17,6 +17,8 @@ $ git clone https://github.com/Arthemyst/Football_analysis.git
 $ cd Football_analysis
 ```
 
+This project requires Python 3.6 or later.
+
 Create a virtual environment to install dependencies in and activate it:
 
 Linux:
