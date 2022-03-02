@@ -31,12 +31,16 @@ Then install the dependencies:
 
 ```sh
 (env)$ pip install -r requirements.txt
+(env)$ pip install -r requirements-dev.txt
 ```
+
+
 Create a .env file in project root directory. The file format can be understood from the example below:
 ```sh
 DEBUG=True
 SECRET_KEY=your-secret-key
 SQLITE_URL=sqlite:///my-local-sqlite.db
+ALLOWED_HOSTS=[]
 ```
 Once `pip` has finished downloading the dependencies:
 ```sh
