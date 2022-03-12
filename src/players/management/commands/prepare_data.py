@@ -3,6 +3,7 @@ import pandas as pd
 from pathlib import Path
 from os import listdir
 from os.path import isfile, join
+from functools import reduce
 
 
 class Command(BaseCommand):
@@ -21,8 +22,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         basepath = options["input"]
-        input_files = [f for f in listdir(basepath)]
-
         csv_list = [item for item in listdir(basepath)]
         df_list = list()
 
@@ -31,6 +30,7 @@ class Command(BaseCommand):
                 f"{basepath}/{df_csv}",
                 usecols=[
                     "short_name",
+                    "long_name",
                     "nationality",
                     "club",
                     "age",
@@ -73,7 +73,9 @@ class Command(BaseCommand):
                     "overall",
                     "value_eur",
                 ],
+                index_col=[0],
             )
+            df_field_players.reset_index(inplace=True)
             df_field_players = df_field_players[
                 df_field_players["team_position"] != "SUB"
             ]
@@ -86,6 +88,7 @@ class Command(BaseCommand):
             ]
             # save team_position as separated data series
             df_name = df_field_players["short_name"]
+            df_long_name = df_field_players["long_name"]
             df_nationality = df_field_players["nationality"]
             df_club = df_field_players["club"]
             df_position = df_field_players["team_position"]
@@ -97,6 +100,7 @@ class Command(BaseCommand):
                     "short_name",
                     "club",
                     "nationality",
+                    "long_name",
                 ],
                 axis="columns",
                 inplace=True,
@@ -104,6 +108,7 @@ class Command(BaseCommand):
 
             # optimizing types of data
             for column in df_field_players.columns:
+                df_field_players.rename({column: f"{column}_{df_csv[8:10]}"})
                 if df_field_players[column].dtypes == "object":
                     # remove '+' and '-' from columns with parameters values ex. '65+2'
                     df_field_players[column] = (
@@ -139,9 +144,27 @@ class Command(BaseCommand):
                 df_field_players["nationality"] = df_field_players[
                     "nationality"
                 ].astype("category")
+                df_field_players["short name"] = df_name
+                df_field_players["long_name"] = df_long_name
+                # df_field_players.reset_index(inplace=True)
+                # df_field_players.reset_index(inplace=True)
+
             df_list.append(df_field_players)
+        # merging all databases together to find common players
+        """
+        merged_df = reduce(
+            lambda l, r: pd.merge(
+                l, r, on=["long_name", "short_name", "nationality"], how="inner"
+            ),
+            df_list,
+        )
+"""
+        for df, name in zip(df_list, csv_list):
+            for col in df.columns:
+                df.rename(columns={col: f"{col}_{name[8:10]}"}, inplace=True)
+            df.rename(columns={df.columns[-2]: "short_name"}, inplace=True)
+            df.rename(columns={df.columns[-1]: "long_name"}, inplace=True)
+            df.rename(columns={df.columns[-3]: "nationality"}, inplace=True)
+            df.to_csv(f"{options['output']}20{name[-6::]}", sep=",", index=False)
 
-        for df, name in zip(df_list, input_files):
-
-            df.to_csv(f"{options['output']}20{name[-6::]}", sep=",")
         print("Data prepared...")
