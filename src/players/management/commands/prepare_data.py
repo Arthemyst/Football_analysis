@@ -4,8 +4,24 @@ from pathlib import Path
 from os import listdir
 from os.path import isfile, join
 from functools import reduce
+import logging, logging.config
+import sys
 
-
+# Django Logging Information
+LOGGING = {
+    'version': 1,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'stream': sys.stdout,
+        }
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO'
+    }
+}
+logging.config.dictConfig(LOGGING)
 class Command(BaseCommand):
     help = "Displays stats related to Article and Comment models"
 
@@ -21,11 +37,14 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
+        
+        
         basepath = options["input"]
         csv_list = [item for item in listdir(basepath)]
         df_list = list()
 
         for df_csv in csv_list:
+            logging.info(f'Preparing data from {df_csv}...')
             df_field_players = pd.read_csv(
                 f"{basepath}/{df_csv}",
                 usecols=[
@@ -148,18 +167,12 @@ class Command(BaseCommand):
                 df_field_players["long_name"] = df_long_name
                 # df_field_players.reset_index(inplace=True)
                 # df_field_players.reset_index(inplace=True)
-
+                
             df_list.append(df_field_players)
-        # merging all databases together to find common players
-        """
-        merged_df = reduce(
-            lambda l, r: pd.merge(
-                l, r, on=["long_name", "short_name", "nationality"], how="inner"
-            ),
-            df_list,
-        )
-"""
+
         for df, name in zip(df_list, csv_list):
+            
+            logging.info(f'Prepared new csv file: 20{name[-6::]} for {len(df)} players')
             for col in df.columns:
                 df.rename(columns={col: f"{col}_{name[8:10]}"}, inplace=True)
             df.rename(columns={df.columns[-2]: "short_name"}, inplace=True)
@@ -167,4 +180,6 @@ class Command(BaseCommand):
             df.rename(columns={df.columns[-3]: "nationality"}, inplace=True)
             df.to_csv(f"{options['output']}20{name[-6::]}", sep=",", index=False)
 
-        print("Data prepared...")
+        
+        
+        
