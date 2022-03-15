@@ -40,7 +40,7 @@ class Command(BaseCommand):
         
         
         basepath = options["input"]
-        csv_list = [item for item in listdir(basepath)]
+        csv_list = sorted([item for item in listdir(basepath)])
         df_list = list()
 
         for df_csv in csv_list:
