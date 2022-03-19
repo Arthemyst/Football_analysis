@@ -9,19 +9,18 @@ import sys
 
 # Django Logging Information
 LOGGING = {
-    'version': 1,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'stream': sys.stdout,
+    "version": 1,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "stream": sys.stdout,
         }
     },
-    'root': {
-        'handlers': ['console'],
-        'level': 'INFO'
-    }
+    "root": {"handlers": ["console"], "level": "INFO"},
 }
 logging.config.dictConfig(LOGGING)
+
+
 class Command(BaseCommand):
     help = "Displays stats related to Article and Comment models"
 
@@ -37,14 +36,13 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        
-        
+
         basepath = options["input"]
         csv_list = sorted([item for item in listdir(basepath)])
         df_list = list()
 
         for df_csv in csv_list:
-            logging.info(f'Preparing data from {df_csv}...')
+            logging.info(f"Preparing data from {df_csv}...")
             df_field_players = pd.read_csv(
                 f"{basepath}/{df_csv}",
                 usecols=[
@@ -146,12 +144,12 @@ class Command(BaseCommand):
                     df_field_players[column] = df_field_players[column].astype(int)
 
                 # change player value for millions of euro
-                """
+
                 df_field_players.loc[:, "value_eur"] *= 0.000001
                 df_field_players.rename(
                     columns={"value_eur": "value_eur_mln"}, inplace=True
                 )
-                """
+
                 # add again team_position column to dataframe
                 df_field_players["team_position"] = df_position
                 df_field_players["team_position"] = df_field_players[
@@ -167,19 +165,11 @@ class Command(BaseCommand):
                 df_field_players["long_name"] = df_long_name
                 # df_field_players.reset_index(inplace=True)
                 # df_field_players.reset_index(inplace=True)
-                
+
             df_list.append(df_field_players)
 
         for df, name in zip(df_list, csv_list):
-            
-            logging.info(f'Prepared new csv file: 20{name[-6::]} for {len(df)} players')
-            for col in df.columns:
-                df.rename(columns={col: f"{col}_{name[8:10]}"}, inplace=True)
-            df.rename(columns={df.columns[-2]: "short_name"}, inplace=True)
-            df.rename(columns={df.columns[-1]: "long_name"}, inplace=True)
-            df.rename(columns={df.columns[-3]: "nationality"}, inplace=True)
-            df.to_csv(f"{options['output']}20{name[-6::]}", sep=",", index=False)
 
-        
-        
-        
+            logging.info(f"Prepared new csv file: 20{name[-6::]} for {len(df)} players")
+
+            df.to_csv(f"{options['output']}20{name[-6::]}", sep=",", index=False)
