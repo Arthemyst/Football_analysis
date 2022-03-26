@@ -134,7 +134,7 @@ class Command(BaseCommand):
             logging.info(
                 f"Prepared new csv file: 20{name[-6::]} for {len(dataframe)} players"
             )
-        except:
+        except OSError:
             raise OSError(
                 f"Cannot save file into a non-existent directory: {directory}"
             )
