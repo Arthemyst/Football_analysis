@@ -33,8 +33,8 @@ class Command(BaseCommand):
             help="Choose directory path when output csv files will save",
         )
 
-    def handle(self, *args, **options):
-        csv_files = self.list_items(options["input"])
+    def handle(self, input, output, *args, **options):
+        csv_files = self.list_items(input)
         df_list = []
         for path in csv_files:
             logging.info(f"Preparing data from {path}...")
@@ -49,22 +49,29 @@ class Command(BaseCommand):
 
         for dataframe, name in zip(df_list, csv_files):
 
-            self.save_file(dataframe, options["output"], name)
+            self.save_file(dataframe, output, name)
 
     def list_items(self, directory):
         # Directory validation and list matching csv files
         try:
             return sorted([str(item) for item in list(Path(directory).iterdir())])
-        except:
+        except FileNotFoundError:
             raise FileNotFoundError(f"No such file or directory: {directory}")
 
     def read_csv(self, path):
         # Load a csv into a Pandas dataframe and return it
-        dataframe = pd.read_csv(
-            f"{path}",
-            usecols=DEFAULT_COLUMNS,
-            index_col=[0],
-        )
+        if not str(path).endswith(".csv"):
+            raise pd.errors.EmptyDataError(
+                f"Not columns to parse from file or not csv format."
+            )
+        try:
+            dataframe = pd.read_csv(
+                f"{path}",
+                usecols=DEFAULT_COLUMNS,
+                index_col=[0],
+            )
+        except ValueError:
+            raise ValueError
         return dataframe
 
     def remove_goalkeepers(self, dataframe):

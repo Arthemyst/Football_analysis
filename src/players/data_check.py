@@ -5,7 +5,7 @@ from pathlib import Path
 
 cwd = Path.cwd()
 
-df16 = pd.read_csv(f"{cwd}/src/players/data/2016.csv")
+df16 = pd.read_csv(f"{cwd}/src/players/data/wrong.txt")
 df17 = pd.read_csv(f"{cwd}/src/players/data/2017.csv")
 df18 = pd.read_csv(f"{cwd}/src/players/data/2018.csv")
 df19 = pd.read_csv(f"{cwd}/src/players/data/2019.csv")
