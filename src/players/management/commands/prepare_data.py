@@ -3,7 +3,7 @@ import pandas as pd
 from pathlib import Path
 import logging, logging.config
 import sys
-from players.constants import DEFAULT_COLUMNS
+from players.constants import DEFAULT_COLUMNS, END_COLUMNS
 
 # Django Logging Information
 LOGGING = {
@@ -20,8 +20,6 @@ logging.config.dictConfig(LOGGING)
 
 
 class Command(BaseCommand):
-    help = "Displays stats related to Article and Comment models"
-
     def add_arguments(self, parser):
         parser.add_argument(
             "input", type=str, help="Choose directory path with input csv files"
@@ -125,14 +123,15 @@ class Command(BaseCommand):
                 dataframe[column] = dataframe[column].astype(int)
 
             # add dropped columns to dataframe
-            dataframe["team_position"] = df_position
-            dataframe["team_position"] = dataframe["team_position"].astype("category")
-            dataframe["club"] = df_club
-            dataframe["club"] = dataframe["club"].astype("category")
-            dataframe["nationality"] = df_nationality
-            dataframe["nationality"] = dataframe["nationality"].astype("category")
-            dataframe["short name"] = df_name
-            dataframe["long_name"] = df_long_name
+        dataframe.insert(0, "short_name", df_name, allow_duplicates=True)
+        dataframe.insert(1, "long_name", df_long_name, allow_duplicates=True)
+        dataframe.insert(2, "team_position", df_position, allow_duplicates=True)
+        dataframe["team_position"] = dataframe["team_position"].astype("category")
+        dataframe.insert(3, "club", df_club, allow_duplicates=True)
+        dataframe["club"] = dataframe["club"].astype("category")
+        dataframe.insert(4, "nationality", df_nationality, allow_duplicates=True)
+        dataframe["nationality"] = dataframe["nationality"].astype("category")
+
         return dataframe
 
     def save_file(self, dataframe, directory, name):

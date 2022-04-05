@@ -1,1 +1,52 @@
 from django.db import models
+
+
+class Player(models.Model):
+    class Meta:
+        db_table = 'players_table' # This tells Django where the SQL table is
+
+    short_name = models.CharField(max_length=100)
+    long_name = models.CharField(max_length=100)
+    team_position = models.CharField(max_length=100)
+    club = models.CharField(max_length=100)
+    nationality= models.CharField(max_length=100)
+    age = models.IntegerField()
+    overall = models.IntegerField()
+    value_eur = models.IntegerField()
+    pace = models.IntegerField()
+    shooting = models.IntegerField()
+    passing = models.IntegerField()
+    dribbling = models.IntegerField()
+    defending = models.IntegerField()
+    physic = models.IntegerField()
+    attacking_crossing = models.IntegerField()
+    attacking_finishing = models.IntegerField()
+    attacking_heading_accuracy = models.IntegerField()
+    attacking_short_passing = models.IntegerField()
+    attacking_volleys = models.IntegerField()
+    skill_dribbling = models.IntegerField()
+    skill_curve = models.IntegerField()
+    skill_fk_accuracy = models.IntegerField()
+    skill_long_passing = models.IntegerField()
+    skill_ball_control = models.IntegerField()
+    movement_acceleration = models.IntegerField()
+    movement_sprint_speed = models.IntegerField()
+    movement_agility = models.IntegerField()
+    movement_reactions = models.IntegerField()
+    movement_balance = models.IntegerField()
+    power_shot_power = models.IntegerField()
+    power_jumping = models.IntegerField()
+    power_stamina = models.IntegerField()
+    power_strength = models.IntegerField()
+    power_long_shots = models.IntegerField()
+    mentality_aggression = models.IntegerField()
+    mentality_interceptions = models.IntegerField()
+    mentality_positioning = models.IntegerField()
+    mentality_vision = models.IntegerField()
+    mentality_penalties = models.IntegerField()
+    defending_marking = models.IntegerField()
+    defending_standing_tackle = models.IntegerField()
+    defending_sliding_tackle = models.IntegerField()
+
+    def __str__(self) -> str:
+        return str(self.short_name)

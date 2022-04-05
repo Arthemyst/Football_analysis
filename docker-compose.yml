@@ -1,0 +1,24 @@
+version: "3.7"
+
+services:
+  pgdb:
+    container_name: pgdb_players
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+pgadmin:
+  container_name: pgadmin4
+  image: dpage/pgadmin4
+  restart: always
+
+  environment:
+    PGADMIN_DEFAULT_EMAIL: a@a.com
+    PGADMIN_DEFAULT_PASSWORD: a
+  posts:
+    - "5050:80"
