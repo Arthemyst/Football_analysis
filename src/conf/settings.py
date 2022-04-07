@@ -2,7 +2,6 @@ from pathlib import Path
 import environ
 import os
 import sys
-import logging, logging.config
 
 
 settings_ = """

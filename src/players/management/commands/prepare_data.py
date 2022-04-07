@@ -4,11 +4,9 @@ from pathlib import Path
 import logging, logging.config
 import sys
 from players.constants import DEFAULT_COLUMNS
+from exceptions import NoFilesException, WrongFileTypeException, NotExistingDirectoryException
 logger = logging.getLogger(__name__)
 
-
-class MyException(Exception):
-    pass
 
 class Command(BaseCommand):
     def add_arguments(self, parser):
@@ -37,12 +35,12 @@ class Command(BaseCommand):
         try:
             return sorted([item for item in Path(directory).iterdir() if item.is_file() and item.name.endswith('csv')])
         except FileNotFoundError as e:
-            raise MyException(f"No such file or directory: {directory}") from e
+            raise NoFilesException(f"No such file or directory: {directory}") from e
 
     def read_csv(self, path):
         # Load a csv into a Pandas dataframe and return it
         if not str(path).endswith(".csv"):
-            raise MyException(
+            raise WrongFileTypeException(
                 f"Not columns to parse from file or not csv format."
             )
         try:
@@ -104,6 +102,6 @@ class Command(BaseCommand):
                 f"Prepared new csv file: {path.name} for {len(dataframe)} players \n"
             )
         except OSError as e:
-            raise MyException(
+            raise NotExistingDirectoryException(
                 f"Cannot save file into a non-existent directory: {directory}"
             )
