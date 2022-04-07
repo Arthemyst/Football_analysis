@@ -2,6 +2,8 @@ from pathlib import Path
 import environ
 import os
 import sys
+import logging, logging.config
+
 
 settings_ = """
 Django settings for mysite project.
@@ -40,7 +42,17 @@ DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
-
+# Django Logging Information
+LOGGING = {
+    "version": 1,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "stream": sys.stdout,
+        }
+    },
+    "root": {"handlers": ["console"], "level": "INFO"},
+}
 
 # Application definition
 

@@ -3,20 +3,8 @@ import pandas as pd
 from pathlib import Path
 import logging, logging.config
 import sys
-from players.constants import DEFAULT_COLUMNS, END_COLUMNS
-
-# Django Logging Information
-LOGGING = {
-    "version": 1,
-    "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
-            "stream": sys.stdout,
-        }
-    },
-    "root": {"handlers": ["console"], "level": "INFO"},
-}
-logging.config.dictConfig(LOGGING)
+from players.constants import DEFAULT_COLUMNS
+logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
@@ -34,12 +22,11 @@ class Command(BaseCommand):
     def handle(self, input, output, *args, **options):
         csv_files = self.list_items(input)
         df_list = []
+
         for path in csv_files:
             logging.info(f"Preparing data from {path}...")
             dataframe = self.read_csv(path)
-
             dataframe = self.remove_goalkeepers(dataframe)
-
             dataframe = self.optimize_types(dataframe)
 
             # add dataframe to list
