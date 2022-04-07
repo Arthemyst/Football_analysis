@@ -66,32 +66,17 @@ class Command(BaseCommand):
         return dataframe
 
     def optimize_types(self, dataframe, path):
-        # save team_position as separated data series
-        
-        df_name = dataframe["short_name"]
-        df_long_name = dataframe["long_name"]
-        df_nationality = dataframe["nationality"]
-        df_club = dataframe["club"]
-        df_position = dataframe["team_position"]
-        # drop team_position column for data types optimization
-        # dropped columns have object type of data
-        # it make problem with optimization of numerical data in othe columns
-        # dropped columns will be added in other step
-        dataframe.drop(
-            [
+        # optimizing types of data
+        for column in dataframe.columns:
+            if column in [
                 "player_positions",
                 "team_position",
                 "short_name",
                 "club",
                 "nationality",
-                "long_name",
-            ],
-            axis="columns",
-            inplace=True,
-        )
-        
-        # optimizing types of data
-        for column in dataframe.columns:
+                "long_name"
+                ]:
+                continue
             if dataframe[column].dtypes == "object":
                 # in pandas module type "object" is related to string type 
                 # remove '+' and '-' from columns with parameters values ex. '65+2'
@@ -105,14 +90,9 @@ class Command(BaseCommand):
                 dataframe[column] = dataframe[column].astype(int)
 
             # add dropped columns to dataframe
-        dataframe.insert(0, "short_name", df_name, allow_duplicates=True)
-        dataframe.insert(1, "long_name", df_long_name, allow_duplicates=True)
-        dataframe.insert(2, "team_position", df_position, allow_duplicates=True)
         dataframe["team_position"] = dataframe["team_position"].astype("category")
-        dataframe.insert(3, "club", df_club, allow_duplicates=True)
         # in pandas module type "category" is related to string type 
         dataframe["club"] = dataframe["club"].astype("category")
-        dataframe.insert(4, "nationality", df_nationality, allow_duplicates=True)
         dataframe["nationality"] = dataframe["nationality"].astype("category")
         dataframe['year'] = f"20{path.name[8:10]}"
         return dataframe
