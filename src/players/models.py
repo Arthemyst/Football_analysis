@@ -2,14 +2,16 @@ from django.db import models
 
 
 class Player(models.Model):
-    class Meta:
-        db_table = 'players_table' # This tells Django where the SQL table is
 
     short_name = models.CharField(max_length=100)
     long_name = models.CharField(max_length=100)
+    nationality= models.CharField(max_length=100)
+
+class PlayerStatistics(models.Model):
+    #player = ForeignKey(Player)
+    year = models.IntegerField()
     team_position = models.CharField(max_length=100)
     club = models.CharField(max_length=100)
-    nationality= models.CharField(max_length=100)
     age = models.IntegerField()
     overall = models.IntegerField()
     value_eur = models.IntegerField()
@@ -47,6 +49,3 @@ class Player(models.Model):
     defending_marking = models.IntegerField()
     defending_standing_tackle = models.IntegerField()
     defending_sliding_tackle = models.IntegerField()
-
-    def __str__(self) -> str:
-        return str(self.short_name)
