@@ -4,7 +4,8 @@ from django.core.management.base import BaseCommand
 import logging, logging.config
 from players.models import Player
 from sqlalchemy import create_engine
-
+class MyException(Exception):
+    pass
 
 
 class Command(BaseCommand):
@@ -17,24 +18,18 @@ class Command(BaseCommand):
     """
 
     def handle(self, *args, **options):
-        """
-        csv_files = self.list_items(options["input"])
-        for path in csv_files:
-            logging.info(f"Preparing data from {path}...")
-            dataframe = self.read_csv(path)
-            print(dataframe.head())
-        """
-        csv_file = "./players/data/2016.csv"
+
+        csv_file = "./players/data/players_16.csv"
         df = self.read_csv(csv_file)
         print(df.head())
         self.make_sql(df)
 
-    def list_items(self, directory):
+    def list_files(self, directory):
         # Directory validation and list matching csv files
         try:
-            return sorted([str(item) for item in list(Path(directory).iterdir())])
-        except FileNotFoundError:
-            raise FileNotFoundError(f"No such file or directory: {directory}")
+            return sorted([item for item in Path(directory).iterdir() if item.is_file() and item.name.endswith('csv')])
+        except FileNotFoundError as e:
+            raise MyException(f"No such file or directory: {directory}") from e
 
     def read_csv(self, directory):
         df = pd.read_csv(directory)

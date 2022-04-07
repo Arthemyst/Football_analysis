@@ -8,7 +8,7 @@ class Player(models.Model):
     nationality= models.CharField(max_length=100)
 
 class PlayerStatistics(models.Model):
-    #player = ForeignKey(Player)
+    player = models.ForeignKey(Player, on_delete=models.CASCADE)
     year = models.IntegerField()
     team_position = models.CharField(max_length=100)
     club = models.CharField(max_length=100)
