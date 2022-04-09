@@ -2,22 +2,20 @@ from django.core.management.base import BaseCommand
 import pandas as pd
 from pathlib import Path
 import logging, logging.config
-import sys
 from players.constants import DEFAULT_COLUMNS
-from exceptions import NoFilesException, WrongFileTypeException, NotExistingDirectoryException
+from players.exceptions import NoFilesException, WrongFileTypeException, NotExistingDirectoryException
 logger = logging.getLogger(__name__)
-
 
 class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument(
-            "input", type=str, help="Choose directory path with input csv files"
+            "input", type=str, help="Directory path with input csv files"
         )
 
         parser.add_argument(
             "output",
             type=str,
-            help="Choose directory path when output csv files will save",
+            help="Directory path with output csv files",
         )
 
     def handle(self, input, output, *args, **options):
@@ -39,7 +37,7 @@ class Command(BaseCommand):
 
     def read_csv(self, path):
         # Load a csv into a Pandas dataframe and return it
-        if not str(path).endswith(".csv"):
+        if not path.name.endswith(".csv"):
             raise WrongFileTypeException(
                 f"Not columns to parse from file or not csv format."
             )
@@ -87,7 +85,7 @@ class Command(BaseCommand):
             if dataframe[column].dtypes == "float":
                 dataframe[column] = dataframe[column].astype(int)
 
-            # add dropped columns to dataframe
+        
         dataframe["team_position"] = dataframe["team_position"].astype("category")
         # in pandas module type "category" is related to string type 
         dataframe["club"] = dataframe["club"].astype("category")

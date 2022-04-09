@@ -3,15 +3,15 @@ from django.db import models
 
 class Player(models.Model):
 
-    short_name = models.CharField(max_length=100)
-    long_name = models.CharField(max_length=100)
-    nationality= models.CharField(max_length=100)
+    short_name = models.TextField()
+    long_name = models.TextField()
+    nationality= models.TextField()
 
 class PlayerStatistics(models.Model):
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
     year = models.IntegerField()
-    team_position = models.CharField(max_length=100)
-    club = models.CharField(max_length=100)
+    team_position = models.TextField()
+    club = models.TextField()
     age = models.IntegerField()
     overall = models.IntegerField()
     value_eur = models.IntegerField()
