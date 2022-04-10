@@ -4,6 +4,7 @@ from pathlib import Path
 import logging, logging.config
 from players.constants import DEFAULT_COLUMNS
 from players.exceptions import NoFilesException, WrongFileTypeException, NotExistingDirectoryException
+from typing import List
 logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
@@ -28,7 +29,7 @@ class Command(BaseCommand):
             dataframe = self.optimize_types(dataframe, path)
             self.save_file(dataframe, output, path)
 
-    def list_files(self, directory):
+    def list_files(self, directory: 'str') -> List():
         # Directory validation and list matching csv files
         try:
             return sorted([item for item in Path(directory).iterdir() if item.is_file() and item.name.endswith('csv')])

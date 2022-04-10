@@ -100,7 +100,14 @@ WSGI_APPLICATION = "conf.wsgi.application"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {"default": env.db(default="sqlite:////tmp/my-tmp-sqlite.db")}
-
+'''
+if env.str('DATABASE_URL', default=''):
+    DATABASES = {
+        'default': env.db(),
+    }
+else:
+    DATABASES = {"default": env.db(default="sqlite:////tmp/my-tmp-sqlite.db")}
+'''
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

@@ -111,9 +111,3 @@ def test_handle_input_wrong_path(tmp_path, command):
         #output.mkdir()
         handle = command.handle(input, output)
         
-
-    
-
-
-
-
