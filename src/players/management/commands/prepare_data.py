@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand
 import pandas as pd
 from pathlib import Path
 import logging, logging.config
-from players.constants import DEFAULT_COLUMNS
+from players.constants import DEFAULT_COLUMNS, UNOPTIMIZABLE_COLUMNS
 from players.exceptions import NoFilesException, WrongFileTypeException, NotExistingDirectoryException
 from typing import List
 logger = logging.getLogger(__name__)
@@ -63,26 +63,24 @@ class Command(BaseCommand):
         return dataframe
 
     def optimize_types(self, dataframe, path):
+        def sum_values(value: str) -> int:
+            """ remove '+' and '-' from columns with parameters values ex. '65+2'
+            change data type to integer"""
+            if "+" in value:
+                return int(value.split("+")[0]) + int(value.split("+")[1])
+            elif "-" in value:
+                return int(value.split("-")[0]) - int(value.split("-")[1])
+            else:
+                return int(value)
+
         # optimizing types of data
         for column in dataframe.columns:
-            if column in [
-                "player_positions",
-                "team_position",
-                "short_name",
-                "club",
-                "nationality",
-                "long_name"
-                ]:
+            if column in UNOPTIMIZABLE_COLUMNS:
                 continue
             if dataframe[column].dtypes == "object":
                 # in pandas module type "object" is related to string type 
-                # remove '+' and '-' from columns with parameters values ex. '65+2'
-                # change data type to integer
                 dataframe[column] = (
-                    dataframe[column].astype(str).apply(lambda x: int(x.split("+")[0]) + int(x.split("+")[1]) if "+" in x else x))               
-                dataframe[column] = (
-                    dataframe[column].astype(str).apply(lambda x: str(int(x.split("-")[0]) - int(x.split("-")[1])) if "-" in x else x))           
-                dataframe[column] = dataframe[column].astype(int)            
+                    dataframe[column].astype(str).apply(sum_values))                          
             if dataframe[column].dtypes == "float":
                 dataframe[column] = dataframe[column].astype(int)
 
