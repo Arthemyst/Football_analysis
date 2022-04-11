@@ -29,7 +29,7 @@ class Command(BaseCommand):
             dataframe = self.optimize_types(dataframe, path)
             self.save_file(dataframe, output, path)
 
-    def list_files(self, directory: 'str') -> List():
+    def list_files(self, directory: str) -> List:
         # Directory validation and list matching csv files
         try:
             return sorted([item for item in Path(directory).iterdir() if item.is_file() and item.name.endswith('csv')])

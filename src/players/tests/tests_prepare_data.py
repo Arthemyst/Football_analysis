@@ -3,6 +3,8 @@ import pandas as pd
 from pathlib import Path
 
 from players.management.commands.prepare_data import Command
+from players.constants import DEFAULT_COLUMNS, UNOPTIMIZABLE_COLUMNS
+
 
 
 @pytest.fixture

@@ -44,11 +44,11 @@ DEFAULT_COLUMNS = [
     "value_eur",
 ]
 
-unoptimizable_columns = [
+UNOPTIMIZABLE_COLUMNS = [
                 "player_positions",
                 "team_position",
                 "short_name",
                 "club",
                 "nationality",
-                "long_name"
+                "long_name",
                 ]
