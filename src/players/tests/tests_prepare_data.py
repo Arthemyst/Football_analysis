@@ -114,6 +114,6 @@ def test_handle_input_wrong_path(tmp_path, command):
     output = tmp_path / "players_temp"
     filepath = tmp_path / "players_temp/players_16.csv"
 
-    with pytest.raises(Exception):
+    with pytest.raises(NoFilesException, match="No such file or directory"):
         handle = command.handle(input, output)
         
