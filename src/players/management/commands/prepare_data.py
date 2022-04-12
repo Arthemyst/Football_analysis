@@ -20,7 +20,7 @@ class Command(BaseCommand):
         )
 
     def handle(self, input, output, *args, **options):
-        csv_files = self.list_files(input)
+        csv_files = self.list_csv_files(input)
 
         for path in csv_files:
             logging.info(f"Preparing data from {path}...")
@@ -29,12 +29,12 @@ class Command(BaseCommand):
             dataframe = self.optimize_types(dataframe, path)
             self.save_file(dataframe, output, path)
 
-    def list_files(self, directory: str) -> List:
+    def list_csv_files(self, directory: str) -> List:
         # Directory validation and list matching csv files
         try:
-            return sorted([item for item in Path(directory).iterdir() if item.is_file() and item.name.endswith('csv')])
+            return sorted([item for item in Path(directory).iterdir() if item.is_file() and item.name.endswith('.csv')])
         except FileNotFoundError as e:
-            raise NoFilesException(f"No such file or directory: {directory}") from e
+            raise NoFilesException(f"No such file or directory") from e
 
     def read_csv(self, path):
         # Load a csv into a Pandas dataframe and return it
@@ -100,5 +100,5 @@ class Command(BaseCommand):
             )
         except OSError as e:
             raise NotExistingDirectoryException(
-                f"Cannot save file into a non-existent directory: {directory}"
+                "Cannot save file into a non-existent directory"
             )
