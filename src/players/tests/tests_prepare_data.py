@@ -19,7 +19,7 @@ def command():
 
 def test_data_optimization_with_category_and_int_types(command):
     # test to check optimize_types module from prepare_data management command
-    filepath = Path("src/players/tests/fixtures/removed_gk.csv")
+    filepath = Path("src/players/tests/fixtures/test_csv_file_after_removing_goalkeepers.csv")
     df = command.read_csv(filepath)
     df = command.optimize_types(df, filepath)
 
@@ -38,7 +38,7 @@ def test_read_csv_with_proper_amount_of_columns(command):
 
 def test_remove_goalkeepers_if_all_goalkeepers_removed(command):
     # check removing goalkeepers from dataframe
-    df = command.read_csv(Path("src/players/tests/fixtures/reader.csv"))
+    df = command.read_csv(Path("src/players/tests/fixtures/test_csv_file_for_testing_reading_module.csv"))
     df = command.remove_goalkeepers(df)
 
     assert len(df[df["player_positions"] == "GK"]) == 0
@@ -48,7 +48,7 @@ def test_remove_goalkeepers_if_all_goalkeepers_removed(command):
 
 def test_save_good_file(tmp_path, command):
     # check to save prepared dataframe to csv file inside temporary dict
-    filepath = "./src/players/tests/fixtures/optimize_types.csv"
+    filepath = "./src/players/tests/fixtures/test_csv_file_after_types_optimization.csv"
     df = pd.read_csv(filepath)
     dir_path = tmp_path / "players_temp"
     file_path = tmp_path / "players_temp/players_16.csv"
@@ -79,7 +79,7 @@ def test_save_file_wrong_dir(tmp_path, command):
     # check to save prepared dataframe to csv file inside wrong dict
     dir_path = Path("players_wrong")
     file_path = tmp_path / "players_temp/players_2016.csv"
-    filepath = "./src/players/tests/fixtures/optimize_types.csv"
+    filepath = "./src/players/tests/fixtures/test_csv_file_after_types_optimization.csv"
     df = pd.read_csv(filepath)
 
     with pytest.raises(
