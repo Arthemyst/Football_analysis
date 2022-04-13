@@ -76,7 +76,7 @@ def test_list_files_raises_on_nonexistent_directory(command):
 
 
 def test_save_file_wrong_dir(tmp_path, command):
-    # check to save prepared dataframe to csv file inside wrong dict
+    # check to save prepared dataframe to csv file inside wrong dir
     dir_path = Path("players_wrong")
     file_path = tmp_path / "players_temp/players_2016.csv"
     filepath = "./src/players/tests/fixtures/test_csv_file_after_types_optimization.csv"
