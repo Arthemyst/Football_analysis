@@ -6,7 +6,7 @@ from typing import List
 import pandas as pd
 from django.core.management.base import BaseCommand
 
-from players.constants import DEFAULT_COLUMNS, UNOPTIMIZABLE_COLUMNS
+from players.constants import DEFAULT_COLUMNS, UNOPTIMIZABLE_COLUMNS, VALUES_COLUMNS
 from players.exceptions import (
     NoFilesException,
     NotExistingDirectoryException,
@@ -97,6 +97,8 @@ class Command(BaseCommand):
         dataframe["club"] = dataframe["club"].astype("category")
         dataframe["nationality"] = dataframe["nationality"].astype("category")
         dataframe["year"] = f"20{path.name[8:10]}"
+        dataframe = dataframe[~(dataframe[VALUES_COLUMNS] < 0).any(axis=1)]
+
         return dataframe
 
     def save_file(self, dataframe, directory, path):

@@ -55,7 +55,7 @@ class PlayerStatistics(models.Model):
     mentality_penalties = models.PositiveSmallIntegerField()
     defending_marking = models.PositiveSmallIntegerField()
     defending_standing_tackle = models.PositiveSmallIntegerField()
-    defending_sliding_tackle = models.IntegerField()
+    defending_sliding_tackle = models.PositiveSmallIntegerField()
 
     class Meta:
         db_table = "player_statistics"
