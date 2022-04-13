@@ -1,5 +1,8 @@
 from pathlib import Path
 import environ
+import sys
+
+
 settings_ = """
 Django settings for mysite project.
 
@@ -25,18 +28,29 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Take environment variables from .env file
 
-environ.Env.read_env(BASE_DIR / '.env')
+environ.Env.read_env(BASE_DIR / ".env")
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
+DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
+# Django Logging Information
+LOGGING = {
+    "version": 1,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "stream": sys.stdout,
+        }
+    },
+    "root": {"handlers": ["console"], "level": "INFO"},
+}
 
 # Application definition
 
@@ -47,6 +61,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "players.apps.PlayersConfig",
 ]
 
 MIDDLEWARE = [
@@ -83,10 +98,15 @@ WSGI_APPLICATION = "conf.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    "default": env.db(default='sqlite:////tmp/my-tmp-sqlite.db')
-}
-
+DATABASES = {"default": env.db(default="sqlite:////tmp/my-tmp-sqlite.db")}
+"""
+if env.str('DATABASE_URL', default=''):
+    DATABASES = {
+        'default': env.db(),
+    }
+else:
+    DATABASES = {"default": env.db(default="sqlite:////tmp/my-tmp-sqlite.db")}
+"""
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
