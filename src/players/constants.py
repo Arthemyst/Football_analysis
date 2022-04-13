@@ -45,10 +45,10 @@ DEFAULT_COLUMNS = [
 ]
 
 UNOPTIMIZABLE_COLUMNS = [
-                "player_positions",
-                "team_position",
-                "short_name",
-                "club",
-                "nationality",
-                "long_name",
-                ]
+    "player_positions",
+    "team_position",
+    "short_name",
+    "club",
+    "nationality",
+    "long_name",
+]

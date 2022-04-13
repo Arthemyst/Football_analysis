@@ -1,19 +1,25 @@
-import pytest
-import pandas as pd
 from pathlib import Path
 
-from players.management.commands.prepare_data import Command
+import pandas as pd
+import pytest
+
 from players.constants import DEFAULT_COLUMNS, UNOPTIMIZABLE_COLUMNS
-from players.exceptions import NotExistingDirectoryException, WrongFileTypeException, NoFilesException
+from players.exceptions import (
+    NoFilesException,
+    NotExistingDirectoryException,
+    WrongFileTypeException,
+)
+from players.management.commands.prepare_data import Command
 
 
 @pytest.fixture
 def command():
     return Command()
 
+
 def test_data_optimization_with_category_and_int_types(command):
     # test to check optimize_types module from prepare_data management command
-    filepath =  Path("src/players/tests/fixtures/removed_gk.csv")
+    filepath = Path("src/players/tests/fixtures/removed_gk.csv")
     df = command.read_csv(filepath)
     df = command.optimize_types(df, filepath)
 
@@ -28,14 +34,6 @@ def test_read_csv_with_proper_amount_of_columns(command):
     df = command.read_csv(filepath)
 
     assert len(df.columns) == 42
-
-
-def test_read_wrong_file(tmpdir, command):
-    # test to check raising extention
-    path = Path(tmpdir.mkdir("test_data").join("wrong_file.txt"))
-
-    with pytest.raises(WrongFileTypeException, match="Not columns to parse from file or not csv format."):
-        command.read_csv(path)
 
 
 def test_remove_goalkeepers_if_all_goalkeepers_removed(command):
@@ -68,6 +66,7 @@ def test_list_files_returns_csv_files(command, tmp_path):
 
     assert list_csv_files == sorted(list_csv_files)
 
+
 def test_list_files_raises_on_nonexistent_directory(command):
     # check for raise exception when directiory does not exist
     path = "players/wrong_tests_inputs"
@@ -83,7 +82,10 @@ def test_save_file_wrong_dir(tmp_path, command):
     filepath = "./src/players/tests/fixtures/optimize_types.csv"
     df = pd.read_csv(filepath)
 
-    with pytest.raises(NotExistingDirectoryException, match="Cannot save file into a non-existent directory"):
+    with pytest.raises(
+        NotExistingDirectoryException,
+        match="Cannot save file into a non-existent directory",
+    ):
         command.save_file(df, dir_path, file_path)
 
 
@@ -93,7 +95,6 @@ def test_list_files_not_csv_file(command):
 
     with pytest.raises(NoFilesException, match="No such file or directory"):
         list_files = command.list_csv_files(path)
-        
 
 
 def test_handle_input_right_path(tmp_path, command):
@@ -116,4 +117,3 @@ def test_handle_input_wrong_path(tmp_path, command):
 
     with pytest.raises(NoFilesException, match="No such file or directory"):
         handle = command.handle(input, output)
-        
