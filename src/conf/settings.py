@@ -98,7 +98,7 @@ WSGI_APPLICATION = "conf.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {"default": env.db(default="sqlite:////tmp/my-tmp-sqlite.db")}
+DATABASES = {"default": env.db(default="psql://postgres:postgres@127.0.0.1:5432/postgres")}
 """
 if env.str('DATABASE_URL', default=''):
     DATABASES = {
