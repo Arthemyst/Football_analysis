@@ -49,7 +49,7 @@ LOGGING = {
             "stream": sys.stdout,
         }
     },
-    "root": {"handlers": ["console"], "level": "INFO"},
+    "root": {"handlers": ["console"], "level": "DEBUG"},
 }
 
 # Application definition

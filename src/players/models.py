@@ -11,7 +11,7 @@ class Player(models.Model):
         return self.short_name
 
     class Meta:
-        db_table = "player"
+        db_table = 'player'
 
 
 class PlayerStatistics(models.Model):
@@ -58,4 +58,4 @@ class PlayerStatistics(models.Model):
     defending_sliding_tackle = models.PositiveSmallIntegerField()
 
     class Meta:
-        db_table = "player_statistics"
+        db_table = 'player_statistics'

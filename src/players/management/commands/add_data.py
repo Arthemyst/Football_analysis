@@ -1,7 +1,6 @@
 import logging
 import logging.config
 from pathlib import Path
-
 import pandas as pd
 from django.core.management.base import BaseCommand
 from sqlalchemy import create_engine
@@ -30,7 +29,6 @@ class Command(BaseCommand):
             logging.info(f"Preparing data from {path}...")
             dataframe = self.read_csv(path)
 
-            # csv_file = "./players/data/players_16.csv"
             df = self.read_csv(path)
             self.make_sql(df)
 
@@ -63,7 +61,7 @@ class Command(BaseCommand):
                 long_name=row["long_name"],
                 nationality=row["nationality"],
             )
-            player.save()
+            # player.save()
             PlayerStatistics.objects.get_or_create(
                 player=player,
                 year=row["year"],
@@ -107,8 +105,4 @@ class Command(BaseCommand):
                 defending_standing_tackle=row["defending_standing_tackle"],
                 defending_sliding_tackle=row["defending_sliding_tackle"],
             )
-        """
-        engine = create_engine("postgresql://postgres:postgres@127.0.0.1:5432/postgres")
-
-        df.to_sql(Player, if_exists="replace", con=engine, index=True)
-        """
+ 
