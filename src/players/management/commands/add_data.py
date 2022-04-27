@@ -1,9 +1,7 @@
-import logging
 import logging.config
 from pathlib import Path
 import pandas as pd
 from django.core.management.base import BaseCommand
-from sqlalchemy import create_engine
 
 from players.constants import (DEFAULT_COLUMNS, UNOPTIMIZABLE_COLUMNS,
                                VALUES_COLUMNS)
@@ -22,17 +20,16 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-
-        csv_files = self.list_csv_items(options["input"])
+        csv_files = self.list_csv_files(options["input"])
 
         for path in csv_files:
             logging.info(f"Preparing data from {path}...")
             dataframe = self.read_csv(path)
 
             df = self.read_csv(path)
-            self.make_sql(df)
+            self.load_to_db(df)
 
-    def list_csv_items(self, directory):
+    def list_csv_files(self, directory):
         # Directory validation and list matching csv files
         try:
             return sorted(
@@ -49,20 +46,15 @@ class Command(BaseCommand):
         df = pd.read_csv(directory)
         return df
 
-    def make_sql(self, df):
+    def load_to_db(self, df):
         for _, row in df.iterrows():
-            Player.objects.get_or_create(
+            player, _ = Player.objects.get_or_create(
                 short_name=row["short_name"],
                 long_name=row["long_name"],
                 nationality=row["nationality"],
             )
-            player = Player.objects.get(
-                short_name=row["short_name"],
-                long_name=row["long_name"],
-                nationality=row["nationality"],
-            )
-            # player.save()
-            PlayerStatistics.objects.get_or_create(
+
+            obj, _ = PlayerStatistics.objects.update_or_create(
                 player=player,
                 year=row["year"],
                 team_position=row["team_position"],
