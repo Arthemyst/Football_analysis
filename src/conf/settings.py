@@ -1,7 +1,7 @@
-from pathlib import Path
-import environ
 import sys
+from pathlib import Path
 
+import environ
 
 settings_ = """
 Django settings for mysite project.
@@ -49,7 +49,7 @@ LOGGING = {
             "stream": sys.stdout,
         }
     },
-    "root": {"handlers": ["console"], "level": "INFO"},
+    "root": {"handlers": ["console"], "level": "DEBUG"},
 }
 
 # Application definition
@@ -98,7 +98,9 @@ WSGI_APPLICATION = "conf.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {"default": env.db(default="sqlite:////tmp/my-tmp-sqlite.db")}
+DATABASES = {
+    "default": env.db(default="psql://postgres:postgres@127.0.0.1:5432/postgres")
+}
 """
 if env.str('DATABASE_URL', default=''):
     DATABASES = {

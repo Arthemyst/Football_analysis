@@ -4,11 +4,9 @@ import pandas as pd
 import pytest
 
 from players.constants import DEFAULT_COLUMNS, UNOPTIMIZABLE_COLUMNS
-from players.exceptions import (
-    NoFilesException,
-    NotExistingDirectoryException,
-    WrongFileTypeException,
-)
+from players.exceptions import (NoFilesException,
+                                NotExistingDirectoryException,
+                                WrongFileTypeException)
 from players.management.commands.prepare_data import Command
 
 
@@ -19,7 +17,9 @@ def command():
 
 def test_data_optimization_with_category_and_int_types(command):
     # test to check optimize_types module from prepare_data management command
-    filepath = Path("src/players/tests/fixtures/test_csv_file_after_removing_goalkeepers.csv")
+    filepath = Path(
+        "src/players/tests/fixtures/test_csv_file_after_removing_goalkeepers.csv"
+    )
     df = command.read_csv(filepath)
     df = command.optimize_types(df, filepath)
 
@@ -38,7 +38,9 @@ def test_read_csv_with_proper_amount_of_columns(command):
 
 def test_remove_goalkeepers_if_all_goalkeepers_removed(command):
     # check removing goalkeepers from dataframe
-    df = command.read_csv(Path("src/players/tests/fixtures/test_csv_file_for_testing_reading_module.csv"))
+    df = command.read_csv(
+        Path("src/players/tests/fixtures/test_csv_file_for_testing_reading_module.csv")
+    )
     df = command.remove_goalkeepers(df)
 
     assert len(df[df["player_positions"] == "GK"]) == 0

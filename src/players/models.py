@@ -10,8 +10,6 @@ class Player(models.Model):
     def __str__(self):
         return self.short_name
 
-    class Meta:
-        db_table = "player"
 
 
 class PlayerStatistics(models.Model):
@@ -58,4 +56,4 @@ class PlayerStatistics(models.Model):
     defending_sliding_tackle = models.PositiveSmallIntegerField()
 
     class Meta:
-        db_table = "player_statistics"
+        unique_together=[['player', 'year']] 
