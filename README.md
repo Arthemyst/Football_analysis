@@ -55,4 +55,3 @@ To test applications:
 ```sh
 (env)$ pytest src
 ```
-

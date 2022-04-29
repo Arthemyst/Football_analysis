@@ -56,4 +56,4 @@ class PlayerStatistics(models.Model):
     defending_sliding_tackle = models.PositiveSmallIntegerField()
 
     class Meta:
-        unique_together=[['player', 'year']] 
+        unique_together=[['player', 'year']]

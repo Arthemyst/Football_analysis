@@ -99,4 +99,3 @@ class Command(BaseCommand):
                 "defending_sliding_tackle":row["defending_sliding_tackle"],
                 }
             )
- 
