@@ -3,6 +3,10 @@
 <p>Short name: {{player.short_name}}</p>
 <p>Long name: {{player.long_name}}</p>
 <p>Nationality: {{player.nationality}}</p>
+<p>Team positions:</p>
+{% for position in team_position.0 %}
+<p>{{position}}</p>
+{% endfor %}
 <p>Overall per year:</p>
 {% for year, pace in pace_per_year %}
 <p>{{year}}: {{pace}}</p>
