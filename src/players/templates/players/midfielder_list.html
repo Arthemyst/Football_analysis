@@ -1,15 +1,16 @@
 {% extends 'players/base.html' %}
 {% block content %}
 <ul>
+    {% filter player.team_position=='LAM' %}
     {% for player in page_obj %}
-
-    <li><a href="{% url 'player-detail' player.id %}">
-            {% if player.team_position in 'LAM' %}
-            {{ player.short_name }}
-            {% endif %}
+    <li><a href="{% url 'player-detail' midfielder.id %}">
+            
+            {{ midfielder.short_name }}
+            
         </a></li>
-
     {% endfor %}
+    {% endfilter %}
+
 </ul>
 <div class="pagination">
     <span class="step-links">

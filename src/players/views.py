@@ -18,12 +18,19 @@ class PlayerDetailView(DetailView):
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context['pace_per_year'] = PlayerStatistics.objects.filter(player=self.get_object()).values_list("year", "overall")
-        context['team_position'] = PlayerStatistics.objects.filter(player=self.get_object()).values_list("team_position")
 
         return context
 
-class MidfielderListView(ListView):
+class MidfielderListView(PlayerListView):
 
     model = Player
     paginate_by = 50
-    context_object_name = 'midfielders'
+    context_object_name = 'midfielder'
+
+
+
+
+
+
+    
+
