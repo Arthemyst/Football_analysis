@@ -21,11 +21,12 @@ class PlayerDetailView(DetailView):
 
         return context
 
-class MidfielderListView(PlayerListView):
+class MidfielderListView(ListView):
 
     model = Player
     paginate_by = 50
     context_object_name = 'midfielder'
+
 
 
 
