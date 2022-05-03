@@ -11,8 +11,8 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
-from players.forms import SignUpForm
+from django.views.generic import CreateView, UpdateView, View
+
 
 class DefenderListView(ListView):
     model = Player
@@ -52,9 +52,3 @@ class MidfielderListView(ListView):
         context['midfielder'] = PlayerStatistics.objects.filter(team_position='LAM')
 
         return context
-
-# Sign Up View
-class SignUpView(CreateView):
-    form_class = SignUpForm
-    success_url = reverse_lazy('login')
-    template_name = 'players/signup.html'

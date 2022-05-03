@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     "players.apps.PlayersConfig",
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+LOGIN_REDIRECT_URL = 'home'
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",

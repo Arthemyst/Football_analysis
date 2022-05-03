@@ -3,22 +3,19 @@
 
 <body>
 
-    {% load crispy_forms_tags %}  
-
-    <!--Contact form-->
-    <div>
-      <h1>Contact</h1>
-      <h4>Contact us directly if you have any questions</h4>
-      <p>
-        Please write your name, email address and a message below if you have any questions.
-        One of our staff members will be happy to contact you directly and answer your questions as soon as possible. 
-      </p>
-      <form method="post">
-        {% csrf_token %}
-
-            <button type="submit">Submit</button>
-        </form>
-    </div>
+    <h2>Home</h2>
+    {% if user.is_authenticated %}
+    <p>You are welcome on Home Page</p>
+    <p>Your name is - {{user.first_name}} {{user.last_name}}</p>
+    <p>Your email is - {{user.email}}</p>
+    <br>
+    <br><br>
+    {% else %}
+    <a href="{% url 'login' %}">Login</a>
+    <br><br>
+    <br><br>
+    <a href="{% url 'signup' %}">Sign Up</a>
+    {% endif %}
 
     <!-- Optional Javascript -->
       <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
