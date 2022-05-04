@@ -4,13 +4,10 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-<p>You are welcome on Football analysis page.</p>
-<p>Your name is - {{user.first_name}} {{user.last_name}}</p>
-<p>Your email is - {{user.email}}</p>
+<h1>Welcome on Football analysis page {{user.first_name}}!</h1>
 <br>
-<a href="{% url 'password_change' %}">Change password</a>
-
-<a href="{% url 'logout' %}">Logout Button</a>
+<button type="button" class="btn btn-light"><a href="{% url 'password_change' %}">Change password</a></button>
+<button type="button" class="btn btn-light"><a href="{% url 'logout' %}">Logout</a></button>
 <br><br>
 {% else %}
 <a href="{% url 'login' %}">Login</a>
