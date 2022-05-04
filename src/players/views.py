@@ -40,7 +40,6 @@ class PlayerDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['pace_per_year'] = PlayerStatistics.objects.filter(player=self.get_object()).values_list("year", "overall")
         context['team_position'] = PlayerStatistics.objects.filter(player=self.get_object()).values_list("team_position")
-        context['players_count'] = Player.objects.all().count()
 
         return context
 
@@ -52,7 +51,7 @@ class MidfielderListView(ListView):
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context['team_position'] = PlayerStatistics.objects.filter(team_position="LAM")
+        context['team_position'] = PlayerStatistics.objects.filter(team_position='LS')
 
         return context
 

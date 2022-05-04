@@ -58,28 +58,11 @@
                             <li><a class="dropdown-item" href="{% url 'midfielder-list' %}">Midfielders</a></li>
                         </ul>
                     </div>
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Players
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><a class="dropdown-item" href="{% url 'player-list' %}">All players</a></li>
-                            <li><a class="dropdown-item" href="{% url 'midfielder-list' %}">Midfielders</a></li>
-                        </ul>
-                    </div>
 
 
 
 
-                    </ul>
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="{% url 'login' %}">Login</a>
-                        </li>
-
-                    </ul>
-                    </ul>
+                    {% if user.is_authenticated %}
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item active">
                             <a class="nav-link" href="{% url 'logout' %}">Logout</a>
@@ -92,6 +75,19 @@
                         </li>
 
                     </ul>
+
+                    {% else %}
+                    </ul>
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{% url 'login' %}">Login</a>
+                        </li>
+
+                    </ul>
+                    </ul>
+                    {% endif %}
+
+
                 </div>
 
                 <form class="d-flex">
@@ -104,7 +100,7 @@
 
         </nav>
     </header>
-    <div class="content container text-center">
+    <div class="content container">
         <div class="row">
             <div class="col-md-8">
 

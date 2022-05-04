@@ -2,9 +2,10 @@
 {% block content %}
 <ul>
     {% for player in midfielder %}
-    <li><a href="{% url 'player-detail' player.id %}">{{ midfielder.player }}</a></li>
+    <li><a href="{% url 'player-detail' midfielder.id %}">{{ midfielder.player }}</a></li>
     {% endfor %}
 </ul>
+
 <div class="pagination">
     <span class="step-links">
         {% if page_obj.has_previous %}
