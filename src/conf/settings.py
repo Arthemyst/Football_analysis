@@ -62,7 +62,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "bootstrap5",
-    'crispy_forms',
     "players.apps.PlayersConfig",
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -104,14 +103,7 @@ WSGI_APPLICATION = "conf.wsgi.application"
 DATABASES = {
     "default": env.db(default="psql://postgres:postgres@127.0.0.1:5432/postgres")
 }
-"""
-if env.str('DATABASE_URL', default=''):
-    DATABASES = {
-        'default': env.db(),
-    }
-else:
-    DATABASES = {"default": env.db(default="sqlite:////tmp/my-tmp-sqlite.db")}
-"""
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
