@@ -1,31 +1,46 @@
 {% extends 'players/base.html' %}
 {% block content %}
 
-<body>
 
-  <h2>Home</h2>
-  {% if user.is_authenticated %}
-  <p>You are welcome on Home Page</p>
-  <p>Your name is - {{user.first_name}} {{user.last_name}}</p>
-  <p>Your email is - {{user.email}}</p>
-  <br>
-  <br><br>
-  {% else %}
-  <a href="{% url 'login' %}">Login</a>
-  <br><br>
-  <br><br>
-  {% endif %}
 
-  <!-- Optional Javascript -->
-  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-    crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-    crossorigin="anonymous"></script>
+
+<body class="text-center">
+
+  <main class="form-signin">
+
+
+    {% if user.is_authenticated %}
+    <p>You are welcome on Home Page</p>
+    <p>Your name is - {{user.first_name}} {{user.last_name}}</p>
+    <p>Your email is - {{user.email}}</p>
+    <br>
+    <br><br>
+    {% else %}
+
+
+
+    <main class="px-3">
+      <h1>Welcome in Football analysis page!</h1>
+      <p class="lead">Cover is a one-page template for building simple and beautiful home pages. Download, edit the
+        text,
+        and add your own fullscreen background photo to make it your own.</p>
+
+      <a href="{% url 'login' %}">Login</a>
+    </main>
+    <br><br>
+
+    {% endif %}
+
+    <!-- Optional Javascript -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+      crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"></script>
 </body>
 
 {% endblock %}
