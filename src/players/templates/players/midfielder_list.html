@@ -2,7 +2,7 @@
 {% block content %}
 <ul>
     {% for player in midfielder %}
-    <li><a href="{% url 'player-detail' player.id %}">{{ player.long_name }}</a></li>
+    <li><a href="{% url 'player-detail' player.id %}">{{ midfielder.player }}</a></li>
     {% endfor %}
 </ul>
 <div class="pagination">

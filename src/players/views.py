@@ -28,12 +28,12 @@ class MidfielderListView(ListView):
     model = Player
     paginate_by = 50
     context_object_name = 'midfielders'
-'''
+
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context['team_position'] = PlayerStatistics.objects.filter(player=self.get_object()).values_list("team_position")
+        context['team_position'] = PlayerStatistics.objects.filter(team_position="LAM")
 
         return context
-'''
+
 class ProfileTemplateView(TemplateView):
     template_name = 'registration/profile.html'

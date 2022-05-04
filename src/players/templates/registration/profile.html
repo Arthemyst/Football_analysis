@@ -3,7 +3,18 @@
 {% block title %}Profile Page{% endblock title %}
 
 {% block content %}
-<h2>Profile Page</h2>
+{% if user.is_authenticated %}
+<p>You are welcome on Football analysis page.</p>
+<p>Your name is - {{user.first_name}} {{user.last_name}}</p>
+<p>Your email is - {{user.email}}</p>
+<br>
+<br><br>
+{% else %}
+<a href="{% url 'login' %}">Login</a>
+<br><br>
+<br><br>
+<a href="{% url 'signup' %}">Sign Up</a>
+{% endif %}
 
 <a href="{% url 'password_change' %}">Change password</a>
 
