@@ -8,28 +8,82 @@
 
   <main class="form-signin">
 
-
-    {% if user.is_authenticated %}
-    <p>You are welcome on Home Page</p>
-    <p>Your name is - {{user.first_name}} {{user.last_name}}</p>
-    <p>Your email is - {{user.email}}</p>
-    <br>
-    <br><br>
-    {% else %}
-
-
-
-    <main class="px-3">
+    <main class="px-3 text-center">
       <h1>Welcome in Football analysis page!</h1>
-      <p class="lead">Cover is a one-page template for building simple and beautiful home pages. Download, edit the
-        text,
-        and add your own fullscreen background photo to make it your own.</p>
+      <p class="lead">Website is used to vizualization data about football players. Data of players are uploaded from
+        FIFA databases prepared by member of kaggle.com community</p>
+      <br><br>
 
-      <a href="{% url 'login' %}">Login</a>
+      <div class="container px-4 py-5 text-center" id="featured-3">
+        <h2 class="pb-2 border-bottom">Statistics</h2>
+        <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+
+          <div class="feature col">
+            <div class="feature-icon bg-primary bg-gradient">
+              <svg class="bi" width="1em" height="1em">
+                <use xlink:href="#collection" />
+              </svg>
+            </div>
+            <p>All players in database:</p>
+            <p>{{players_count}}</p>
+          </div>
+
+          <div class="feature col">
+            <div class="feature-icon bg-primary bg-gradient">
+              <svg class="bi" width="1em" height="1em">
+                <use xlink:href="#people-circle" />
+              </svg>
+            </div>
+            <p>Players in 2016:</p>
+            <p>{{2016_count}}</p>
+          </div>
+
+          <div class="feature col">
+            <div class="feature-icon bg-primary bg-gradient">
+              <svg class="bi" width="1em" height="1em">
+                <use xlink:href="#toggles2" />
+              </svg>
+            </div>
+            <p>Players in 2017:</p>
+            <p>{{2017_count}}</p>
+          </div>
+
+          <div class="feature col">
+            <div class="feature-icon bg-primary bg-gradient">
+              <svg class="bi" width="1em" height="1em">
+                <use xlink:href="#toggles2" />
+              </svg>
+            </div>
+            <p>Players in 2018:</p>
+            <p>{{2018_count}}</p>
+          </div>
+
+          <div class="feature col">
+            <div class="feature-icon bg-primary bg-gradient">
+              <svg class="bi" width="1em" height="1em">
+                <use xlink:href="#toggles2" />
+              </svg>
+            </div>
+            <p>Players in 2019:</p>
+            <p>{{2019_count}}</p>
+          </div>
+
+          <div class="feature col">
+            <div class="feature-icon bg-primary bg-gradient">
+              <svg class="bi" width="1em" height="1em">
+                <use xlink:href="#toggles2" />
+              </svg>
+            </div>
+            <p>Players in 2020:</p>
+            <p>{{2020_count}}</p>
+          </div>
+
+        </div>
+      </div>
     </main>
-    <br><br>
 
-    {% endif %}
+
+
 
     <!-- Optional Javascript -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
