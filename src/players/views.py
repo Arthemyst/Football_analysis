@@ -1,15 +1,46 @@
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic import TemplateView
-from django.shortcuts import render
 from players.models import Player, PlayerStatistics
 from typing import Dict, Any
+from players.constants import DEFAULT_COLUMNS
 
 class PlayerListView(ListView):
 
     model = Player
     paginate_by = 50
     context_object_name = 'players'
+
+class Player2016ListView(ListView):
+
+    model = PlayerStatistics.objects.filter(year=2016)
+    paginate_by = 50
+    context_object_name = 'players'
+
+class Player2017ListView(ListView):
+
+    model = Player
+    paginate_by = 50
+    context_object_name = 'players'
+
+class Player2018ListView(ListView):
+
+    model = Player
+    paginate_by = 50
+    context_object_name = 'players'
+
+class Player2019ListView(ListView):
+
+    model = Player
+    paginate_by = 50
+    context_object_name = 'players'
+
+class Player2020ListView(ListView):
+
+    model = Player
+    paginate_by = 50
+    context_object_name = 'players'
+
 
 class HomeView(ListView):
 
@@ -40,6 +71,8 @@ class PlayerDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['pace_per_year'] = PlayerStatistics.objects.filter(player=self.get_object()).values_list("year", "overall")
         context['team_position'] = PlayerStatistics.objects.filter(player=self.get_object()).values_list("team_position")
+        context['statistics_list'] = [i.replace("_", " ") for i in DEFAULT_COLUMNS][7:]
+
 
         return context
 

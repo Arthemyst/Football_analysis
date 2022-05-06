@@ -48,42 +48,35 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Players
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><a class="dropdown-item" href="{% url 'player-list' %}">All players</a></li>
-                            <li><a class="dropdown-item" href="{% url 'midfielder-list' %}">Midfielders</a></li>
-                        </ul>
-                    </div>
 
+
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{% url 'player-list' %}">Players</a>
+                        </li>
+
+                    </ul>
 
 
 
                     {% if user.is_authenticated %}
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-                        </li>
-
-                    </ul>
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="{% url 'profile' %}">Profile</a>
-                        </li>
-
-                    </ul>
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Profile
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                        </ul>
+                    </div>
 
                     {% else %}
-                    </ul>
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item active">
                             <a class="nav-link" href="{% url 'login' %}">Login</a>
                         </li>
 
-                    </ul>
                     </ul>
                     {% endif %}
 
@@ -101,13 +94,13 @@
         </nav>
     </header>
     <div class="content container">
-        <div class="row">
-            <div class="col-md-8">
 
-                {% block content %}
-                {% endblock %}
-            </div>
-        </div>
+
+
+        {% block content %}
+        {% endblock %}
+
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"

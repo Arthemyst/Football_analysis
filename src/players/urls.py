@@ -1,10 +1,14 @@
 from django.urls import path
 from django.views.generic import TemplateView
-from players.views import PlayerDetailView, PlayerListView, MidfielderListView, ProfileTemplateView, HomeView
+from players.views import PlayerDetailView, PlayerListView, Player2016ListView, Player2017ListView, Player2017ListView, Player2018ListView, Player2019ListView, Player2020ListView, ProfileTemplateView, HomeView
 
 urlpatterns = [
     path("", HomeView.as_view(template_name='players/index.html'), name="home"),
-    path("midfielders/", MidfielderListView.as_view(), name="midfielder-list"),
+    path("players/2016/", Player2016ListView.as_view(), name="player-list-2016"),
+    path("players/2017/", Player2017ListView.as_view(), name="player-list-2017"),
+    path("players/2018/", Player2018ListView.as_view(), name="player-list-2018"),
+    path("players/2019/", Player2019ListView.as_view(), name="player-list-2019"),
+    path("players/2020/", Player2020ListView.as_view(), name="player-list-2020"),
     path("players/", PlayerListView.as_view(), name="player-list"),
     path("players/<int:pk>/", PlayerDetailView.as_view(), name='player-detail'),
     path('profile/', ProfileTemplateView.as_view(), name='profile')

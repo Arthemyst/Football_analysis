@@ -1,14 +1,40 @@
 {% extends 'players/base.html' %}
 {% block content %}
-<p>Short name: {{player.short_name}}</p>
-<p>Long name: {{player.long_name}}</p>
-<p>Nationality: {{player.nationality}}</p>
-<p>Team positions:</p>
-{% for position in team_position.0 %}
-<p>{{position}}</p>
-{% endfor %}
-<p>Overall per year:</p>
-{% for year, pace in pace_per_year %}
-<p>{{year}}: {{pace}}</p>
-{% endfor %}
+<main>
+
+    <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+
+        <div class="feature col">
+            <h2 class="pb-2 border-bottom">Player details</h2>
+            <p>Short name: {{player.short_name}}</p>
+            <p>Long name: {{player.long_name}}</p>
+            <p>Nationality: {{player.nationality}}</p>
+            <p>Team position:</p>
+
+            {% if team_position.0.0 in 'LAM, CM, RAM, RDM, LM, LCM, RM, LDM, CDM, RCM, CAM' %}
+            <p>Midfielder - {{team_position.0.0}}</p>
+            {% elif team_position.0.0 in 'LF, RF, RS, LS, CF, ST, LW, RW' %}
+            <p>Attacker - {{team_position.0.0}}</p>
+            {% elif team_position.0.0 in 'LWB, RWB, CB, RB, LB, RCB, LCB' %}
+            <p>Defender - {{team_position.0.0}}</p>
+            {% endif %}
+
+
+        </div>
+        <div class="feature col">
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    Statistics
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    {% for statistic in statistics_list %}
+                    <li><a class="dropdown-item" href="#">{{statistic}}</a></li>
+                    {% endfor %}
+
+
+                </ul>
+
+            </div>
+</main>
 {% endblock %}
