@@ -8,8 +8,7 @@ from players.constants import DEFAULT_COLUMNS
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import PasswordChangeView
 from django.views import generic
-from django.contrib.auth.forms import UserCreationForm
-
+from .forms import SignUpForm
 
 class PlayerListView(ListView):
 
@@ -102,7 +101,7 @@ class PasswordChangeView(PasswordChangeView):
     success_url = reverse_lazy('password-success')
 
 class UserRegisterView(generic.CreateView):
-    form_class = UserCreationForm
+    form_class = SignUpForm
     template_name = 'registration/register.html'
     success_url = reverse_lazy('login')
 
