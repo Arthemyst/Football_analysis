@@ -1,9 +1,13 @@
+from django.urls import reverse_lazy
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic import TemplateView
 from players.models import Player, PlayerStatistics
 from typing import Dict, Any
 from players.constants import DEFAULT_COLUMNS
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.views import PasswordChangeView
+
 
 class PlayerListView(ListView):
 
@@ -90,3 +94,7 @@ class MidfielderListView(ListView):
 
 class ProfileTemplateView(TemplateView):
     template_name = 'registration/profile.html'
+
+class PasswordChangeView(PasswordChangeView):
+    form_class = PasswordChangeForm
+    success_url = reverse_lazy('password-success')
