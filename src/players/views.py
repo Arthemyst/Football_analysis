@@ -7,6 +7,8 @@ from typing import Dict, Any
 from players.constants import DEFAULT_COLUMNS
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import PasswordChangeView
+from django.views import generic
+from django.contrib.auth.forms import UserCreationForm
 
 
 class PlayerListView(ListView):
@@ -98,3 +100,9 @@ class ProfileTemplateView(TemplateView):
 class PasswordChangeView(PasswordChangeView):
     form_class = PasswordChangeForm
     success_url = reverse_lazy('password-success')
+
+class UserRegisterView(generic.CreateView):
+    form_class = UserCreationForm
+    template_name = 'registration/register.html'
+    success_url = reverse_lazy('login')
+

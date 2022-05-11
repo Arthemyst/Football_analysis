@@ -5,6 +5,7 @@
 {% block content %}
 {% if user.is_authenticated %}
 <h1>Edit Profile...</h1>
+<br /><br />
 <h1>Welcome on Football analysis page {{user.first_name}}!</h1>
 <br>
 <button type="button" class="btn btn-light"><a href="{% url 'password-change' %}">Change password</a></button>

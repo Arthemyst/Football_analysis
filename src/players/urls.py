@@ -1,6 +1,6 @@
 from django.urls import path
 from django.views.generic import TemplateView
-from players.views import PlayerDetailView, PlayerListView, Player2016ListView, Player2017ListView, Player2017ListView, Player2018ListView, Player2019ListView, Player2020ListView, ProfileTemplateView, HomeView
+from players.views import UserRegisterView, PlayerDetailView, PlayerListView, Player2016ListView, Player2017ListView, Player2017ListView, Player2018ListView, Player2019ListView, Player2020ListView, ProfileTemplateView, HomeView
 
 urlpatterns = [
     path("", HomeView.as_view(template_name='players/index.html'), name="home"),
@@ -11,5 +11,6 @@ urlpatterns = [
     path("players/2020/", Player2020ListView.as_view(), name="player-list-2020"),
     path("players/", PlayerListView.as_view(), name="player-list"),
     path("players/<int:pk>/", PlayerDetailView.as_view(), name='player-detail'),
-    path('profile/', ProfileTemplateView.as_view(), name='profile')
+    path('profile/', ProfileTemplateView.as_view(), name='profile'),
+    path('register/', UserRegisterView.as_view(), name='register'),
 ]
