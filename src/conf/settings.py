@@ -43,12 +43,7 @@ ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 # Django Logging Information
 LOGGING = {
     "version": 1,
-    "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
-            "stream": sys.stdout,
-        }
-    },
+    "handlers": {"console": {"class": "logging.StreamHandler", "stream": sys.stdout}},
     "root": {"handlers": ["console"], "level": "DEBUG"},
 }
 
@@ -64,8 +59,8 @@ INSTALLED_APPS = [
     "bootstrap5",
     "players.apps.PlayersConfig",
 ]
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
-LOGIN_REDIRECT_URL = 'home'
+CRISPY_TEMPLATE_PACK = "bootstrap4"
+LOGIN_REDIRECT_URL = "home"
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -89,9 +84,9 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-            ],
+            ]
         },
-    },
+    }
 ]
 
 WSGI_APPLICATION = "conf.wsgi.application"
@@ -110,17 +105,11 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
     },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
 
@@ -149,4 +138,4 @@ LOGOUT_REDIRECT_URL = "/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

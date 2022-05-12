@@ -5,7 +5,6 @@ from typing import List
 
 import pandas as pd
 from django.core.management.base import BaseCommand
-
 from players.constants import (DEFAULT_COLUMNS, UNOPTIMIZABLE_COLUMNS,
                                VALUES_COLUMNS)
 from players.exceptions import (NoFilesException,
@@ -22,9 +21,7 @@ class Command(BaseCommand):
         )
 
         parser.add_argument(
-            "output",
-            type=str,
-            help="Directory path with output csv files",
+            "output", type=str, help="Directory path with output csv files"
         )
 
     def handle(self, input, output, *args, **options):
@@ -52,11 +49,7 @@ class Command(BaseCommand):
 
     def read_csv(self, path):
         # Load a csv into a Pandas dataframe and return it
-        dataframe = pd.read_csv(
-            f"{path}",
-            usecols=DEFAULT_COLUMNS,
-            index_col=[0],
-        )
+        dataframe = pd.read_csv(f"{path}", usecols=DEFAULT_COLUMNS, index_col=[0])
 
         return dataframe
 
