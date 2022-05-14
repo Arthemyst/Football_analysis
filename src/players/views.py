@@ -149,3 +149,13 @@ def search_player(request):
     else:
         return render(request, 'players/player_search.html', {})
 
+class ClubFinderView(TemplateView):
+    model = Player
+    template_name = "players/club.html"
+    context_object_name = "club"
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["clubs"] = PlayerStatistics.objects.order_by('club').values('club').distinct()
+
+        return context

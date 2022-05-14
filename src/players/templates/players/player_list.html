@@ -1,6 +1,6 @@
 {% extends 'players/base.html' %}
 {% block content %}
-<ul class="list-group list-group-flush">
+<ul class="px-2 list-group list-group-flush">
 
     {% for player in page_obj %}
     <li class="list-group-item"></li><a href="{% url 'player-detail' player.id %}">{{ player.short_name }}</a>{{ player.nationality }}</li>
