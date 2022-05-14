@@ -1,16 +1,14 @@
 {% extends 'players/base.html' %}
 {% block content %}
-<center>
+
     {% if players %}
-        {% for player in players %}
-            {{ player.long_name }}
-
-            <a href="{% url 'player-detail' player.id %}">{{ player.short_name }}</a><br/>
-        {% endfor %}
-
+        <ul class="list-group list-group-flush">
+            {% for player in players %}
+            <li class="list-group-item">{{ player.long_name }}<br/><a href="{% url 'player-detail' player.id %}">{{ player.short_name }}<br/></a>{{ player.nationality }}<br/></li>
+            {% endfor %}
+        </ul>
     {% else %}
         <h1>You searched for nothing...</h1>
     {% endif %}
     
-</center>
 {% endblock %}

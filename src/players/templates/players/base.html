@@ -32,7 +32,7 @@
             user-select: none;
         }
 
-        @media (min-width: 768px) {
+        @media (min-width: 320px) {
             .bd-placeholder-img-lg {
                 font-size: 3.5rem;
             }
@@ -50,7 +50,7 @@
 
 
     <header>
-        <nav class="navbar navbar-collapse navbar-expand-md navbar-dark  bg-dark">
+        <nav class="navbar navbar-collapse navbar-expand-md navbar-dark navbar-fixed-top bg-dark">
             <div class="container-fluid">
                 <a class="navbar-brand" href="{% url 'home' %}">Football analysis</a>
 
@@ -98,8 +98,8 @@
                             <a class="nav-link px-2 text-white" href="{% url 'player-list' %}">Players</a>
                         </li>
                     </ul>
-            
                 </div>
+            
             </div>
 
             <form class="d-flex" method=GET action="{% url 'player-search' %}">
