@@ -1,0 +1,16 @@
+{% extends 'players/base.html' %}
+{% block content %}
+<center>
+    {% if players %}
+        {% for player in players %}
+            {{ player.long_name }}
+
+            <a href="{% url 'player-detail' player.id %}">{{ player.short_name }}</a><br/>
+        {% endfor %}
+
+    {% else %}
+        <h1>You searched for nothing...</h1>
+    {% endif %}
+    
+</center>
+{% endblock %}

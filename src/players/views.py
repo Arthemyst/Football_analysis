@@ -130,10 +130,19 @@ class UserEditView(generic.UpdateView):
 
 class PasswordsChangeView(PasswordChangeView):
     form_class = PasswordChangingForm
-    # form_class = PasswordChangeForm
-    # success_url =reverse_lazy('home')
     success_url = reverse_lazy("password_success")
 
 
 def password_success(request):
     return render(request, "registration/password_success.html", {})
+
+def search_player(request):
+
+    if request.method == "GET":
+        searched = request.GET.get('searched')
+        players = Player.objects.filter(short_name__icontains=searched)
+        context = {'players': players}
+        return render(request, 'players/player_search.html', context)
+    else:
+        return render(request, 'players/player_search.html', {})
+

@@ -15,6 +15,14 @@
     <link href="/docs/5.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="/docs/5.1/assets/css/docs.css" rel="stylesheet">
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" href="/docs/5.0/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
+    <link rel="icon" href="/docs/5.0/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/docs/5.0/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
+    <link rel="manifest" href="/docs/5.0/assets/img/favicons/manifest.json">
+    <link rel="mask-icon" href="/docs/5.0/assets/img/favicons/safari-pinned-tab.svg" color="#7952b3">
+    <link rel="icon" href="/docs/5.0/assets/img/favicons/favicon.ico">
+    <meta name="theme-color" content="#7952b3">
     <style>
         .bd-placeholder-img {
             font-size: 1.125rem;
@@ -40,6 +48,7 @@
         }
     </style>
 
+
     <header>
         <nav class="navbar navbar-collapse navbar-expand-md navbar-dark  bg-dark">
             <div class="container-fluid">
@@ -55,57 +64,52 @@
 
                 </button>
                 <div class="collapse navbar-collapse" id="bdNavbar">
-                    <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0">
-
-
-                        <li class="nav-item active">
-                            <a class="nav-link" href="{% url 'player-list' %}">Players</a>
-                        </li>
-
-                    </ul>
-
-
-
                     {% if user.is_authenticated %}
-
-
-
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="{% url 'edit-profile' %}">Edit Profile</a>
-                        </li>
-                        <li class="nav-item active"></li>
-                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-                        </li>
-                        <li class="nav-item active"></li>
-                        <a class="nav-link" href="{% url 'password' %}">Change Password</a>
-                        </li>
-
+                    <ul class="mr-auto">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                              Profile
+                            </button>
+                            <ul class="dropdown-menu">
+                              <li><a class="dropdown-item" href="{% url 'edit-profile' %}">Edit Profile</a></li>
+                              <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                              <li><a class="dropdown-item" href="{% url 'password' %}">Change Password</a></li>
+                            </ul>
+                        </div>
                     </ul>
-                </div>
 
-                {% else %}
-                <ul class="navbar-nav mr-auto">
+                    {% else %}
+                    <ul class="mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link px-2 text-white" href="{% url 'register' %}">Register</a>
+                        </li>
+                    </ul>
+                    <ul class="mr-auto">
+
                     <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'register' %}">Register</a>
-                    </li>
-                    <li class="nav-item active"></li>
-                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                        <a class="nav-link px-2 text-white" href="{% url 'login' %}">Login</a>
                     </li>
                 </ul>
-                {% endif %}
+                    {% endif %}
+                <div class="btn-group">
 
-
+                    <ul class="">
+                        <li class="nav-item active">
+                            <a class="nav-link px-2 text-white" href="{% url 'player-list' %}">Players</a>
+                        </li>
+                    </ul>
+            
+                </div>
             </div>
 
-            <form class="d-flex">
-                <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            <form class="d-flex" method=GET action="{% url 'player-search' %}">
+
+                {% csrf_token %} 
+
+                <input class="form-control mr-sm-2" type="search" placeholder="Search player" aria-label="Search" name="searched">
+                <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
             </form>
             </div>
-            </div>
-
-
         </nav>
     </header>
     <div class="content container">
