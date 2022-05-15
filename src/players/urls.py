@@ -1,10 +1,11 @@
 from django.urls import path
 from django.views.generic import TemplateView
-from players.views import (HomeView, PasswordsChangeView, Player2016ListView,
-                           Player2017ListView, Player2018ListView,
-                           Player2019ListView, Player2020ListView,
-                           PlayerDetailView, PlayerListView,
-                           ProfileTemplateView, UserEditView, UserRegisterView, search_player, ClubFinderView)
+from players.views import (ClubFinderView, HomeView, PasswordsChangeView,
+                           Player2016ListView, Player2017ListView,
+                           Player2018ListView, Player2019ListView,
+                           Player2020ListView, PlayerDetailView,
+                           PlayerListView, ProfileTemplateView, UserEditView,
+                           UserRegisterView, search_player, search_club)
 
 urlpatterns = [
     path("", HomeView.as_view(template_name="players/index.html"), name="home"),
@@ -29,6 +30,7 @@ urlpatterns = [
         name="password-success",
     ),
     path("player_search/", search_player, name="player-search"),
-    path("find_club/", ClubFinderView.as_view(), name="club")
+    path("club_search/", ClubFinderView.as_view(), name="club-search"),
+    path("club_searched/", search_club, name="players-in-club"),
 
 ]

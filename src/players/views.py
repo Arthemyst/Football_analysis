@@ -139,23 +139,37 @@ class PasswordsChangeView(PasswordChangeView):
 def password_success(request):
     return render(request, "registration/password_success.html", {})
 
+
 def search_player(request):
 
     if request.method == "GET":
-        searched = request.GET.get('searched')
+        searched = request.GET.get("searched")
         players = Player.objects.filter(short_name__icontains=searched)
-        context = {'players': players}
-        return render(request, 'players/player_search.html', context)
+        context = {"players": players}
+        return render(request, "players/player_search.html", context)
     else:
-        return render(request, 'players/player_search.html', {})
+        return render(request, "players/player_search.html", {})
+
 
 class ClubFinderView(TemplateView):
     model = Player
-    template_name = "players/club.html"
-    context_object_name = "club"
+    template_name = "players/club_search.html"
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context["clubs"] = PlayerStatistics.objects.order_by('club').values('club').distinct()
+        context["clubs"] = (
+            PlayerStatistics.objects.order_by("club").values("club").distinct()
+        )
 
         return context
+
+def search_club(request):
+
+    if request.method == "GET":
+        searched = request.GET.get("searched_club")
+        #players_statistics = PlayerStatistics.objects.filter(club__icontains=searched, year=2016)
+        players = Player.objects.filter(playerstatistics__club__icontains=searched, playerstatistics__year=2020)
+        context = {"players": players}
+        return render(request, "players/players_in_club.html", context)
+    else:
+        return render(request, "players/players_in_club.html", {})
