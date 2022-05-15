@@ -19,81 +19,15 @@
 
       <div class="container px-4 py-5 text-center" id="featured-3">
         <h2 class="pb-2 border-bottom">Statistics</h2>
-        <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
 
           <div class="feature col">
             <div class="feature-icon bg-primary bg-gradient">
-              <svg class="bi" width="1em" height="1em">
-                <use xlink:href="#collection" />
-              </svg>
             </div>
             <h4>All players in database:</h4>
             <p>{{players_count}}</p>
             <a class="btn btn-primary" href="{% url 'player-list' %}" role="button">jump to</a>
           </div>
-
-          <div class="feature col">
-            <div class="feature-icon bg-primary bg-gradient">
-              <svg class="bi" width="1em" height="1em">
-                <use xlink:href="#people-circle" />
-              </svg>
-            </div>
-            <h4>Players in 2016:</h4>
-            <p>{{2016_count}}</p>
-            <a class="btn btn-primary" href="{% url 'player-list-2016' %}" role="button">jump to</a>
-
-          </div>
-
-          <div class="feature col">
-            <div class="feature-icon bg-primary bg-gradient">
-              <svg class="bi" width="1em" height="1em">
-                <use xlink:href="#toggles2" />
-              </svg>
-            </div>
-            <h4>Players in 2017:</h4>
-            <p>{{2017_count}}</p>
-            <a class="btn btn-primary" href="{% url 'player-list-2016' %}" role="button">jump to</a>
-
-          </div>
-
-          <div class="feature col">
-            <div class="feature-icon bg-primary bg-gradient">
-              <svg class="bi" width="1em" height="1em">
-                <use xlink:href="#toggles2" />
-              </svg>
-            </div>
-            <h4>Players in 2018:</h4>
-            <p>{{2018_count}}</p>
-            <a class="btn btn-primary" href="{% url 'player-list-2016' %}" role="button">jump to</a>
-
-          </div>
-
-          <div class="feature col">
-            <div class="feature-icon bg-primary bg-gradient">
-              <svg class="bi" width="1em" height="1em">
-                <use xlink:href="#toggles2" />
-              </svg>
-            </div>
-            <h4>Players in 2019:</h4>
-            <p>{{2019_count}}</p>
-            <a class="btn btn-primary" href="{% url 'player-list-2016' %}" role="button">jump to</a>
-
-          </div>
-
-          <div class="feature col">
-            <div class="feature-icon bg-primary bg-gradient">
-              <svg class="bi" width="1em" height="1em">
-                <use xlink:href="#toggles2" />
-              </svg>
-            </div>
-            <h4>Players in 2020:</h4>
-            <p>{{2020_count}}</p>
-            <a class="btn btn-primary" href="{% url 'player-list-2016' %}" role="button">jump to</a>
-
-          </div>
-
         </div>
-      </div>
     </main>
 
 

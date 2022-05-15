@@ -3,7 +3,7 @@
 
 <ul>
     {% for player in page_obj %}
-    <li><a href="{% url 'player-detail' player.id %}">{{ player.short_name }}</a></li>
+    <li><a href="{% url 'player-detail' player.id %}">{{ player }}</a></li>
     {% endfor %}
 </ul>
 <div class="pagination">

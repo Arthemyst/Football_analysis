@@ -23,9 +23,15 @@ class PlayerListView(ListView):
 
 class Player2016ListView(ListView):
 
-    model = PlayerStatistics.objects.filter(year=2016)
+    model = Player
+
     paginate_by = 50
-    context_object_name = "players"
+    context_object_name = "players_16"
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["players_2016"] = Player.objects.filter(playerstatistics__year=2016)
+
+        return context
 
 
 class Player2017ListView(ListView):
@@ -83,6 +89,10 @@ class PlayerDetailView(DetailView):
         context["position_per_year"] = PlayerStatistics.objects.filter(
             player=self.get_object()
         ).values_list("year", "team_position")
+        context["value_per_year"] = PlayerStatistics.objects.filter(
+            player=self.get_object()
+        ).values_list("year", "value_eur")
+
         context["club_per_year"] = PlayerStatistics.objects.filter(
             player=self.get_object()
         ).values_list("year", "club")
@@ -167,7 +177,6 @@ def search_club(request):
 
     if request.method == "GET":
         searched = request.GET.get("searched_club")
-        #players_statistics = PlayerStatistics.objects.filter(club__icontains=searched, year=2016)
         players = Player.objects.filter(playerstatistics__club__icontains=searched, playerstatistics__year=2020)
         context = {"players": players}
         return render(request, "players/players_in_club.html", context)
