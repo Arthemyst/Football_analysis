@@ -182,3 +182,9 @@ def search_club(request):
         return render(request, "players/players_in_club.html", context)
     else:
         return render(request, "players/players_in_club.html", {})
+
+
+class ComparePlayersView(TemplateView):
+    model = Player
+    template_name = "players/compare_players.html"
+

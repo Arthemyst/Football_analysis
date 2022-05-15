@@ -5,7 +5,7 @@ from players.views import (ClubFinderView, HomeView, PasswordsChangeView,
                            Player2018ListView, Player2019ListView,
                            Player2020ListView, PlayerDetailView,
                            PlayerListView, ProfileTemplateView, UserEditView,
-                           UserRegisterView, search_player, search_club)
+                           UserRegisterView, ComparePlayersView, search_player, search_club)
 
 urlpatterns = [
     path("", HomeView.as_view(template_name="players/index.html"), name="home"),
@@ -32,5 +32,7 @@ urlpatterns = [
     path("player_search/", search_player, name="player-search"),
     path("club_search/", ClubFinderView.as_view(), name="club-search"),
     path("club_searched/", search_club, name="players-in-club"),
+    path("compare_players/", ComparePlayersView.as_view(), name="compare-players"),
+
 
 ]
