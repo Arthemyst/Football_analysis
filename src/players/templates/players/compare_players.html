@@ -1,4 +1,26 @@
 {% extends 'players/base.html' %}
 {% block content %}
 <h1>Compare players...</h1>
+<form class="d-flex" method=GET action="{% url 'compare-searched-players' %}">
+
+    {% csrf_token %}
+    <input class="form-control mr-sm-2" list="datalistOptions" id="exampleDataList" placeholder="Choose player"
+        aria-label="Search" name="player1">
+    <datalist id="datalistOptions">
+        {% for name in names %}
+        <option value="{{name.name}}">
+            {% endfor %}
+    </datalist>
+    {% csrf_token %}
+    <input class="form-control mr-sm-2" list="datalistOptions" id="exampleDataList" placeholder="Choose player"
+        aria-label="Search" name="player2">
+    <datalist id="datalistOptions">
+        {% for name in names %}
+        <option value="{{name.name}}">
+            {% endfor %}
+    </datalist>
+
+    <button class="btn btn-lg btn-primary my-2 my-sm-0" type="submit">Compare</button>
+</form>
+
 {% endblock %}

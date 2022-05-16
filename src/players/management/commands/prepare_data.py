@@ -90,6 +90,7 @@ class Command(BaseCommand):
         dataframe["nationality"] = dataframe["nationality"].astype("category")
         dataframe["year"] = f"20{path.name[8:10]}"
         dataframe = dataframe[~(dataframe[VALUES_COLUMNS] < 0).any(axis=1)]
+        dataframe["club"] = dataframe["club"].str.replace('1. ', '')
 
         return dataframe
 
