@@ -188,34 +188,7 @@ def search_club(request):
         return render(request, "players/players_in_club.html", {})
 
 
-class ComparePlayersView(TemplateView):
-    model = Player
-    template_name = "players/compare_players.html"
 
-
-class PlayersCompareDetailView(DetailView):
-
-    model = Player
-    context_object_name = "player"
-
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        context = super().get_context_data(**kwargs)
-        context["position_per_year"] = PlayerStatistics.objects.filter(
-            player=self.get_object()
-        ).values_list("year", "team_position")
-        context["value_per_year"] = PlayerStatistics.objects.filter(
-            player=self.get_object()
-        ).values_list("year", "value_eur")
-
-        context["club_per_year"] = PlayerStatistics.objects.filter(
-            player=self.get_object()
-        ).values_list("year", "club")
-        context["team_position"] = PlayerStatistics.objects.filter(
-            player=self.get_object()
-        ).values_list("team_position")
-        context["statistics_list"] = [i.replace("_", " ") for i in DEFAULT_COLUMNS][7:]
-
-        return context
 
 
 class PlayersCompareView(ListView):
@@ -223,9 +196,7 @@ class PlayersCompareView(ListView):
     template_name = "players/compare_players.html"
     context_object_name = "players"
     queryset = (
-        Player.objects.select_related("faculty")
-        .prefetch_related("short_name")
-        .order_by("short_name")
+        Player.objects.all().order_by('short_name').distinct()
     )
 
 
