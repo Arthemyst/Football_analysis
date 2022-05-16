@@ -3,11 +3,12 @@ from pathlib import Path
 
 import pandas as pd
 from django.core.management.base import BaseCommand
-from players.constants import (DEFAULT_COLUMNS, UNOPTIMIZABLE_COLUMNS,
-                               VALUES_COLUMNS)
-from players.exceptions import (NoFilesException,
-                                NotExistingDirectoryException,
-                                WrongFileTypeException)
+from players.constants import DEFAULT_COLUMNS, UNOPTIMIZABLE_COLUMNS, VALUES_COLUMNS
+from players.exceptions import (
+    NoFilesException,
+    NotExistingDirectoryException,
+    WrongFileTypeException,
+)
 from players.models import Player, PlayerStatistics
 
 
