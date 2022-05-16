@@ -1,11 +1,24 @@
 {% extends 'players/base.html' %}
 {% block content %}
-<ul class="px-2 list-group list-group-flush">
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Short name</th>
+            <th scope="col">Long name</th>
+            <th scope="col">Nationality</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for player in page_obj %}
 
-    {% for player in page_obj %}
-    <li class="list-group-item"></li><a href="{% url 'player-detail' player.id %}">{{ player.short_name }}</a>{{ player.nationality }}</li>
-    {% endfor %}
-</ul>
+        <tr>
+            <th scope="row"><a href="{% url 'player-detail' player.id %}">{{ player.short_name }}</a></th>
+            <td>{{ player.long_name }}</td>
+            <td>{{ player.nationality }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 <div class="pagination">
     <span class="step-links">
         {% if page_obj.has_previous %}
