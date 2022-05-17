@@ -67,7 +67,7 @@
                 </button>
                 <div class="collapse navbar-collapse" id="bdNavbar">
                     {% if user.is_authenticated %}
-                    <ul class="mr-auto">
+                    
                         <div class="btn-group">
                             <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                               Profile
@@ -78,39 +78,41 @@
                               <li><a class="dropdown-item" href="{% url 'password' %}">Change Password</a></li>
                             </ul>
                         </div>
-                    </ul>
+                    
 
                     {% else %}
-                    <ul class="mr-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link px-2 text-white" href="{% url 'register' %}">Register</a>
-                        </li>
-                    </ul>
-                    <ul class="mr-auto">
-
-                    <li class="nav-item active">
-                        <a class="nav-link px-2 text-white" href="{% url 'login' %}">Login</a>
-                    </li>
-                </ul>
-                    {% endif %}
                 <div class="btn-group">
 
-                    <ul class="">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        Profile
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'login' %}">Sign In</a></li>
+                        <li><a class="dropdown-item" href="{% url 'register' %}">Sign Up</a></li>
+                    </ul>
+                </div>
+
+
+  
+                    {% endif %}
+                
+
+                    <ul>
                         <li class="nav-item active">
                             <a class="nav-link px-2 text-white" href="{% url 'player-list' %}">Players</a>
                         </li>
                     </ul>
-                    <ul class="">
+                    <ul>
                         <li class="nav-item active">
                             <a class="nav-link px-2 text-white" href="{% url 'club-search' %}">Clubs</a>
                         </li>
                     </ul>
-                    <ul class="">
+                    <ul>
                         <li class="nav-item active">
                             <a class="nav-link px-2 text-white" href="{% url 'compare-players' %}">Compare players</a>
                         </li>
                     </ul>
-                </div>
+                
             
             </div>
 

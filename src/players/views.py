@@ -152,7 +152,7 @@ def password_success(request):
 
 
 def search_player(request):
-
+    paginate_by = 50
     if request.method == "GET":
         searched = request.GET.get("searched")
         players = Player.objects.filter(short_name__icontains=searched)
@@ -188,16 +188,11 @@ def search_club(request):
         return render(request, "players/players_in_club.html", {})
 
 
-
-
-
 class PlayersCompareView(ListView):
     model = Player
     template_name = "players/compare_players.html"
     context_object_name = "players"
-    queryset = (
-        Player.objects.all().order_by('short_name').distinct()
-    )
+    queryset = Player.objects.all().order_by("short_name").distinct()
 
 
 def compare_players(request):
