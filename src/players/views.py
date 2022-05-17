@@ -10,6 +10,8 @@ from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from players.constants import DEFAULT_COLUMNS
 from players.models import Player, PlayerStatistics
+from django.core.paginator import Paginator
+
 
 from .forms import EditProfileForm, PasswordChangingForm, SignUpForm
 
@@ -152,11 +154,17 @@ def password_success(request):
 
 
 def search_player(request):
-    paginate_by = 50
+
     if request.method == "GET":
         searched = request.GET.get("searched")
         players = Player.objects.filter(short_name__icontains=searched)
-        context = {"players": players}
+        paginator = Paginator(players, 25) # Show 25 contacts per page.
+
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        context = {"players": players, 'page_obj': page_obj}
+        
         return render(request, "players/player_search.html", context)
     else:
         return render(request, "players/player_search.html", {})
@@ -249,3 +257,20 @@ def compare_players(request):
         return render(request, "players/compare_chosen_players.html", context)
     else:
         return render(request, "players/compare_chosen_players.html.html", {})
+
+class PlayerSearchView(ListView):
+    model = Player
+    template_name = 'players/player_search.html'
+
+    paginate_by: 50
+
+    def get_queryset(self):
+        searched = self.kwargs.get('searched')
+        
+        if searched:
+            players = Player.objects.filter(
+                short_name__icontains=searched
+            )
+        else: 
+            players = Player.objects.none()
+        return players

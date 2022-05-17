@@ -6,7 +6,7 @@ from players.views import (ClubFinderView, HomeView, PasswordsChangeView,
                            Player2020ListView, PlayerDetailView,
                            PlayerListView, PlayersCompareView,
                            ProfileTemplateView, UserEditView, UserRegisterView,
-                           compare_players, search_club, search_player)
+                           compare_players, search_club, search_player, PlayerSearchView)
 
 urlpatterns = [
     path("", HomeView.as_view(template_name="players/index.html"), name="home"),
