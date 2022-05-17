@@ -157,7 +157,7 @@ def search_player(request):
 
     if request.method == "GET":
         searched = request.GET.get("searched")
-        players = Player.objects.filter(short_name__icontains=searched)
+        players = Player.objects.filter(short_name__icontains=searched).order_by('id')
         paginator = Paginator(players, 25) # Show 25 contacts per page.
 
         page_number = request.GET.get('page')
