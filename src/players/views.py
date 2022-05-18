@@ -163,12 +163,12 @@ def search_player(request):
     if request.method == "GET":
         searched = request.GET.get("searched")
         players = Player.objects.filter(short_name__icontains=searched).order_by('id')
-        paginator = Paginator(players, 25) # Show 25 contacts per page.
+        paginator = Paginator(players, 25) 
 
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
-        context = {"players": players, 'page_obj': page_obj}
+        context = {"players": players, 'page_obj': page_obj, 'searched': searched}
         
         return render(request, "players/player_search.html", context)
     else:
@@ -195,7 +195,7 @@ def search_club(request):
         players = Player.objects.filter(
             playerstatistics__club__icontains=searched, playerstatistics__year=2020
         ).order_by('id')
-        context = {"players": players}
+        context = {"players": players, "searched": searched}
         return render(request, "players/players_in_club.html", context)
     else:
         return render(request, "players/players_in_club.html", {})
