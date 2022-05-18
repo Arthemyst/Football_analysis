@@ -21,26 +21,29 @@
       <div class="container px-4 py-5 text-center" id="featured-3">
         <h2 class="pb-2 border-bottom">Statistics</h2>
 
-          <div class="feature col">
-            <div class="feature-icon bg-primary bg-gradient">
-            </div>
-            <h4>All players in database:</h4>
-            <p>{{players_count}}</p>
-            <a class="btn btn-primary" href="{% url 'player-list' %}" role="button">jump to</a>
+        <div class="feature col">
+          <div class="feature-icon bg-primary bg-gradient">
           </div>
+          <h4>All players in database:</h4>
+          <p>{{players_count}}</p>
+          <a class="btn btn-primary" href="{% url 'player-list' %}" role="button">jump to</a>
         </div>
+      </div>
 
-        {% else %}
+      {% else %}
+      <div class="shadow p-3 mb-5 bg-body rounded">
+        <h1 class="h3 mb-3 fw-normal">Please sign in or register</h1>
 
-          <h1 class="h3 mb-3 fw-normal">Please sign in or register</h1>
-          <a class="nav-link px-2" href="{% url 'login' %}">Login</a>
-          <a class="nav-link px-2" href="{% url 'register' %}">Register</a>
+        <a class="btn btn-primary" href="{% url 'login' %}" role="button">Login</a>
+        <a class="btn btn-primary" href="{% url 'register' %}" role="button">Register</a>
+      </div>
 
 
 
-      
-    
-        {% endif %}
+
+
+
+      {% endif %}
     </main>
 
 

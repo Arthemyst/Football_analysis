@@ -2,6 +2,21 @@
 {% block content %}
 
 {% if players %}
+
+<div class="btn-group">
+
+    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        Choose year
+    </button>
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="{% url 'login' %}">2020</a></li>
+        <li><a class="dropdown-item" href="{% url 'register' %}">2019</a></li>
+        <li><a class="dropdown-item" href="{% url 'register' %}">2018</a></li>
+        <li><a class="dropdown-item" href="{% url 'register' %}">2017</a></li>
+        <li><a class="dropdown-item" href="{% url 'register' %}">2016</a></li>
+
+    </ul>
+</div>
 <table class="table table-striped">
     <thead>
         <tr>

@@ -1,8 +1,7 @@
 {% extends 'players/base.html' %}
 {% block content %}
 <div>
-    <label for="exampleDataList" class="form-label">Choose club</label>
-    <form class="d-flex" method=GET action="{% url 'players-in-club' %}">
+    <form class="d-flex shadow p-3 mb-5 bg-body rounded" method=GET action="{% url 'players-in-club' %}">
 
         {% csrf_token %}
         <input class="form-control mr-sm-2" list="datalistOptions" id="exampleDataList" placeholder="Search club"

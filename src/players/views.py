@@ -22,6 +22,11 @@ class PlayerListView(ListView):
     paginate_by = 50
     context_object_name = "players"
 
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["players_all"] = Player.objects.all()
+        return context
+
 
 class Player2016ListView(ListView):
 
@@ -189,7 +194,7 @@ def search_club(request):
         searched = request.GET.get("searched_club")
         players = Player.objects.filter(
             playerstatistics__club__icontains=searched, playerstatistics__year=2020
-        )
+        ).order_by('id')
         context = {"players": players}
         return render(request, "players/players_in_club.html", context)
     else:
@@ -199,8 +204,13 @@ def search_club(request):
 class PlayersCompareView(ListView):
     model = Player
     template_name = "players/compare_players.html"
-    context_object_name = "players"
-    queryset = Player.objects.all().order_by("short_name").distinct()
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["players"] = (
+            Player.objects.order_by("id").values("long_name").distinct()
+        )
+
+        return context
 
 
 def compare_players(request):
@@ -210,38 +220,55 @@ def compare_players(request):
         searched_player2 = request.GET.get("player2")
 
         player1 = Player.objects.filter(
-            playerstatistics__player__short_name=searched_player1,
+            playerstatistics__player__long_name__icontains=searched_player1,
             playerstatistics__year=2020,
         )
         player2 = Player.objects.filter(
-            playerstatistics__player__short_name=searched_player2,
+            playerstatistics__player__long_name__icontains=searched_player2,
             playerstatistics__year=2020,
         )
         player1_position = PlayerStatistics.objects.filter(
-            player__short_name=searched_player1
+            player__long_name__icontains=searched_player1
         ).values_list("team_position")
         player2_position = PlayerStatistics.objects.filter(
-            player__short_name=searched_player2
+            player__long_name=searched_player2
         ).values_list("team_position")
         player1_position_per_year = PlayerStatistics.objects.filter(
-            player__short_name=searched_player1
+            player__long_name=searched_player1
         ).values_list("year", "team_position")
         player2_position_per_year = PlayerStatistics.objects.filter(
-            player__short_name=searched_player2
+            player__long_name=searched_player2
         ).values_list("year", "team_position")
         player1_value_per_year = PlayerStatistics.objects.filter(
-            player__short_name=searched_player1
+            player__long_name=searched_player1
         ).values_list("year", "value_eur")
         player2_value_per_year = PlayerStatistics.objects.filter(
-            player__short_name=searched_player2
+            player__long_name=searched_player2
         ).values_list("year", "value_eur")
         player1_club_per_year = PlayerStatistics.objects.filter(
-            player__short_name=searched_player1
+            player__long_name=searched_player1
         ).values_list("year", "club")
         player2_club_per_year = PlayerStatistics.objects.filter(
-            player__short_name=searched_player2
+            player__long_name=searched_player2
         ).values_list("year", "club")
-
+        player1_long_name = Player.objects.filter(
+            long_name=searched_player1
+        ).values_list("long_name")
+        player2_long_name = Player.objects.filter(
+            long_name=searched_player2
+        ).values_list("long_name")
+        player1_nationality = Player.objects.filter(
+            long_name=searched_player1
+        ).values_list("nationality")
+        player2_nationality = Player.objects.filter(
+            long_name=searched_player2
+        ).values_list("nationality")
+        player1_overall_per_year = PlayerStatistics.objects.filter(
+            player__long_name=searched_player1
+        ).values_list("year", "overall")
+        player2_overall_per_year = PlayerStatistics.objects.filter(
+            player__long_name=searched_player2
+        ).values_list("year", "overall")
         context = {
             "player1": player1,
             "player2": player2,
@@ -253,6 +280,12 @@ def compare_players(request):
             "player2_value_per_year": player2_value_per_year,
             "player1_club_per_year": player1_club_per_year,
             "player2_club_per_year": player2_club_per_year,
+            "player1_long_name": player1_long_name,
+            "player2_long_name": player2_long_name,
+            "player1_nationality": player1_nationality,
+            "player2_nationality": player2_nationality,
+            "player1_overall_per_year": player1_overall_per_year,
+            "player2_overall_per_year": player2_overall_per_year
         }
         return render(request, "players/compare_chosen_players.html", context)
     else:

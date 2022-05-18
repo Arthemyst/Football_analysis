@@ -1,23 +1,24 @@
 {% extends 'players/base.html' %}
 {% block content %}
 <main>
-
+    {% if player1 and player2 %}
     <div class="container">
         <div class="row">
 
             <div class="feature col">
-                <h2 class="pb-2 border-bottom">Player details</h2>
-                <p>Short name: {{player1.0}}</p>
-                <p>Long name: {{player1.0}}</p>
-                <p>Nationality: {{player1.0}}</p>
+                <div class="shadow p-3 mb-5 bg-body rounded">
+                    <h2 class="pb-2 border-bottom">{{player1.0}}</h2>
+                    <p>Long name: {{player1_long_name.0.0}}</p>
+                    <p>Nationality: {{player1_nationality.0.0}}</p>
 
-                {% if player1_position.0.0 in 'LAM, CM, RAM, RDM, LM, LCM, RM, LDM, CDM, RCM, CAM' %}
-                <p>Team position: Midfielder</p>
-                {% elif player1_position.0.0 in 'LF, RF, RS, LS, CF, ST, LW, RW' %}
-                <p>Team position: Attacker</p>
-                {% elif player1_position.0.0 in 'LWB, RWB, CB, RB, LB, RCB, LCB' %}
-                <p>Team position: Defender</p>
-                {% endif %}
+                    {% if player1_position.0.0 in 'LAM, CM, RAM, RDM, LM, LCM, RM, LDM, CDM, RCM, CAM' %}
+                    <p>Team position: Midfielder</p>
+                    {% elif player1_position.0.0 in 'LF, RF, RS, LS, CF, ST, LW, RW' %}
+                    <p>Team position: Attacker</p>
+                    {% elif player1_position.0.0 in 'LWB, RWB, CB, RB, LB, RCB, LCB' %}
+                    <p>Team position: Defender</p>
+                    {% endif %}
+                </div>
                 <div class="feature cols">
 
                     <p>
@@ -55,10 +56,27 @@
                     </div>
                     <p>
                         <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample3" role="button"
-                            aria-expanded="false" aria-controls="multiCollapseExample3">Value per year</a>
+                            aria-expanded="false" aria-controls="multiCollapseExample2">Overall per year</a>
                     </p>
                     <div class="col">
                         <div class="collapse multi-collapse" id="multiCollapseExample3">
+                            <div class="card card-body">
+
+                                <ul class="list-group list-group-flush">
+                                    {% for year, overall in player1_overall_per_year %}
+                                    <li class="list-group-item">{{year}} - {{overall}}</li>
+                                    {% endfor %}
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+                    <p>
+                        <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample4" role="button"
+                            aria-expanded="false" aria-controls="multiCollapseExample3">Value per year</a>
+                    </p>
+                    <div class="col">
+                        <div class="collapse multi-collapse" id="multiCollapseExample4">
                             <div class="card card-body">
 
                                 <ul class="list-group list-group-flush">
@@ -75,26 +93,27 @@
 
 
             <div class="feature col">
-                <h2 class="pb-2 border-bottom">Player details</h2>
-                <p>Short name: {{player2.0}}</p>
-                <p>Long name: {{player2.0}}</p>
-                <p>Nationality: {{player2.0}}</p>
+                <div class="shadow p-3 mb-5 bg-body rounded">
+                    <h2 class="pb-2 border-bottom">{{player2.0}}</h2>
+                    <p>Long name: {{player2_long_name.0.0}}</p>
+                    <p>Nationality: {{player2_nationality.0.0}}</p>
 
-                {% if player2_position.0.0 in 'LAM, CM, RAM, RDM, LM, LCM, RM, LDM, CDM, RCM, CAM' %}
-                <p>Team position: Midfielder</p>
-                {% elif player2_position.0.0 in 'LF, RF, RS, LS, CF, ST, LW, RW' %}
-                <p>Team position: Attacker</p>
-                {% elif player2_position.0.0 in 'LWB, RWB, CB, RB, LB, RCB, LCB' %}
-                <p>Team position: Defender</p>
-                {% endif %}
+                    {% if player2_position.0.0 in 'LAM, CM, RAM, RDM, LM, LCM, RM, LDM, CDM, RCM, CAM' %}
+                    <p>Team position: Midfielder</p>
+                    {% elif player2_position.0.0 in 'LF, RF, RS, LS, CF, ST, LW, RW' %}
+                    <p>Team position: Attacker</p>
+                    {% elif player2_position.0.0 in 'LWB, RWB, CB, RB, LB, RCB, LCB' %}
+                    <p>Team position: Defender</p>
+                    {% endif %}
+                </div>
                 <div class="feature cols">
 
                     <p>
-                        <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample4" role="button"
+                        <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample5" role="button"
                             aria-expanded="false" aria-controls="multiCollapseExample1">Position per year</a>
                     </p>
                     <div class="col">
-                        <div class="collapse multi-collapse" id="multiCollapseExample4">
+                        <div class="collapse multi-collapse" id="multiCollapseExample5">
                             <div class="card card-body">
 
                                 <ul class="list-group list-group-flush">
@@ -106,11 +125,11 @@
                         </div>
                     </div>
                     <p>
-                        <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample5" role="button"
+                        <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample6" role="button"
                             aria-expanded="false" aria-controls="multiCollapseExample2">Club per year</a>
                     </p>
                     <div class="col">
-                        <div class="collapse multi-collapse" id="multiCollapseExample5">
+                        <div class="collapse multi-collapse" id="multiCollapseExample6">
                             <div class="card card-body">
 
                                 <ul class="list-group list-group-flush">
@@ -122,12 +141,34 @@
                             </div>
                         </div>
                     </div>
+
+
                     <p>
-                        <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample6" role="button"
+                        <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample7" role="button"
+                            aria-expanded="false" aria-controls="multiCollapseExample2">Overall per year</a>
+                    </p>
+                    <div class="col">
+                        <div class="collapse multi-collapse" id="multiCollapseExample7">
+                            <div class="card card-body">
+
+                                <ul class="list-group list-group-flush">
+                                    {% for year, overall in player2_overall_per_year %}
+                                    <li class="list-group-item">{{year}} - {{overall}}</li>
+                                    {% endfor %}
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <p>
+                        <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample8" role="button"
                             aria-expanded="false" aria-controls="multiCollapseExample3">Value per year</a>
                     </p>
                     <div class="col">
-                        <div class="collapse multi-collapse" id="multiCollapseExample6">
+                        <div class="collapse multi-collapse" id="multiCollapseExample8">
                             <div class="card card-body">
 
                                 <ul class="list-group list-group-flush">
@@ -142,14 +183,12 @@
                 </div>
             </div>
 
-
-
-
-
         </div>
     </div>
 
 
+    {% else %}
+    {% endif %}
 
 </main>
 {% endblock %}
