@@ -1,7 +1,7 @@
 {% extends 'players/base.html' %}
 {% block content %}
 <main>
-    {% if player1 and player2 %}
+    {% if player1_long_name and player2_long_name %}
     <div class="container">
         <div class="row">
 
@@ -188,6 +188,7 @@
 
 
     {% else %}
+    <p>You need choose both players...</p>
     {% endif %}
 
 </main>
