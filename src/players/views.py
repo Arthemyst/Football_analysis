@@ -36,11 +36,6 @@ class HomeView(ListView):
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context["players_count"] = Player.objects.all().count()
-        context["2016_count"] = PlayerStatistics.objects.filter(year="2016").count()
-        context["2017_count"] = PlayerStatistics.objects.filter(year="2017").count()
-        context["2018_count"] = PlayerStatistics.objects.filter(year="2018").count()
-        context["2019_count"] = PlayerStatistics.objects.filter(year="2019").count()
-        context["2020_count"] = PlayerStatistics.objects.filter(year="2020").count()
 
         return context
 
@@ -70,26 +65,8 @@ class PlayerDetailView(DetailView):
         return context
 
 
-class MidfielderListView(ListView):
-
-    model = Player
-    paginate_by = 50
-    context_object_name = "midfielders"
-
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        context = super().get_context_data(**kwargs)
-        context["team_position"] = PlayerStatistics.objects.filter(team_position="LS")
-
-        return context
-
-
 class ProfileTemplateView(TemplateView):
     template_name = "registration/profile.html"
-
-
-class PasswordChangeView(PasswordChangeView):
-    form_class = PasswordChangeForm
-    success_url = reverse_lazy("password-success")
 
 
 class UserRegisterView(generic.CreateView):
