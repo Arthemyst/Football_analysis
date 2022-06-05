@@ -28,48 +28,6 @@ class PlayerListView(ListView):
         return context
 
 
-class Player2016ListView(ListView):
-
-    model = Player
-
-    paginate_by = 50
-    context_object_name = "players_16"
-
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        context = super().get_context_data(**kwargs)
-        context["players_2016"] = Player.objects.filter(playerstatistics__year=2016)
-
-        return context
-
-
-class Player2017ListView(ListView):
-
-    model = Player
-    paginate_by = 50
-    context_object_name = "players"
-
-
-class Player2018ListView(ListView):
-
-    model = Player
-    paginate_by = 50
-    context_object_name = "players"
-
-
-class Player2019ListView(ListView):
-
-    model = Player
-    paginate_by = 50
-    context_object_name = "players"
-
-
-class Player2020ListView(ListView):
-
-    model = Player
-    paginate_by = 50
-    context_object_name = "players"
-
-
 class HomeView(ListView):
 
     model = Player
@@ -162,14 +120,14 @@ def search_player(request):
 
     if request.method == "GET":
         searched = request.GET.get("searched")
-        players = Player.objects.filter(short_name__icontains=searched).order_by('id')
-        paginator = Paginator(players, 25) 
+        players = Player.objects.filter(short_name__icontains=searched).order_by("id")
+        paginator = Paginator(players, 25)
 
-        page_number = request.GET.get('page')
+        page_number = request.GET.get("page")
         page_obj = paginator.get_page(page_number)
 
-        context = {"players": players, 'page_obj': page_obj, 'searched': searched}
-        
+        context = {"players": players, "page_obj": page_obj, "searched": searched}
+
         return render(request, "players/player_search.html", context)
     else:
         return render(request, "players/player_search.html", {})
@@ -194,7 +152,7 @@ def search_club(request):
         searched = request.GET.get("searched_club")
         players = Player.objects.filter(
             playerstatistics__club__icontains=searched, playerstatistics__year=2020
-        ).order_by('id')
+        ).order_by("id")
         context = {"players": players, "searched": searched}
         return render(request, "players/players_in_club.html", context)
     else:
@@ -204,6 +162,7 @@ def search_club(request):
 class PlayersCompareView(ListView):
     model = Player
     template_name = "players/compare_players.html"
+
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context["players"] = (
@@ -285,25 +244,24 @@ def compare_players(request):
             "player1_nationality": player1_nationality,
             "player2_nationality": player2_nationality,
             "player1_overall_per_year": player1_overall_per_year,
-            "player2_overall_per_year": player2_overall_per_year
+            "player2_overall_per_year": player2_overall_per_year,
         }
         return render(request, "players/compare_chosen_players.html", context)
     else:
         return render(request, "players/compare_chosen_players.html.html", {})
 
+
 class PlayerSearchView(ListView):
     model = Player
-    template_name = 'players/player_search.html'
+    template_name = "players/player_search.html"
 
     paginate_by: 50
 
     def get_queryset(self):
-        searched = self.kwargs.get('searched')
-        
+        searched = self.kwargs.get("searched")
+
         if searched:
-            players = Player.objects.filter(
-                short_name__icontains=searched
-            )
-        else: 
+            players = Player.objects.filter(short_name__icontains=searched)
+        else:
             players = Player.objects.none()
         return players

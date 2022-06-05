@@ -1,10 +1,18 @@
 from django.urls import path
-from django.views.generic import TemplateView
-from players.views import (ClubFinderView, HomeView, PasswordsChangeView,
-                           PlayerDetailView,
-                           PlayerListView, PlayersCompareView,
-                           ProfileTemplateView, UserEditView, UserRegisterView,
-                           compare_players, search_club, search_player, PlayerSearchView)
+from players.views import (
+    ClubFinderView,
+    HomeView,
+    PasswordsChangeView,
+    PlayerDetailView,
+    PlayerListView,
+    PlayersCompareView,
+    ProfileTemplateView,
+    UserEditView,
+    UserRegisterView,
+    compare_players,
+    search_club,
+    search_player,
+)
 
 urlpatterns = [
     path("", HomeView.as_view(template_name="players/index.html"), name="home"),
