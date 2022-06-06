@@ -78,19 +78,19 @@ class Command(BaseCommand):
         for column in dataframe.columns:
             if column in UNOPTIMIZABLE_COLUMNS:
                 continue
-            if dataframe[column].dtypes == "object":
+            elif dataframe[column].dtypes == "object":
                 # in pandas module type "object" is related to string type
                 dataframe[column] = dataframe[column].astype(str).apply(sum_values)
-            if dataframe[column].dtypes == "float":
+            elif dataframe[column].dtypes == "float":
                 dataframe[column] = dataframe[column].astype(int)
 
         dataframe["team_position"] = dataframe["team_position"].astype("category")
         # in pandas module type "category" is related to string type
-        dataframe["club"] = dataframe["club"].astype("category")
         dataframe["nationality"] = dataframe["nationality"].astype("category")
         dataframe["year"] = f"20{path.name[8:10]}"
         dataframe = dataframe[~(dataframe[VALUES_COLUMNS] < 0).any(axis=1)]
-        dataframe["club"] = dataframe["club"].str.replace("1. ", "")
+        dataframe["club"] = dataframe["club"].str.replace("1. ", "", regex=True)
+        dataframe["club"] = dataframe["club"].astype("category")
 
         return dataframe
 
