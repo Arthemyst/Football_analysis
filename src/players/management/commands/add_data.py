@@ -24,8 +24,6 @@ class Command(BaseCommand):
 
         for path in csv_files:
             logging.info(f"Preparing data from {path}...")
-            dataframe = self.read_csv(path)
-
             df = self.read_csv(path)
             self.load_to_db(df)
 

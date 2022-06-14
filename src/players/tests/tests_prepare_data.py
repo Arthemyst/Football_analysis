@@ -4,8 +4,7 @@ import pandas as pd
 import pytest
 from players.constants import DEFAULT_COLUMNS, UNOPTIMIZABLE_COLUMNS
 from players.exceptions import (NoFilesException,
-                                NotExistingDirectoryException,
-                                WrongFileTypeException)
+                                NotExistingDirectoryException)
 from players.management.commands.prepare_data import Command
 
 
@@ -17,19 +16,18 @@ def command():
 def test_data_optimization_with_category_and_int_types(command):
     # test to check optimize_types module from prepare_data management command
     filepath = Path(
-        "src/players/tests/fixtures/test_csv_file_after_removing_goalkeepers.csv"
+        "players/tests/fixtures/test_csv_file_after_removing_goalkeepers.csv"
     )
     df = command.read_csv(filepath)
     df = command.optimize_types(df, filepath)
 
     assert df["club"].dtypes == "category"
-    assert df["nationality"].dtypes == "category"
     assert df["age"].dtypes == int
 
 
 def test_read_csv_with_proper_amount_of_columns(command):
     # test to check reader module from prepare_data management command
-    filepath = Path("src/players/tests/fixtures/players_16.csv")
+    filepath = Path("players/tests/fixtures/players_16.csv")
     df = command.read_csv(filepath)
 
     assert len(df.columns) == 42
@@ -38,7 +36,7 @@ def test_read_csv_with_proper_amount_of_columns(command):
 def test_remove_goalkeepers_if_all_goalkeepers_removed(command):
     # check removing goalkeepers from dataframe
     df = command.read_csv(
-        Path("src/players/tests/fixtures/test_csv_file_for_testing_reading_module.csv")
+        Path("players/tests/fixtures/test_csv_file_for_testing_reading_module.csv")
     )
     df = command.remove_goalkeepers(df)
 
@@ -49,7 +47,7 @@ def test_remove_goalkeepers_if_all_goalkeepers_removed(command):
 
 def test_save_good_file(tmp_path, command):
     # check to save prepared dataframe to csv file inside temporary dict
-    filepath = "./src/players/tests/fixtures/test_csv_file_after_types_optimization.csv"
+    filepath = "players/tests/fixtures/test_csv_file_after_types_optimization.csv"
     df = pd.read_csv(filepath)
     dir_path = tmp_path / "players_temp"
     file_path = tmp_path / "players_temp/players_16.csv"
@@ -61,7 +59,7 @@ def test_save_good_file(tmp_path, command):
 
 
 def test_list_files_returns_csv_files(command, tmp_path):
-    path = "src/players/tests/fixtures"
+    path = "players/tests/fixtures"
 
     list_csv_files = command.list_csv_files(path)
 
@@ -80,7 +78,7 @@ def test_save_file_wrong_dir(tmp_path, command):
     # check to save prepared dataframe to csv file inside wrong dir
     dir_path = Path("players_wrong")
     file_path = tmp_path / "players_temp/players_2016.csv"
-    filepath = "./src/players/tests/fixtures/test_csv_file_after_types_optimization.csv"
+    filepath = "players/tests/fixtures/test_csv_file_after_types_optimization.csv"
     df = pd.read_csv(filepath)
 
     with pytest.raises(
@@ -100,7 +98,7 @@ def test_list_files_not_csv_file(command):
 
 def test_handle_input_right_path(tmp_path, command):
     # check handle module by inputing right path and outputing right path
-    input = "src/players/tests/fixtures/test_handle_input_right_path"
+    input = "players/tests/fixtures/test_handle_input_right_path"
     output = tmp_path / "players_temp"
     output.mkdir()
     filepath = tmp_path / "players_temp/players_16.csv"

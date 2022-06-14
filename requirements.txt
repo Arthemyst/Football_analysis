@@ -1,4 +1,4 @@
-Django==4.0.1
+Django>=4.0.4
 django-environ==0.8.1
 pandas==1.4.1
 pytest==7.1.1
