@@ -4,3 +4,5 @@ pandas==1.4.1
 pytest==7.1.1
 pytest-django==4.5.2
 psycopg2-binary==2.9.3
+django-bootstrap-v5==1.0.11
+pre-commit==2.18.1

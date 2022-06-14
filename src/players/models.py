@@ -11,7 +11,6 @@ class Player(models.Model):
         return self.short_name
 
 
-
 class PlayerStatistics(models.Model):
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
     year = models.PositiveSmallIntegerField()
@@ -56,4 +55,4 @@ class PlayerStatistics(models.Model):
     defending_sliding_tackle = models.PositiveSmallIntegerField()
 
     class Meta:
-        unique_together=[['player', 'year']] 
+        unique_together = [["player", "year"]]

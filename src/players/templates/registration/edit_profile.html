@@ -1,0 +1,12 @@
+{% extends 'players/base.html' %}
+{% block title %}Update Page{% endblock title %}
+
+{% block content %}
+<h2>Update Page</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-lg btn-primary" type="submit" value="Login">Update</button>
+    <br><br>
+</form>
+{% endblock content %}

@@ -1,0 +1,21 @@
+{% extends 'players/base.html' %}
+
+{% block title %}Profile Page{% endblock title %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<h1>Welcome on Football analysis page {{user.first_name}}!</h1>
+<br>
+<button type="button" class="btn btn-light"><a href="{% url 'password-change' %}">Change password</a></button>
+<button type="button" class="btn btn-light"><a href="{% url 'logout' %}">Logout</a></button>
+<br><br>
+{% else %}
+<p>For details about profile you need sign in.</p>
+<a href="{% url 'login' %}">Login</a>
+<br><br>
+<br><br>
+{% endif %}
+
+
+</form>
+{% endblock content %}

@@ -1,0 +1,27 @@
+{% extends 'players/base.html' %}
+{% block content %}
+
+<form class="d-flex shadow p-3 mb-5 bg-body rounded" method=GET action="{% url 'compare-searched-players' %}">
+
+    {% csrf_token %}
+    <input class="form-control mr-sm-2" list="datalistOptions" id="exampleDataList" placeholder="Choose player"
+        aria-label="Search" name="player1">
+    <datalist id="datalistOptions">
+        {% for name in players %}
+        <option value="{{name.long_name}}">
+            {% endfor %}
+    </datalist>
+    <button class="btn btn-lg btn-primary my-2 my-sm-0" type="submit">Compare</button>
+
+    {% csrf_token %}
+    <input class="form-control mr-sm-2" list="datalistOptions" id="exampleDataList" placeholder="Choose player"
+        aria-label="Search" name="player2">
+    <datalist id="datalistOptions">
+        {% for name in players %}
+        <option value="{{name.long_name}}">
+            {% endfor %}
+    </datalist>
+
+</form>
+
+{% endblock %}

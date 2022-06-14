@@ -1,0 +1,43 @@
+{% extends 'players/base.html' %}
+{% block content %}
+
+{% if searched %}
+
+<div class="btn-group">
+
+    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        Choose year
+    </button>
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="">2020</a></li>
+        <li><a class="dropdown-item" href="">2019</a></li>
+        <li><a class="dropdown-item" href="">2018</a></li>
+        <li><a class="dropdown-item" href="">2017</a></li>
+        <li><a class="dropdown-item" href="">2016</a></li>
+
+    </ul>
+</div>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Long name</th>
+            <th scope="col">Nationality</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for player in players %}
+
+        <tr>
+            <th scope="row"><a href="{% url 'player-detail' player.id %}">{{ player.short_name }}</a></th>
+            <td>{{ player.long_name }}</td>
+            <td>{{ player.nationality }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<h1>You searched for nothing...</h1>
+{% endif %}
+
+{% endblock %}

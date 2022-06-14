@@ -1,0 +1,106 @@
+{% extends 'players/base.html' %}
+{% block content %}
+<main>
+
+    <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+
+        <div class="feature col">
+            <div class="shadow p-3 mb-5 bg-body rounded">
+                <h2 class="pb-2 border-bottom">Player details</h2>
+                <p>Short name: {{player.short_name}}</p>
+                <p>Long name: {{player.long_name}}</p>
+                <p>Nationality: {{player.nationality}}</p>
+
+                {% if team_position.0.0 in 'LAM, CM, RAM, RDM, LM, LCM, RM, LDM, CDM, RCM, CAM' %}
+                <p>Team position: Midfielder</p>
+                {% elif team_position.0.0 in 'LF, RF, RS, LS, CF, ST, LW, RW' %}
+                <p>Team position: Attacker</p>
+                {% elif team_position.0.0 in 'LWB, RWB, CB, RB, LB, RCB, LCB' %}
+                <p>Team position: Defender</p>
+                {% endif %}
+            </div>
+            <div class="feature cols">
+
+                <p>
+                    <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample1" role="button"
+                        aria-expanded="false" aria-controls="multiCollapseExample1">Position per year</a>
+                </p>
+                <div class="col">
+                    <div class="collapse multi-collapse" id="multiCollapseExample1">
+                        <div class="card card-body">
+
+                            <ul class="list-group list-group-flush">
+                                {% for year, position in position_per_year %}
+                                <li class="list-group-item">{{year}} - {{position}}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <p>
+                    <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample2" role="button"
+                        aria-expanded="false" aria-controls="multiCollapseExample2">Club per year</a>
+                </p>
+                <div class="col">
+                    <div class="collapse multi-collapse" id="multiCollapseExample2">
+                        <div class="card card-body">
+
+                            <ul class="list-group list-group-flush">
+                                {% for year, club in club_per_year %}
+                                <li class="list-group-item">{{year}} - {{club}}</li>
+                                {% endfor %}
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <p>
+                    <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample3" role="button"
+                        aria-expanded="false" aria-controls="multiCollapseExample3">Value per year</a>
+                </p>
+                <div class="col">
+                    <div class="collapse multi-collapse" id="multiCollapseExample3">
+                        <div class="card card-body">
+
+                            <ul class="list-group list-group-flush">
+                                {% for year, value in value_per_year %}
+                                <li class="list-group-item">{{year}} - {{value}} euro</li>
+                                {% endfor %}
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+
+
+
+        </div>
+
+        <div class="feature col">
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    Statistics
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    {% for statistic in statistics_list %}
+                    <li><a class="dropdown-item" href="#">{{statistic}}</a></li>
+                    {% endfor %}
+
+                </ul>
+            </div>
+        </div>
+
+
+</main>
+{% endblock %}
