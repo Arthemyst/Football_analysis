@@ -39,4 +39,21 @@ Application runs on docker. Please run docker-compose to install dependiences an
 $ docker-compose -f docker/docker-compose.yaml up --build
 ```
 
+When app is running please use add_data management command to upload database:
+```sh
+$ docker exec -it docker_web_1 /bin/bash
+/app# python manage.py add_data players/data
+```
+
+To test application:
+```sh
+$ docker exec -it docker_web_1 /bin/bash
+/app# python -m pytest players/tests/tests_add_data.py
+/app# python -m pytest players/tests/tests_prepare_data.py
+```
+
+Run app in website:
+```sh
+http://localhost:8000
+```
 
