@@ -14,6 +14,7 @@ from players.views import (
     search_player,
 )
 
+
 urlpatterns = [
     path("", HomeView.as_view(template_name="players/index.html"), name="home"),
     path("players/all/", PlayerListView.as_view(), name="player-list"),
