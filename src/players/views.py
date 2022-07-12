@@ -1,3 +1,5 @@
+
+
 from typing import Any, Dict
 
 from django.contrib.auth.forms import PasswordChangeForm
@@ -11,6 +13,7 @@ from django.views.generic.list import ListView
 from players.constants import DEFAULT_COLUMNS
 from players.models import Player, PlayerStatistics
 from django.core.paginator import Paginator
+import plotly.express as px
 
 
 from .forms import EditProfileForm, PasswordChangingForm, SignUpForm
@@ -61,7 +64,19 @@ class PlayerDetailView(DetailView):
             player=self.get_object()
         ).values_list("team_position")
         context["statistics_list"] = [i.replace("_", " ") for i in DEFAULT_COLUMNS][7:]
-
+        overall_year = PlayerStatistics.objects.filter(
+            player=self.get_object()
+        ).values_list("overall", "year").order_by('year')
+        fig = px.line(
+            x = [c[1] for c in overall_year],
+            y = [c[0] for c in overall_year],
+            markers=True,
+            labels = {'x': 'Year', 'y': 'Overall'},
+            height=325
+        )
+        fig.update_xaxes()
+        chart = fig.to_html()
+        context["chart"] = chart
         return context
 
 
