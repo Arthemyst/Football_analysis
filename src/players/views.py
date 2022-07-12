@@ -14,6 +14,7 @@ from players.constants import DEFAULT_COLUMNS
 from players.models import Player, PlayerStatistics
 from django.core.paginator import Paginator
 import plotly.express as px
+import plotly.graph_objects as go
 
 
 from .forms import EditProfileForm, PasswordChangingForm, SignUpForm
@@ -74,7 +75,8 @@ class PlayerDetailView(DetailView):
             labels = {'x': 'Year', 'y': 'Overall'},
             height=325
         )
-        fig.update_xaxes()
+        fig.update_xaxes(dtick='d')
+        fig.update_yaxes(dtick='d')
         chart = fig.to_html()
         context["chart"] = chart
         return context
@@ -220,6 +222,30 @@ def compare_players(request):
         player2_overall_per_year = PlayerStatistics.objects.filter(
             player__long_name=searched_player2
         ).values_list("year", "overall")
+        player1_value_per_year = PlayerStatistics.objects.filter(
+            player__long_name=searched_player1
+        ).values_list("value_eur", "year").order_by('year')
+        player2_value_per_year = PlayerStatistics.objects.filter(
+            player__long_name=searched_player2
+        ).values_list("value_eur", "year").order_by('year')
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(
+            x = [c[1] for c in player1_value_per_year],
+            y = [c[0] for c in player1_value_per_year],
+            name=f'{searched_player1}'
+
+        ))
+        fig.add_trace(go.Scatter(
+            x = [c[1] for c in player2_value_per_year],
+            y = [c[0] for c in player2_value_per_year],
+            name=f'{searched_player2}'
+            
+        ))
+        fig.update_layout(xaxis_title="Year", yaxis_title="Value in Euro")
+        fig.update_xaxes(dtick='d')
+        #fig.update_yaxes(dtick='d')
+        chart = fig.to_html()
+        
         context = {
             "player1": player1,
             "player2": player2,
@@ -237,6 +263,7 @@ def compare_players(request):
             "player2_nationality": player2_nationality,
             "player1_overall_per_year": player1_overall_per_year,
             "player2_overall_per_year": player2_overall_per_year,
+            "chart": chart,
         }
         return render(request, "players/compare_chosen_players.html", context)
     else:
