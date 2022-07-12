@@ -281,6 +281,10 @@ class PlayerSearchView(ListView):
 
         if searched:
             players = Player.objects.filter(short_name__icontains=searched)
+            if len(players) == 0:
+                players = None
+            else:
+                players = players
         else:
-            players = Player.objects.none()
+            players = None
         return players
