@@ -12,6 +12,13 @@ from players.views import (
     compare_players,
     search_club,
     search_player,
+    search_club_year,
+
+    
+
+
+
+
 )
 
 
@@ -37,4 +44,9 @@ urlpatterns = [
     path("club_searched/", search_club, name="players-in-club"),
     path("compare_searched_players/", compare_players, name="compare-searched-players"),
     path("compare_players/", PlayersCompareView.as_view(), name="compare-players"),
+    path("club_searched/year_<str:year>/", search_club_year, name="players-in-club-year"),
+
+
+
+
 ]
