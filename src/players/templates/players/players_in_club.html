@@ -3,26 +3,12 @@
 
 {% if searched %}
 <h2>{{ club_name }}</h2>
+<p>Current year: {{ last_year }}</p>
 <div class="btn-group">
 
-        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-            Choose year
-        </button>
-        <ul class="dropdown-menu">
-            {% for year in years %}
-            <li><a class="dropdown-item" href="{% url 'players-in-club-year' year %}">{{ year }}</a></li>
-            {% endfor %}
-        </ul>
- 
-    <form action="">
-        <select name="year">
-            <option disabled=true selected>Choose year</option>
-            {% for year in years %}
-            <option>{{ year }}</option>
-            {% endfor %}
-        </select>
-        <input type="submit" value="click">
-    </form>
+
+    
+<button type="button" class="btn btn-secondary"><a href="{% url 'players-in-club-year'  %}">Click to active other years!</a></button>
 </div>
 <table class="table table-striped">
     <thead>

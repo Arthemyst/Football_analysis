@@ -148,31 +148,43 @@ def search_club(request):
         request.session['save_searched_club'] = searched
         request.session.modified = True
         years = PlayerStatistics.objects.filter(club=searched).order_by()
-        years_distinct = list(set([year.year for year in years]))
-        last_year = years_distinct[-1]
-        players = Player.objects.filter(
-            playerstatistics__club__icontains=searched, playerstatistics__year=last_year
-        ).order_by("id")
-        club_name = list(set([player.club for player in years]))[0]
-        context = {"players": players, "searched": searched, "years": years_distinct, "club_name": club_name}
-        return render(request, "players/players_in_club.html", context)
+        if not years:
+            return render(request, "players/players_in_club.html", {})
+        else:
+            years_distinct = list(set([year.year for year in years]))
+            last_year = years_distinct[-1]
+            players = Player.objects.filter(
+                playerstatistics__club__icontains=searched, playerstatistics__year=last_year
+            ).order_by("id")
+            club_name = list(set([player.club for player in years]))[0]
+            context = {"players": players, "searched": searched, "years": years_distinct, "club_name": club_name, "last_year": last_year}
+            return render(request, "players/players_in_club.html", context)
     else:
         return render(request, "players/players_in_club.html", {})
 
-def search_club_year(request, year):
+def search_club_year(request):
 
     if request.method == "GET":
         searched = request.session["save_searched_club"]
         request.session['save_searched_club'] = searched
         request.session.modified = True
-        year = request.GET["year"]
+        years = PlayerStatistics.objects.filter(club=searched).order_by()
+        years_distinct = list(set([year.year for year in years]))
+        if not years_distinct:
+            last_year = 2020
+        else:
+            last_year = years_distinct[-1]
+
+        year = request.GET.get('year', False)
+        if not year:
+            year = last_year
         players = Player.objects.filter(
             playerstatistics__club__icontains=searched, playerstatistics__year=year
         ).order_by("id")
         years = PlayerStatistics.objects.filter(club=searched).order_by()
         years_distinct = list(set([year_item.year for year_item in years]))
         club_name = list(set([player.club for player in years]))[0]
-        context = {"players": players, "searched": searched, "years": years_distinct, "club_name": club_name}
+        context = {"players": players, "searched": searched, "years": years_distinct, "club_name": club_name, "year": year}
         return render(request, "players/players_in_club_year.html", context)
     else:
         return render(request, "players/players_in_club_year.html", {})
