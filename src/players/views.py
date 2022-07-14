@@ -1,3 +1,5 @@
+
+
 from typing import Any, Dict
 
 from django.contrib.auth.forms import PasswordChangeForm
@@ -11,6 +13,9 @@ from django.views.generic.list import ListView
 from players.constants import DEFAULT_COLUMNS
 from players.models import Player, PlayerStatistics
 from django.core.paginator import Paginator
+from django.http import HttpResponse
+import plotly.express as px
+import plotly.graph_objects as go
 
 
 from .forms import EditProfileForm, PasswordChangingForm, SignUpForm
@@ -61,7 +66,20 @@ class PlayerDetailView(DetailView):
             player=self.get_object()
         ).values_list("team_position")
         context["statistics_list"] = [i.replace("_", " ") for i in DEFAULT_COLUMNS][7:]
-
+        overall_year = PlayerStatistics.objects.filter(
+            player=self.get_object()
+        ).values_list("overall", "year").order_by('year')
+        fig = px.line(
+            x = [c[1] for c in overall_year],
+            y = [c[0] for c in overall_year],
+            markers=True,
+            labels = {'x': 'Year', 'y': 'Overall'},
+            height=325
+        )
+        fig.update_xaxes(dtick='d')
+        fig.update_yaxes(dtick='d')
+        chart = fig.to_html()
+        context["chart"] = chart
         return context
 
 
@@ -127,13 +145,37 @@ def search_club(request):
 
     if request.method == "GET":
         searched = request.GET.get("searched_club")
+        request.session['save_searched_club'] = searched
+        request.session.modified = True
+        years = PlayerStatistics.objects.filter(club=searched).order_by()
+        years_distinct = list(set([year.year for year in years]))
+        last_year = years_distinct[-1]
         players = Player.objects.filter(
-            playerstatistics__club__icontains=searched, playerstatistics__year=2020
+            playerstatistics__club__icontains=searched, playerstatistics__year=last_year
         ).order_by("id")
-        context = {"players": players, "searched": searched}
+        club_name = list(set([player.club for player in years]))[0]
+        context = {"players": players, "searched": searched, "years": years_distinct, "club_name": club_name}
         return render(request, "players/players_in_club.html", context)
     else:
         return render(request, "players/players_in_club.html", {})
+
+def search_club_year(request, year):
+
+    if request.method == "GET":
+        searched = request.session["save_searched_club"]
+        request.session['save_searched_club'] = searched
+        request.session.modified = True
+        year = request.GET["year"]
+        players = Player.objects.filter(
+            playerstatistics__club__icontains=searched, playerstatistics__year=year
+        ).order_by("id")
+        years = PlayerStatistics.objects.filter(club=searched).order_by()
+        years_distinct = list(set([year_item.year for year_item in years]))
+        club_name = list(set([player.club for player in years]))[0]
+        context = {"players": players, "searched": searched, "years": years_distinct, "club_name": club_name}
+        return render(request, "players/players_in_club_year.html", context)
+    else:
+        return render(request, "players/players_in_club_year.html", {})
 
 
 class PlayersCompareView(ListView):
@@ -205,6 +247,29 @@ def compare_players(request):
         player2_overall_per_year = PlayerStatistics.objects.filter(
             player__long_name=searched_player2
         ).values_list("year", "overall")
+        player1_value_per_year = PlayerStatistics.objects.filter(
+            player__long_name=searched_player1
+        ).values_list("value_eur", "year").order_by('year')
+        player2_value_per_year = PlayerStatistics.objects.filter(
+            player__long_name=searched_player2
+        ).values_list("value_eur", "year").order_by('year')
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(
+            x = [c[1] for c in player1_value_per_year],
+            y = [c[0] for c in player1_value_per_year],
+            name=f'{searched_player1}'
+
+        ))
+        fig.add_trace(go.Scatter(
+            x = [c[1] for c in player2_value_per_year],
+            y = [c[0] for c in player2_value_per_year],
+            name=f'{searched_player2}'
+            
+        ))
+        fig.update_layout(xaxis_title="Year", yaxis_title="Value in Euro")
+        fig.update_xaxes(dtick='d')
+        chart = fig.to_html()
+        
         context = {
             "player1": player1,
             "player2": player2,
@@ -222,6 +287,7 @@ def compare_players(request):
             "player2_nationality": player2_nationality,
             "player1_overall_per_year": player1_overall_per_year,
             "player2_overall_per_year": player2_overall_per_year,
+            "chart": chart,
         }
         return render(request, "players/compare_chosen_players.html", context)
     else:
@@ -239,6 +305,10 @@ class PlayerSearchView(ListView):
 
         if searched:
             players = Player.objects.filter(short_name__icontains=searched)
+            if len(players) == 0:
+                players = None
+            else:
+                players = players
         else:
-            players = Player.objects.none()
+            players = None
         return players
