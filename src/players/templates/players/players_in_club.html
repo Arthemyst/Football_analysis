@@ -3,18 +3,14 @@
 
 {% if searched %}
 <div class="shadow p-2 mb-2 bg-body rounded">
-    <h2>{{ club_name }}</h2>
-    
-    <p>Year: {{ last_year }}</p>
+<h2>{{ club_name }}</h2>
+<p>Year: {{ last_year }}</p>
 </div>
+
 <div class="btn-group">
-
-
-
     {% if user.is_authenticated %}
 
     <a class="btn btn-primary" href="{% url 'players-in-club-year'  %}" role="button">Click to active other years!</a>
-
 
     {% else %}
     <div class="shadow p-3 mb-5 bg-body rounded">
