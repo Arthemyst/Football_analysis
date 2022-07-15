@@ -41,53 +41,8 @@
                         <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample2" role="button"
                             aria-expanded="false" aria-controls="multiCollapseExample2">Club per year</a>
                     </p>
-                    <div class="col">
-                        <div class="collapse multi-collapse" id="multiCollapseExample2">
-                            <div class="card card-body">
 
-                                <ul class="list-group list-group-flush">
-                                    {% for year, club in player1_club_per_year %}
-                                    <li class="list-group-item">{{year}} - {{club}}</li>
-                                    {% endfor %}
-                                </ul>
 
-                            </div>
-                        </div>
-                    </div>
-                    <p>
-                        <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample3" role="button"
-                            aria-expanded="false" aria-controls="multiCollapseExample2">Overall per year</a>
-                    </p>
-                    <div class="col">
-                        <div class="collapse multi-collapse" id="multiCollapseExample3">
-                            <div class="card card-body">
-
-                                <ul class="list-group list-group-flush">
-                                    {% for year, overall in player1_overall_per_year %}
-                                    <li class="list-group-item">{{year}} - {{overall}}</li>
-                                    {% endfor %}
-                                </ul>
-
-                            </div>
-                        </div>
-                    </div>
-                    <p>
-                        <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample4" role="button"
-                            aria-expanded="false" aria-controls="multiCollapseExample3">Value per year</a>
-                    </p>
-                    <div class="col">
-                        <div class="collapse multi-collapse" id="multiCollapseExample4">
-                            <div class="card card-body">
-
-                                <ul class="list-group list-group-flush">
-                                    {% for year, value in player1_value_per_year %}
-                                    <li class="list-group-item">{{year}} - {{value}} euro</li>
-                                    {% endfor %}
-                                </ul>
-
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -128,61 +83,9 @@
                         <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample6" role="button"
                             aria-expanded="false" aria-controls="multiCollapseExample2">Club per year</a>
                     </p>
-                    <div class="col">
-                        <div class="collapse multi-collapse" id="multiCollapseExample6">
-                            <div class="card card-body">
-
-                                <ul class="list-group list-group-flush">
-                                    {% for year, club in player2_club_per_year %}
-                                    <li class="list-group-item">{{year}} - {{club}}</li>
-                                    {% endfor %}
-                                </ul>
-
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <p>
-                        <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample7" role="button"
-                            aria-expanded="false" aria-controls="multiCollapseExample2">Overall per year</a>
-                    </p>
-                    <div class="col">
-                        <div class="collapse multi-collapse" id="multiCollapseExample7">
-                            <div class="card card-body">
-
-                                <ul class="list-group list-group-flush">
-                                    {% for year, overall in player2_overall_per_year %}
-                                    <li class="list-group-item">{{year}} - {{overall}}</li>
-                                    {% endfor %}
-                                </ul>
-
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                    <p>
-                        <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample8" role="button"
-                            aria-expanded="false" aria-controls="multiCollapseExample3">Value per year</a>
-                    </p>
-                    <div class="col">
-                        <div class="collapse multi-collapse" id="multiCollapseExample8">
-                            <div class="card card-body">
-
-                                <ul class="list-group list-group-flush">
-                                    {% for year, value in player2_value_per_year %}
-                                    <li class="list-group-item">{{year}} - {{value}} euro</li>
-                                    {% endfor %}
-                                </ul>
-
-                            </div>
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
-
         </div>
         {{ chart|safe }}
     </div>

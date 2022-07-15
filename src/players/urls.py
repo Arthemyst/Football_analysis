@@ -13,13 +13,6 @@ from players.views import (
     search_club,
     search_player,
     search_club_year,
-    PlayerDetailChooseGraphView,
-
-    
-
-
-
-
 )
 
 
@@ -27,7 +20,6 @@ urlpatterns = [
     path("", HomeView.as_view(template_name="players/index.html"), name="home"),
     path("players/all/", PlayerListView.as_view(), name="player-list"),
     path("players/<int:pk>/", PlayerDetailView.as_view(), name="player-detail"),
-    path("players_graphs/<int:pk>/", PlayerDetailChooseGraphView.as_view(), name="player-detail_chosen_graph"),
 
     path("profile/", ProfileTemplateView.as_view(), name="profile"),
     path("register/", UserRegisterView.as_view(), name="register"),

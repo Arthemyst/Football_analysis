@@ -82,9 +82,6 @@ class PlayerDetailView(DetailView):
         fig.add_trace(go.Scatter(
             x = [c[1] for c in chosen_statistic_year],
             y = [c[0] for c in chosen_statistic_year],
-            
-            
-
         ))
         fig.update_xaxes(dtick='d')
         fig.update_layout(xaxis_title="Year", yaxis_title=chosen_statistic.replace("_", " "))
@@ -220,6 +217,7 @@ class PlayersCompareView(ListView):
 def compare_players(request):
 
     if request.method == "GET":
+        
         searched_player1 = request.GET.get("player1")
         searched_player2 = request.GET.get("player2")
 
@@ -279,22 +277,27 @@ def compare_players(request):
         player2_value_per_year = PlayerStatistics.objects.filter(
             player__long_name=searched_player2
         ).values_list("value_eur", "year").order_by('year')
+
+        player1_value_per_year = PlayerStatistics.objects.filter(
+            player__long_name=searched_player1).values_list("value_eur", "year").order_by('year')
+        player2_value_per_year = PlayerStatistics.objects.filter(
+            player__long_name=searched_player2).values_list("value_eur", "year").order_by('year')
+
         fig = go.Figure()
         fig.add_trace(go.Scatter(
             x = [c[1] for c in player1_value_per_year],
             y = [c[0] for c in player1_value_per_year],
             name=f'{searched_player1}'
-
         ))
         fig.add_trace(go.Scatter(
             x = [c[1] for c in player2_value_per_year],
             y = [c[0] for c in player2_value_per_year],
             name=f'{searched_player2}'
-            
         ))
-        fig.update_layout(xaxis_title="Year", yaxis_title="Value in Euro")
         fig.update_xaxes(dtick='d')
+        fig.update_layout(xaxis_title="Year", yaxis_title="Value eur")
         chart = fig.to_html()
+        
         
         context = {
             "player1": player1,
@@ -338,42 +341,3 @@ class PlayerSearchView(ListView):
         else:
             players = None
         return players
-
-class PlayerDetailChooseGraphView(DetailView):
-
-    model = Player
-    context_object_name = "player"
-
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        chosen_player = self.request.session["chosen_player"]
-
-        context = super().get_context_data(**kwargs)
-        context["position_per_year"] = PlayerStatistics.objects.filter(
-            player=self.get_object()
-        ).values_list("year", "team_position")
-        context["value_per_year"] = PlayerStatistics.objects.filter(
-            player=self.get_object()
-        ).values_list("year", "value_eur")
-
-        context["club_per_year"] = PlayerStatistics.objects.filter(
-            player=self.get_object()
-        ).values_list("year", "club")
-        context["team_position"] = PlayerStatistics.objects.filter(
-            player=self.get_object()
-        ).values_list("team_position")
-        context["statistics_list"] = [i.replace("_", " ") for i in DEFAULT_COLUMNS][7:]
-        overall_year = PlayerStatistics.objects.filter(
-            player=self.get_object()
-        ).values_list("overall", "year").order_by('year')
-        fig = px.line(
-            x = [c[1] for c in overall_year],
-            y = [c[0] for c in overall_year],
-            markers=True,
-            labels = {'x': 'Year', 'y': 'Overall'},
-            height=325
-        )
-        fig.update_xaxes(dtick='d')
-        fig.update_yaxes(dtick='d')
-        chart = fig.to_html()
-        context["chart"] = chart
-        return context
