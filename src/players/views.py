@@ -50,7 +50,10 @@ class PlayerDetailView(DetailView):
     model = Player
     context_object_name = "player"
 
+
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        self.request.session['chosen_player'] = self.context_object_name
+
         context = super().get_context_data(**kwargs)
         context["position_per_year"] = PlayerStatistics.objects.filter(
             player=self.get_object()
@@ -66,18 +69,29 @@ class PlayerDetailView(DetailView):
             player=self.get_object()
         ).values_list("team_position")
         context["statistics_list"] = [i.replace("_", " ") for i in DEFAULT_COLUMNS][7:]
-        overall_year = PlayerStatistics.objects.filter(
+        chosen_statistic = self.request.GET.get("chosen_statistic")
+        if chosen_statistic:
+            chosen_statistic = chosen_statistic.replace(" ", "_")
+        else:
+            chosen_statistic = 'overall'
+        chosen_statistic_year = PlayerStatistics.objects.filter(
             player=self.get_object()
-        ).values_list("overall", "year").order_by('year')
-        fig = px.line(
-            x = [c[1] for c in overall_year],
-            y = [c[0] for c in overall_year],
-            markers=True,
-            labels = {'x': 'Year', 'y': 'Overall'},
-            height=325
-        )
+        ).values_list(chosen_statistic, "year").order_by('year')
+
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(
+            x = [c[1] for c in chosen_statistic_year],
+            y = [c[0] for c in chosen_statistic_year],
+            
+            
+
+        ))
         fig.update_xaxes(dtick='d')
-        fig.update_yaxes(dtick='d')
+        fig.update_layout(xaxis_title="Year", yaxis_title=chosen_statistic.replace("_", " "))
+
+        if chosen_statistic != 'value_eur':
+            fig.update_yaxes(dtick='d')
+
         chart = fig.to_html()
         context["chart"] = chart
         return context
@@ -324,3 +338,42 @@ class PlayerSearchView(ListView):
         else:
             players = None
         return players
+
+class PlayerDetailChooseGraphView(DetailView):
+
+    model = Player
+    context_object_name = "player"
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        chosen_player = self.request.session["chosen_player"]
+
+        context = super().get_context_data(**kwargs)
+        context["position_per_year"] = PlayerStatistics.objects.filter(
+            player=self.get_object()
+        ).values_list("year", "team_position")
+        context["value_per_year"] = PlayerStatistics.objects.filter(
+            player=self.get_object()
+        ).values_list("year", "value_eur")
+
+        context["club_per_year"] = PlayerStatistics.objects.filter(
+            player=self.get_object()
+        ).values_list("year", "club")
+        context["team_position"] = PlayerStatistics.objects.filter(
+            player=self.get_object()
+        ).values_list("team_position")
+        context["statistics_list"] = [i.replace("_", " ") for i in DEFAULT_COLUMNS][7:]
+        overall_year = PlayerStatistics.objects.filter(
+            player=self.get_object()
+        ).values_list("overall", "year").order_by('year')
+        fig = px.line(
+            x = [c[1] for c in overall_year],
+            y = [c[0] for c in overall_year],
+            markers=True,
+            labels = {'x': 'Year', 'y': 'Overall'},
+            height=325
+        )
+        fig.update_xaxes(dtick='d')
+        fig.update_yaxes(dtick='d')
+        chart = fig.to_html()
+        context["chart"] = chart
+        return context
