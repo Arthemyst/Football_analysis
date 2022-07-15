@@ -58,10 +58,25 @@
 
 
 
-                
+                <p>
+                    <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample3" role="button"
+                        aria-expanded="false" aria-controls="multiCollapseExample3">Value per year</a>
+                </p>
+                <div class="col">
+                    <div class="collapse multi-collapse" id="multiCollapseExample3">
+                        <div class="card card-body">
+
+                            <ul class="list-group list-group-flush">
+                                {% for year, value in value_per_year %}
+                                <li class="list-group-item">{{year}} - {{value}} euro</li>
+                                {% endfor %}
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
         <div class="feature col">
             <div class="d-flex">
                 <div class="form-group">
@@ -83,7 +98,23 @@
                     </div>
                 </div>
             </div>
+        
 
+
+
+        
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    Statistics
+                </button>
+
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    {% for statistic in statistics_list %}
+                    <li><a class="dropdown-item" href="#">{{statistic}}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
             {{ chart|safe }}
         </div>
         
