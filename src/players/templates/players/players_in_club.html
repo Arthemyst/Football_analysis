@@ -7,8 +7,23 @@
 <div class="btn-group">
 
 
+
+    {% if user.is_authenticated %}
+
+    <a class="btn btn-primary" href="{% url 'players-in-club-year'  %}" role="button">Click to active other years!</a>
+
+
+    {% else %}
+    <div class="shadow p-3 mb-5 bg-body rounded">
+      <p class="mb-3 fw-normal">Sign in or register to find previous years!</p>
+      <a class="btn btn-primary" href="{% url 'login' %}" role="button">Login</a>
+      <a class="btn btn-primary" href="{% url 'register' %}" role="button">Register</a>
+    </div>
+    {% endif %}
+
+
+
     
-<button type="button" class="btn btn-secondary"><a href="{% url 'players-in-club-year'  %}">Click to active other years!</a></button>
 </div>
 <table class="table table-striped">
     <thead>

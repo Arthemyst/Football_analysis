@@ -2,24 +2,30 @@
 {% block content %}
 
 {% if searched %}
+<div class="shadow p-2 mb-2 bg-body rounded">
 <h2>{{ club_name }}</h2>
+
 <p>Current year: {{ year }}</p>
+</div>
+<div class="d-flex">
+    <div class="form-group">
+        <div class="input-group">
 
-<div class="btn-group">
+            <form class="d-flex" action="">
+                <select required class="form-select" name="year" aria-label="Default select example">
+                    <option selected="true" disabled="disabled" value="" hidden>Choose year</option>
+                    {% for year in years %}
+                    <option>{{ year }}</option>
+                    {% endfor %}
+                </select>
+                <span class="input-group-btn">
 
-
-    
-
-    <form action="">
-        <select name="year">
-            <option disabled=true selected>Choose year</option>
-            {% for year in years %}
-            <option>{{ year }}</option>
-            {% endfor %}
-        </select>
-        <input type="submit" value="click">
-    </form>
-    
+                <button class="btn btn-lg btn-primary my-2 my-sm-0" type="submit">Click</button>
+                </span>
+            </form>
+            
+        </div>
+    </div>
 </div>
 <table class="table table-striped">
     <thead>
