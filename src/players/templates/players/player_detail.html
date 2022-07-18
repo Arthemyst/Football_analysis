@@ -1,4 +1,34 @@
 {% extends 'players/base.html' %}
+{% load static %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'line',
+
+            // The data for our dataset
+            data: {
+                labels: [1, 2, 3, 4, 5],
+                datasets: [{
+                    label: 'First 10 Richest Persons On Earth in Billions',
+                    backgroundColor: 'rgb(0,0,255)',
+                    borderColor: 'rgb(0,0,255)',
+                    data: [1, 2, 3, 4, 5]
+                }]
+            },
+
+            // Configuration options go here
+            options: {}
+        });
+    });
+
+</script>
+{% endblock scripts %}
+
+
 {% block content %}
 <main>
 
@@ -99,6 +129,7 @@
 
                 </ul>
             </div>
+            <canvas id="myChart" width="200" height="200"></canvas>
         </div>
 
 

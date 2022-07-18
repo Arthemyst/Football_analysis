@@ -11,7 +11,7 @@ from django.views.generic.list import ListView
 from players.constants import DEFAULT_COLUMNS
 from players.models import Player, PlayerStatistics
 from django.core.paginator import Paginator
-
+from chartjs.views.lines import BaseLineChartView
 
 from .forms import EditProfileForm, PasswordChangingForm, SignUpForm
 
@@ -60,9 +60,17 @@ class PlayerDetailView(DetailView):
         context["team_position"] = PlayerStatistics.objects.filter(
             player=self.get_object()
         ).values_list("team_position")
+        context["years"] = PlayerStatistics.objects.filter(
+            player=self.get_object()
+        ).values_list("year")
+        context["overalls"] = PlayerStatistics.objects.filter(
+            player=self.get_object()
+        ).values_list("overall")
         context["statistics_list"] = [i.replace("_", " ") for i in DEFAULT_COLUMNS][7:]
 
         return context
+
+
 
 
 class ProfileTemplateView(TemplateView):
