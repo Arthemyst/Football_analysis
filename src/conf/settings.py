@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-
+import os
 import environ
 
 settings_ = """
@@ -77,7 +77,7 @@ ROOT_URLCONF = "conf.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, 'templates')],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
