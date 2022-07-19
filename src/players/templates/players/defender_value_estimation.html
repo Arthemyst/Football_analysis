@@ -1,0 +1,34 @@
+{% extends 'players/base.html' %}
+{% block content %}
+<h1>Player value estimator</h1>
+<h2>Position: defender</h2>
+<div class="input-group">
+
+    <form class="d-flex" action="">
+        <select required class="form-select" name="chosen_statistic" aria-label="Default select example">
+            <option selected="true" disabled="disabled" value="" hidden>Choose position</option>
+
+            <option>Attacker</option>
+            <option>Midfielder</option>
+            <option>Defender</option>
+
+        </select>
+        <span class="input-group-btn">
+
+            <button class="btn btn-lg btn-primary my-2 my-sm-0" type="submit">Click</button>
+        </span>
+    </form>
+
+</div>
+<label for="customRange1" class="form-label">Defending</label>
+<input type="range" class="form-range" id="customRange1">
+<label for="customRange1" class="form-label">Defending marking</label>
+<input type="range" class="form-range" id="customRange2">
+<label for="customRange1" class="form-label">Defending sliding tackle</label>
+<input type="range" class="form-range" id="customRange3">
+<label for="customRange1" class="form-label">Mentality interceptions</label>
+<input type="range" class="form-range" id="customRange4">
+<label for="customRange1" class="form-label">Movement reactions</label>
+<input type="range" class="form-range" id="customRange5">
+
+{% endblock %}

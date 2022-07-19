@@ -9,7 +9,9 @@ from players.views import (
     ProfileTemplateView,
     UserEditView,
     UserRegisterView,
-    PlayerValueEstimation,
+    MidfielderValueEstimation,
+    AttackerValueEstimation,
+    DefenderValueEstimation,
     compare_players,
     search_club,
     search_player,
@@ -42,7 +44,17 @@ urlpatterns = [
     path("club_searched/year/", search_club_year, name="players-in-club-year"),
     path(
         "midfielder_value_estimation/",
-        PlayerValueEstimation.as_view(),
-        name="player-value-estimation",
+        MidfielderValueEstimation.as_view(),
+        name="midfielder-value-estimation",
+    ),
+    path(
+        "attacker_value_estimation/",
+        AttackerValueEstimation.as_view(),
+        name="attacker-value-estimation",
+    ),
+    path(
+        "defender_value_estimation/",
+        DefenderValueEstimation.as_view(),
+        name="defender-value-estimation",
     ),
 ]

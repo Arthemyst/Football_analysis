@@ -1,0 +1,40 @@
+{% extends 'players/base.html' %}
+{% block content %}
+<h1>Player value estimator</h1>
+<h2>Position: attacker</h2>
+<div class="input-group">
+
+    <form class="d-flex" action="">
+        <select required class="form-select" name="chosen_statistic" aria-label="Default select example">
+            <option selected="true" disabled="disabled" value="" hidden>Choose position</option>
+
+            <option>Attacker</option>
+            <option>Midfielder</option>
+            <option>Defender</option>
+
+        </select>
+        <span class="input-group-btn">
+
+            <button class="btn btn-lg btn-primary my-2 my-sm-0" type="submit">Click</button>
+        </span>
+    </form>
+
+</div>
+<label for="customRange1" class="form-label">Attacking finishing</label>
+<input type="range" class="form-range" id="customRange1">
+<label for="customRange1" class="form-label">Dribbling</label>
+<input type="range" class="form-range" id="customRange2">
+<label for="customRange1" class="form-label">Mentality positioning</label>
+<input type="range" class="form-range" id="customRange3">
+<label for="customRange1" class="form-label">Movement reactions</label>
+<input type="range" class="form-range" id="customRange4">
+<label for="customRange1" class="form-label">Passing</label>
+<input type="range" class="form-range" id="customRange5">
+<label for="customRange1" class="form-label">Shooting</label>
+<input type="range" class="form-range" id="customRange6">
+<label for="customRange1" class="form-label">Skill ball control</label>
+<input type="range" class="form-range" id="customRange7">
+<label for="customRange1" class="form-label">Skill dribbling</label>
+<input type="range" class="form-range" id="customRange8">
+
+{% endblock %}

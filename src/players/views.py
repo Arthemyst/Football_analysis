@@ -14,6 +14,7 @@ from django.core.paginator import Paginator
 from django.http import HttpResponse
 import plotly.express as px
 import plotly.graph_objects as go
+import joblib
 
 
 from .forms import EditProfileForm, PasswordChangingForm, SignUpForm
@@ -373,5 +374,19 @@ class PlayerSearchView(ListView):
         return players
 
 
-class PlayerValueEstimation(TemplateView):
-    template_name = "players/player_value_estimation.html"
+class MidfielderValueEstimation(TemplateView):
+    template_name = "players/midfielder_value_estimation.html"
+
+    model_mid = joblib.load("players/models/model_mid_16.pkl")
+
+
+class AttackerValueEstimation(TemplateView):
+    template_name = "players/attacker_value_estimation.html"
+
+    model_att = joblib.load("players/models/model_att_16.pkl")
+
+
+class DefenderValueEstimation(TemplateView):
+    template_name = "players/defender_value_estimation.html"
+
+    model_def = joblib.load("players/models/model_def_16.pkl")
