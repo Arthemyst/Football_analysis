@@ -1,5 +1,3 @@
-
-
 from typing import Any, Dict
 
 from django.contrib.auth.forms import PasswordChangeForm
@@ -50,9 +48,8 @@ class PlayerDetailView(DetailView):
     model = Player
     context_object_name = "player"
 
-
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        self.request.session['chosen_player'] = self.context_object_name
+        self.request.session["chosen_player"] = self.context_object_name
 
         context = super().get_context_data(**kwargs)
         context["position_per_year"] = PlayerStatistics.objects.filter(
@@ -73,21 +70,27 @@ class PlayerDetailView(DetailView):
         if chosen_statistic:
             chosen_statistic = chosen_statistic.replace(" ", "_")
         else:
-            chosen_statistic = 'overall'
-        chosen_statistic_year = PlayerStatistics.objects.filter(
-            player=self.get_object()
-        ).values_list(chosen_statistic, "year").order_by('year')
+            chosen_statistic = "overall"
+        chosen_statistic_year = (
+            PlayerStatistics.objects.filter(player=self.get_object())
+            .values_list(chosen_statistic, "year")
+            .order_by("year")
+        )
 
         fig = go.Figure()
-        fig.add_trace(go.Scatter(
-            x = [c[1] for c in chosen_statistic_year],
-            y = [c[0] for c in chosen_statistic_year],
-        ))
-        fig.update_xaxes(dtick='d')
-        fig.update_layout(xaxis_title="Year", yaxis_title=chosen_statistic.replace("_", " "))
+        fig.add_trace(
+            go.Scatter(
+                x=[c[1] for c in chosen_statistic_year],
+                y=[c[0] for c in chosen_statistic_year],
+            )
+        )
+        fig.update_xaxes(dtick="d")
+        fig.update_layout(
+            xaxis_title="Year", yaxis_title=chosen_statistic.replace("_", " ")
+        )
 
-        if chosen_statistic != 'value_eur':
-            fig.update_yaxes(dtick='d')
+        if chosen_statistic != "value_eur":
+            fig.update_yaxes(dtick="d")
 
         chart = fig.to_html()
         context["chart"] = chart
@@ -156,7 +159,7 @@ def search_club(request):
 
     if request.method == "GET":
         searched = request.GET.get("searched_club")
-        request.session['save_searched_club'] = searched
+        request.session["save_searched_club"] = searched
         request.session.modified = True
         years = PlayerStatistics.objects.filter(club=searched).order_by()
         if not years:
@@ -165,19 +168,27 @@ def search_club(request):
             years_distinct = list(set([year.year for year in years]))
             last_year = years_distinct[-1]
             players = Player.objects.filter(
-                playerstatistics__club__icontains=searched, playerstatistics__year=last_year
+                playerstatistics__club__icontains=searched,
+                playerstatistics__year=last_year,
             ).order_by("id")
             club_name = list(set([player.club for player in years]))[0]
-            context = {"players": players, "searched": searched, "years": years_distinct, "club_name": club_name, "last_year": last_year}
+            context = {
+                "players": players,
+                "searched": searched,
+                "years": years_distinct,
+                "club_name": club_name,
+                "last_year": last_year,
+            }
             return render(request, "players/players_in_club.html", context)
     else:
         return render(request, "players/players_in_club.html", {})
+
 
 def search_club_year(request):
 
     if request.method == "GET":
         searched = request.session["save_searched_club"]
-        request.session['save_searched_club'] = searched
+        request.session["save_searched_club"] = searched
         request.session.modified = True
         years = PlayerStatistics.objects.filter(club=searched).order_by()
         years_distinct = list(set([year.year for year in years]))
@@ -186,7 +197,7 @@ def search_club_year(request):
         else:
             last_year = years_distinct[-1]
 
-        year = request.GET.get('year', False)
+        year = request.GET.get("year", False)
         if not year:
             year = last_year
         players = Player.objects.filter(
@@ -195,7 +206,13 @@ def search_club_year(request):
         years = PlayerStatistics.objects.filter(club=searched).order_by()
         years_distinct = list(set([year_item.year for year_item in years]))
         club_name = list(set([player.club for player in years]))[0]
-        context = {"players": players, "searched": searched, "years": years_distinct, "club_name": club_name, "year": year}
+        context = {
+            "players": players,
+            "searched": searched,
+            "years": years_distinct,
+            "club_name": club_name,
+            "year": year,
+        }
         return render(request, "players/players_in_club_year.html", context)
     else:
         return render(request, "players/players_in_club_year.html", {})
@@ -217,7 +234,7 @@ class PlayersCompareView(ListView):
 def compare_players(request):
 
     if request.method == "GET":
-        
+
         searched_player1 = request.GET.get("player1")
         searched_player2 = request.GET.get("player2")
 
@@ -271,34 +288,47 @@ def compare_players(request):
         player2_overall_per_year = PlayerStatistics.objects.filter(
             player__long_name=searched_player2
         ).values_list("year", "overall")
-        player1_value_per_year = PlayerStatistics.objects.filter(
-            player__long_name=searched_player1
-        ).values_list("value_eur", "year").order_by('year')
-        player2_value_per_year = PlayerStatistics.objects.filter(
-            player__long_name=searched_player2
-        ).values_list("value_eur", "year").order_by('year')
+        player1_value_per_year = (
+            PlayerStatistics.objects.filter(player__long_name=searched_player1)
+            .values_list("value_eur", "year")
+            .order_by("year")
+        )
+        player2_value_per_year = (
+            PlayerStatistics.objects.filter(player__long_name=searched_player2)
+            .values_list("value_eur", "year")
+            .order_by("year")
+        )
 
-        player1_value_per_year = PlayerStatistics.objects.filter(
-            player__long_name=searched_player1).values_list("value_eur", "year").order_by('year')
-        player2_value_per_year = PlayerStatistics.objects.filter(
-            player__long_name=searched_player2).values_list("value_eur", "year").order_by('year')
+        player1_value_per_year = (
+            PlayerStatistics.objects.filter(player__long_name=searched_player1)
+            .values_list("value_eur", "year")
+            .order_by("year")
+        )
+        player2_value_per_year = (
+            PlayerStatistics.objects.filter(player__long_name=searched_player2)
+            .values_list("value_eur", "year")
+            .order_by("year")
+        )
 
         fig = go.Figure()
-        fig.add_trace(go.Scatter(
-            x = [c[1] for c in player1_value_per_year],
-            y = [c[0] for c in player1_value_per_year],
-            name=f'{searched_player1}'
-        ))
-        fig.add_trace(go.Scatter(
-            x = [c[1] for c in player2_value_per_year],
-            y = [c[0] for c in player2_value_per_year],
-            name=f'{searched_player2}'
-        ))
-        fig.update_xaxes(dtick='d')
+        fig.add_trace(
+            go.Scatter(
+                x=[c[1] for c in player1_value_per_year],
+                y=[c[0] for c in player1_value_per_year],
+                name=f"{searched_player1}",
+            )
+        )
+        fig.add_trace(
+            go.Scatter(
+                x=[c[1] for c in player2_value_per_year],
+                y=[c[0] for c in player2_value_per_year],
+                name=f"{searched_player2}",
+            )
+        )
+        fig.update_xaxes(dtick="d")
         fig.update_layout(xaxis_title="Year", yaxis_title="Value eur")
         chart = fig.to_html()
-        
-        
+
         context = {
             "player1": player1,
             "player2": player2,
@@ -341,3 +371,7 @@ class PlayerSearchView(ListView):
         else:
             players = None
         return players
+
+
+class PlayerValueEstimation(TemplateView):
+    template_name = "players/player_value_estimation.html"

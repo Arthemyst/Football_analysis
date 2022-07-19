@@ -37,8 +37,6 @@
                 font-size: 3.5rem;
             }
         }
-
-        
     </style>
 
 </head>
@@ -67,35 +65,37 @@
                 </button>
                 <div class="collapse navbar-collapse" id="bdNavbar">
                     {% if user.is_authenticated %}
-                    
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                              Profile
-                            </button>
-                            <ul class="dropdown-menu">
-                              <li><a class="dropdown-item" href="{% url 'edit-profile' %}">Edit Profile</a></li>
-                              <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
-                              <li><a class="dropdown-item" href="{% url 'password' %}">Change Password</a></li>
-                            </ul>
-                        </div>
-                    
+
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Profile
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'edit-profile' %}">Edit Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                            <li><a class="dropdown-item" href="{% url 'password' %}">Change Password</a></li>
+                        </ul>
+                    </div>
+
 
                     {% else %}
-                <div class="btn-group">
+                    <div class="btn-group">
 
-                    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        Profile
-                      </button>
-                      <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{% url 'login' %}">Sign In</a></li>
-                        <li><a class="dropdown-item" href="{% url 'register' %}">Sign Up</a></li>
-                    </ul>
-                </div>
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Profile
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'login' %}">Sign In</a></li>
+                            <li><a class="dropdown-item" href="{% url 'register' %}">Sign Up</a></li>
+                        </ul>
+                    </div>
 
 
-  
+
                     {% endif %}
-                
+
 
                     <ul>
                         <li class="nav-item active">
@@ -112,17 +112,24 @@
                             <a class="nav-link px-2 text-white" href="{% url 'compare-players' %}">Compare players</a>
                         </li>
                     </ul>
-                
-            
-            </div>
+                    <ul>
+                        <li class="nav-item active">
+                            <a class="nav-link px-2 text-white" href="{% url 'player-value-estimation' %}">Player
+                                value estimation</a>
+                        </li>
+                    </ul>
 
-            <form class="d-flex" method=GET action="{% url 'player-search' %}">
 
-                {% csrf_token %} 
+                </div>
 
-                <input class="form-control mr-sm-2" type="search" placeholder="Search player" aria-label="Search" name="searched">
-                <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
-            </form>
+                <form class="d-flex" method=GET action="{% url 'player-search' %}">
+
+                    {% csrf_token %}
+
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search player" aria-label="Search"
+                        name="searched">
+                    <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+                </form>
             </div>
         </nav>
     </header>
