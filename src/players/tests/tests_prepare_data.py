@@ -2,9 +2,7 @@ from pathlib import Path
 
 import pandas as pd
 import pytest
-from players.constants import DEFAULT_COLUMNS, UNOPTIMIZABLE_COLUMNS
-from players.exceptions import (NoFilesException,
-                                NotExistingDirectoryException)
+from players.exceptions import NoFilesException, NotExistingDirectoryException
 from players.management.commands.prepare_data import Command
 
 

@@ -58,7 +58,7 @@
 
 
 
-                
+
             </div>
         </div>
 
@@ -66,27 +66,28 @@
             <div class="d-flex">
                 <div class="form-group">
                     <div class="input-group">
-            
+
                         <form class="d-flex" action="">
-                            <select required class="form-select" name="chosen_statistic" aria-label="Default select example">
+                            <select required class="form-select" name="chosen_statistic"
+                                aria-label="Default select example">
                                 <option selected="true" disabled="disabled" value="" hidden>Choose statistic</option>
                                 {% for statistic in statistics_list %}
                                 <option>{{ statistic }}</option>
                                 {% endfor %}
                             </select>
                             <span class="input-group-btn">
-            
-                            <button class="btn btn-lg btn-primary my-2 my-sm-0" type="submit">Click</button>
+
+                                <button class="btn btn-lg btn-primary my-2 my-sm-0" type="submit">Click</button>
                             </span>
                         </form>
-                        
+
                     </div>
                 </div>
             </div>
 
             {{ chart|safe }}
         </div>
-        
+
 
 </main>
 {% endblock %}

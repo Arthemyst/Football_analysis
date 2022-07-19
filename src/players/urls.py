@@ -9,6 +9,9 @@ from players.views import (
     ProfileTemplateView,
     UserEditView,
     UserRegisterView,
+    MidfielderValueEstimation,
+    AttackerValueEstimation,
+    DefenderValueEstimation,
     compare_players,
     search_club,
     search_player,
@@ -20,7 +23,6 @@ urlpatterns = [
     path("", HomeView.as_view(template_name="players/index.html"), name="home"),
     path("players/all/", PlayerListView.as_view(), name="player-list"),
     path("players/<int:pk>/", PlayerDetailView.as_view(), name="player-detail"),
-
     path("profile/", ProfileTemplateView.as_view(), name="profile"),
     path("register/", UserRegisterView.as_view(), name="register"),
     path("edit_profile/", UserEditView.as_view(), name="edit-profile"),
@@ -40,8 +42,19 @@ urlpatterns = [
     path("compare_searched_players/", compare_players, name="compare-searched-players"),
     path("compare_players/", PlayersCompareView.as_view(), name="compare-players"),
     path("club_searched/year/", search_club_year, name="players-in-club-year"),
-
-
-
-
+    path(
+        "midfielder_value_estimation/",
+        MidfielderValueEstimation.as_view(),
+        name="midfielder-value-estimation",
+    ),
+    path(
+        "attacker_value_estimation/",
+        AttackerValueEstimation.as_view(),
+        name="attacker-value-estimation",
+    ),
+    path(
+        "defender_value_estimation/",
+        DefenderValueEstimation.as_view(),
+        name="defender-value-estimation",
+    ),
 ]
