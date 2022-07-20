@@ -83,6 +83,7 @@ class PlayerDetailView(DetailView):
             go.Scatter(
                 x=[c[1] for c in chosen_statistic_year],
                 y=[c[0] for c in chosen_statistic_year],
+                
             )
         )
         fig.update_xaxes(dtick="d")
