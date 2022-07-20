@@ -1,33 +1,48 @@
 {% extends 'players/base.html' %}
 {% block content %}
-<h1>Player value estimator</h1>
-<h2>Position: midfielder</h2>
-<div class="input-group">
+<center>
+    <h1>Player value estimator</h1>
+    <h2>Position: midfielder</h2>
 
-    <form class="d-flex" action="">
-        <select required class="form-select" name="chosen_statistic" aria-label="Default select example">
-            <option selected="true" disabled="disabled" value="" hidden>Choose position</option>
+    <form method="post">
 
-            <option>Attacker</option>
-            <option>Midfielder</option>
-            <option>Defender</option>
+        <label>Dribbling
+            <input type="range" value="75" min="50" max="100" oninput="showAmount_dribbling(this.value)" />
+            <span id="dribbling">75</span>
+        </label>
 
-        </select>
-        <span class="input-group-btn">
+        <label>Movement reactions
+            <input type="range" value="75" min="50" max="100" oninput="showAmount_movement_reactions(this.value)" />
+            <span id="movement_reactions">75</span>
+        </label>
 
-            <button class="btn btn-lg btn-primary my-2 my-sm-0" type="submit">Click</button>
-        </span>
+        <label>Passing
+            <input type="range" value="75" min="50" max="100" oninput="showAmount_passing(this.value)" />
+            <span id="passing">75</span>
+        </label>
+
+        <label>Skill ball control
+            <input type="range" value="75" min="50" max="100" oninput="showAmount_skill_ball_control(this.value)" />
+            <span id="skill_ball_control">75</span>
+        </label>
+
+        <script>
+            function showAmount_dribbling(newAmount_dribbling) {
+                document.getElementById('dribbling').innerHTML = newAmount_dribbling;
+            }
+            function showAmount_movement_reactions(newAmount_movement_reactions) {
+                document.getElementById('movement_reactions').innerHTML = newAmount_movement_reactions;
+            }
+            function showAmount_passing(newAmount_passing) {
+                document.getElementById('passing').innerHTML = newAmount_passing;
+            }
+            function showAmount_skill_ball_control(newAmount_skill_ball_control) {
+                document.getElementById('skill_ball_control').innerHTML = newAmount_skill_ball_control;
+            }
+        </script>
+        <input type="submit" value="Estimate">
     </form>
+</center>
 
-</div>
-
-<label for="customRange1" class="form-label">Dribbling</label>
-<input type="range" class="form-range" id="customRange1">
-<label for="customRange1" class="form-label">Movement reactions</label>
-<input type="range" class="form-range" id="customRange2">
-<label for="customRange1" class="form-label">Passing</label>
-<input type="range" class="form-range" id="customRange3">
-<label for="customRange1" class="form-label">Skill ball control</label>
-<input type="range" class="form-range" id="customRange4">
 
 {% endblock %}

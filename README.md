@@ -4,8 +4,9 @@
 
 Program will be used to vizualization data about football players.
 Data of players are uploaded from FIFA databases prepared by member of kaggle.com community: https://www.kaggle.com/stefanoleone992/fifa-20-complete-player-dataset
-Databases are separated by years, from 2016 to 2020. In program we can look parameters for each player. We can compare players parameters, make visualisation of clubs.
-Vizualization works with website with usage of Django framework and is connected to docker.
+Databases are separated by years, from 2016 to 2020. In program we can look how parameters are related to player overall rate and player value. We can compare players parameters, make visualisation of clubs, positions, nationality rankings etc.
+Data vizualization is based on python libraries like pandas, plotly, nupmy.
+Vizualization works with website with usage of Django framework.
 
 ## Setup
 
@@ -38,21 +39,16 @@ Application runs on docker. Please run docker-compose to install dependiences an
 $ docker-compose -f docker/docker-compose.yaml up --build
 ```
 
-When app is running please use add_data management command to upload database:
+To test applications:
 ```sh
-$ docker exec -it docker_web_1 /bin/bash
-/app# python manage.py add_data players/data
+(env)$ docker exec -it docker_web_1 /bin/bash
+(env)$ python3 -m pytest players/tests/tests_prepare_data.py
+(env)$ python3 -m pytest players/tests/tests_add_data.py
 ```
 
-To test application:
+To load data to database:
 ```sh
-$ docker exec -it docker_web_1 /bin/bash
-/app# python -m pytest players/tests/tests_add_data.py
-/app# python -m pytest players/tests/tests_prepare_data.py
-```
-
-Run app in website:
-```sh
-http://localhost:8000
+(env)$ docker exec -it docker_web_1 /bin/bash
+(env)$ python3 manage.py add_data players/data
 ```
 
