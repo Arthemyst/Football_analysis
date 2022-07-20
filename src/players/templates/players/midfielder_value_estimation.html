@@ -1,30 +1,44 @@
 {% extends 'players/base.html' %}
 {% block content %}
 <center>
-    <h1>Player value estimator</h1>
-    <h2>Position: midfielder</h2>
+    <div class="shadow p-2 mb-2 bg-body rounded">
+        <h1>Player value estimator</h1>
+        <h2>Position: midfielder</h2>
+    </div>
+</center>
+<form method="post">
+    <div class="column">
 
-    <form method="post">
+        <div class="item shadow p-2 mb-2 bg-body rounded">
+            <label>Dribbling
+                <input type="range" class="form-range" value="75" min="50" max="100"
+                    oninput="showAmount_dribbling(this.value)" />
+                <span id="dribbling">75</span>
+            </label>
+        </div>
+        <div class="item shadow p-2 mb-2 bg-body rounded">
+            <label>Movement reactions
+                <input type="range" class="form-range" value="75" min="50" max="100"
+                    oninput="showAmount_movement_reactions(this.value)" />
+                <span id="movement_reactions">75</span>
+            </label>
+        </div>
+        <div class="item shadow p-2 mb-2 bg-body rounded">
 
-        <label>Dribbling
-            <input type="range" value="75" min="50" max="100" oninput="showAmount_dribbling(this.value)" />
-            <span id="dribbling">75</span>
-        </label>
+            <label>Passing
+                <input type="range" class="form-range" value="75" min="50" max="100"
+                    oninput="showAmount_passing(this.value)" />
+                <span id="passing">75</span>
+            </label>
+        </div>
+        <div class="item shadow p-2 mb-2 bg-body rounded">
 
-        <label>Movement reactions
-            <input type="range" value="75" min="50" max="100" oninput="showAmount_movement_reactions(this.value)" />
-            <span id="movement_reactions">75</span>
-        </label>
-
-        <label>Passing
-            <input type="range" value="75" min="50" max="100" oninput="showAmount_passing(this.value)" />
-            <span id="passing">75</span>
-        </label>
-
-        <label>Skill ball control
-            <input type="range" value="75" min="50" max="100" oninput="showAmount_skill_ball_control(this.value)" />
-            <span id="skill_ball_control">75</span>
-        </label>
+            <label>Skill ball control
+                <input type="range" class="form-range" value="75" min="50" max="100"
+                    oninput="showAmount_skill_ball_control(this.value)" />
+                <span id="skill_ball_control">75</span>
+            </label>
+        </div>
 
         <script>
             function showAmount_dribbling(newAmount_dribbling) {
@@ -40,9 +54,21 @@
                 document.getElementById('skill_ball_control').innerHTML = newAmount_skill_ball_control;
             }
         </script>
-        <input type="submit" value="Estimate">
-    </form>
+        <input type="submit" value="Estimate" class="btn btn-lg btn-primary my-2 my-sm-0">
+    </div>
+</form>
+
+<div class="item shadow p-2 mb-2 bg-body rounded">
+    <h4>You have chosen parameters:</h4>
+    <p>Dribbling: 73</p>
+    <p>Movement reactions: 75</p>
+    <p>Passing: 81</p>
+    <p>Skill ball control: 89</p>
+</div>
+<center>
+    <div class="item shadow p-2 mb-2 bg-body rounded">
+        <h4>Estimated value:</h4>
+        <p>453252352 euro</p>
+    </div>
 </center>
-
-
 {% endblock %}
