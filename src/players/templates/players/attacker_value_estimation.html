@@ -1,40 +1,122 @@
 {% extends 'players/base.html' %}
 {% block content %}
-<h1>Player value estimator</h1>
-<h2>Position: attacker</h2>
-<div class="input-group">
+<center>
+    <div class="shadow p-2 mb-2 bg-body rounded">
+        <h1>Player value estimator</h1>
+        <h2>Position: attacker</h2>
+    </div>
+</center>
+<form method="post">
+    <div class="column">
 
-    <form class="d-flex" action="">
-        <select required class="form-select" name="chosen_statistic" aria-label="Default select example">
-            <option selected="true" disabled="disabled" value="" hidden>Choose position</option>
+        <div class="item shadow p-2 mb-2 bg-body rounded">
+            <label>Attacking finishing
+                <input type="range" class="form-range" value="75" min="50" max="100"
+                    oninput="showAmount_attacking_finishing(this.value)" />
+                <span id="attacking_finishing">75</span>
+            </label>
+        </div>
+        <div class="item shadow p-2 mb-2 bg-body rounded">
+            <label>Dribbling
+                <input type="range" class="form-range" value="75" min="50" max="100"
+                    oninput="showAmount_dribbling(this.value)" />
+                <span id="dribbling">75</span>
+            </label>
+        </div>
+        <div class="item shadow p-2 mb-2 bg-body rounded">
 
-            <option>Attacker</option>
-            <option>Midfielder</option>
-            <option>Defender</option>
+            <label>Mentality positioning
+                <input type="range" class="form-range" value="75" min="50" max="100"
+                    oninput="showAmount_mentality_positioning(this.value)" />
+                <span id="mentality_positioning">75</span>
+            </label>
+        </div>
+        <div class="item shadow p-2 mb-2 bg-body rounded">
 
-        </select>
-        <span class="input-group-btn">
+            <label>Movement reactions
+                <input type="range" class="form-range" value="75" min="50" max="100"
+                    oninput="showAmount_movement_reactions(this.value)" />
+                <span id="movement_reactions">75</span>
+            </label>
+        </div>
+        <div class="item shadow p-2 mb-2 bg-body rounded">
 
-            <button class="btn btn-lg btn-primary my-2 my-sm-0" type="submit">Click</button>
-        </span>
-    </form>
+            <label>Passing
+                <input type="range" class="form-range" value="75" min="50" max="100"
+                    oninput="showAmount_passing(this.value)" />
+                <span id="passing">75</span>
+            </label>
+        </div>
+        <div class="item shadow p-2 mb-2 bg-body rounded">
+
+            <label>Shooting
+                <input type="range" class="form-range" value="75" min="50" max="100"
+                    oninput="showAmount_shooting(this.value)" />
+                <span id="shooting">75</span>
+            </label>
+        </div>
+        <div class="item shadow p-2 mb-2 bg-body rounded">
+
+            <label>Skill ball control
+                <input type="range" class="form-range" value="75" min="50" max="100"
+                    oninput="showAmount_skill_ball_control(this.value)" />
+                <span id="skill_ball_control">75</span>
+            </label>
+        </div>
+        <div class="item shadow p-2 mb-2 bg-body rounded">
+
+            <label>Skill dribbling
+                <input type="range" class="form-range" value="75" min="50" max="100"
+                    oninput="showAmount_skill_dribbling(this.value)" />
+                <span id="skill_dribbling">75</span>
+            </label>
+        </div>
+        <script>
+            function showAmount_attacking_finishing(newAmount_attacking_finishing) {
+                document.getElementById('attacking_finishing').innerHTML = newAmount_attacking_finishing;
+            }
+            function showAmount_dribbling(newAmount_dribbling) {
+                document.getElementById('dribbling').innerHTML = newAmount_dribbling;
+            }
+            function showAmount_mentality_positioning(newAmount_mentality_positioning) {
+                document.getElementById('mentality_positioning').innerHTML = newAmount_mentality_positioning;
+            }
+            function showAmount_movement_reactions(newAmount_movement_reactions) {
+                document.getElementById('movement_reactions').innerHTML = newAmount_movement_reactions;
+            }
+            function showAmount_passing(newAmount_passing) {
+                document.getElementById('passing').innerHTML = newAmount_passing;
+            }
+            function showAmount_shooting(newAmount_shooting) {
+                document.getElementById('passing').innerHTML = newAmount_shooting;
+            }
+            function showAmount_skill_ball_control(newAmount_skill_ball_control) {
+                document.getElementById('paskill_ball_controlssing').innerHTML = newAmount_skill_ball_control;
+            }
+            function showAmount_skill_dribbling(newAmount_skill_dribbling) {
+                document.getElementById('skill_dribbling').innerHTML = newAmount_skill_dribbling;
+            }
+        </script>
+        <input type="submit" value="Estimate" class="btn btn-lg btn-primary my-2 my-sm-0">
+    </div>
+</form>
+
+<div class="item shadow p-2 mb-2 bg-body rounded">
+    <h4>You have chosen parameters:</h4>
+    <p>Attacking finishing: 73</p>
+    <p>Dribbling: 75</p>
+    <p>Movement reactions: 81</p>
+    <p>Passing: 89</p>
+    <p>Shooting: 89</p>
+    <p>Skill ball control: 89</p>
+    <p>Skill dribbling: 89</p>
 
 </div>
-<label for="customRange1" class="form-label">Attacking finishing</label>
-<input type="range" class="form-range" id="customRange1">
-<label for="customRange1" class="form-label">Dribbling</label>
-<input type="range" class="form-range" id="customRange2">
-<label for="customRange1" class="form-label">Mentality positioning</label>
-<input type="range" class="form-range" id="customRange3">
-<label for="customRange1" class="form-label">Movement reactions</label>
-<input type="range" class="form-range" id="customRange4">
-<label for="customRange1" class="form-label">Passing</label>
-<input type="range" class="form-range" id="customRange5">
-<label for="customRange1" class="form-label">Shooting</label>
-<input type="range" class="form-range" id="customRange6">
-<label for="customRange1" class="form-label">Skill ball control</label>
-<input type="range" class="form-range" id="customRange7">
-<label for="customRange1" class="form-label">Skill dribbling</label>
-<input type="range" class="form-range" id="customRange8">
+<center>
+    <div class="item shadow p-2 mb-2 bg-body rounded">
+        <h4>Estimated value:</h4>
+        <p>453252352 euro</p>
+    </div>
+</center>
 
 {% endblock %}
