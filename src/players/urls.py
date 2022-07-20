@@ -11,7 +11,7 @@ from players.views import (
     UserRegisterView,
     MidfielderValueEstimation,
     AttackerValueEstimation,
-    DefenderValueEstimation,
+    defender_value_estimation,
     compare_players,
     search_club,
     search_player,
@@ -54,7 +54,7 @@ urlpatterns = [
     ),
     path(
         "defender_value_estimation/",
-        DefenderValueEstimation.as_view(),
+        defender_value_estimation,
         name="defender-value-estimation",
     ),
 ]

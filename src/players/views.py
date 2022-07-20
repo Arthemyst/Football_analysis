@@ -1,4 +1,5 @@
 from typing import Any, Dict
+from urllib import request
 
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import PasswordChangeView
@@ -387,7 +388,51 @@ class AttackerValueEstimation(TemplateView):
     model_att = joblib.load("players/models/model_att_16.pkl")
 
 
-class DefenderValueEstimation(TemplateView):
-    template_name = "players/defender_value_estimation.html"
+def defender_value_estimation(request):
+    if request.method == "POST":
+        defending = request.POST.get("defending")
+        defending_marking = request.POST.get("defending_marking")
+        defending_sliding_tackle = request.POST.get("defending_sliding_tackle")
+        defending_standing_tackle = request.POST.get("defending_standing_tackle")
+        movement_reactions = request.POST.get("movement_reactions")
+        mentality_interceptions = request.POST.get("mentality_interceptions")
+        defending = request.POST.get("defending")
 
-    model_def = joblib.load("players/models/model_def_16.pkl")
+
+        model_def = joblib.load("players/models/model_def_16.pkl")
+        
+        pred_defender = int(model_def.predict([[
+            defending, 
+            defending_marking, 
+            defending_sliding_tackle, 
+            defending_standing_tackle, 
+            mentality_interceptions, 
+            movement_reactions,
+            ]])[0])
+        euro = "euro"
+        
+        context = {
+            "defending": defending, 
+            "defending_marking": defending_marking, 
+            "defending_sliding_tackle": defending_sliding_tackle,
+            "defending_standing_tackle": defending_standing_tackle, 
+            "mentality_interceptions": mentality_interceptions, 
+            "movement_reactions": movement_reactions, 
+            "pred_defender": pred_defender,
+            "euro": euro,
+            }
+        return render(request, "players/defender_value_estimation.html", context)
+    else:
+        context = {
+            "defending": 75, 
+            "defending_marking": 75, 
+            "defending_sliding_tackle": 75,
+            "defending_standing_tackle": 75, 
+            "mentality_interceptions": 75, 
+            "movement_reactions": 75, 
+            "pred_defender": "Click estimation button",
+            "euro": "",
+            }
+        return render(request, "players/defender_value_estimation.html", context)
+
+
