@@ -20,6 +20,10 @@ import joblib
 
 from .forms import EditProfileForm, PasswordChangingForm, SignUpForm
 
+model_mid = joblib.load("players/models/model_mid_16.pkl")
+model_att = joblib.load("players/models/model_att_16.pkl")
+model_def = joblib.load("players/models/model_def_16.pkl")
+
 
 class PlayerListView(ListView):
 
@@ -394,10 +398,8 @@ def defender_value_estimation(request):
         mentality_interceptions = request.POST.get("mentality_interceptions")
         defending = request.POST.get("defending")
 
-
-        model = joblib.load("players/models/model_def_16.pkl")
         
-        pred_value = int(model.predict([[
+        pred_value = int(model_def.predict([[
             defending, 
             defending_marking, 
             defending_sliding_tackle, 
@@ -442,10 +444,8 @@ def attacker_value_estimation(request):
         shooting = request.POST.get("shooting")
         skill_ball_control = request.POST.get("skill_ball_control")
         skill_dribbling = request.POST.get("skill_dribbling")
-
-        model = joblib.load("players/models/model_att_16.pkl")
         
-        pred_value = int(model.predict([[
+        pred_value = int(model_att.predict([[
             attacking_finishing, 
             attacking_short_passing, 
             dribbling, 
@@ -500,11 +500,8 @@ def midfielder_value_estimation(request):
         skill_ball_control = request.POST.get("skill_ball_control")
         skill_dribbling = request.POST.get("skill_dribbling")
         skill_long_passing = request.POST.get("skill_long_passing")
-
-
-        model = joblib.load("players/models/model_mid_16.pkl")
         
-        pred_value = int(model.predict([[
+        pred_value = int(model_mid.predict([[
             attacking_short_passing, 
             dribbling, 
             mentality_positioning, 
