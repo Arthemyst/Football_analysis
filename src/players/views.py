@@ -16,7 +16,7 @@ from django.http import HttpResponse
 import plotly.express as px
 import plotly.graph_objects as go
 import joblib
-
+from math import log, floor
 
 from .forms import EditProfileForm, PasswordChangingForm, SignUpForm
 
@@ -224,7 +224,6 @@ def search_club_year(request):
     else:
         return render(request, "players/players_in_club_year.html", {})
 
-
 class PlayersCompareView(ListView):
     model = Player
     template_name = "players/compare_players.html"
@@ -416,7 +415,7 @@ def defender_value_estimation(request):
             "defending_standing_tackle": defending_standing_tackle, 
             "mentality_interceptions": mentality_interceptions, 
             "movement_reactions": movement_reactions, 
-            "pred_value": pred_value,
+            "pred_value": change_number_format(pred_value),
             "euro": euro,
             }
         return render(request, "players/defender_value_estimation.html", context)
@@ -469,7 +468,7 @@ def attacker_value_estimation(request):
             "skill_ball_control": skill_ball_control,
             "skill_dribbling": skill_dribbling,
             "euro": "euro",
-            "pred_value": pred_value
+            "pred_value": change_number_format(pred_value)
             }
         return render(request, "players/attacker_value_estimation.html", context)
     else:
@@ -526,7 +525,7 @@ def midfielder_value_estimation(request):
             "skill_dribbling": skill_dribbling,
             "skill_long_passing": skill_long_passing,
             "euro": "euro",
-            "pred_value": pred_value
+            "pred_value": change_number_format(pred_value)
             }
         return render(request, "players/midfielder_value_estimation.html", context)
     else:
@@ -545,3 +544,9 @@ def midfielder_value_estimation(request):
             "euro": "",
             }
         return render(request, "players/midfielder_value_estimation.html", context)
+
+def change_number_format(number):
+    units = ['', ' K', ' MLN']
+    k = 1000.0
+    magnitude = int(floor(log(number, k)))
+    return '%.3f%s' % (number / k**magnitude, units[magnitude])
