@@ -6,70 +6,83 @@
         <h2>Position: attacker</h2>
     </div>
 </center>
-<div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+<div class="row g-4 py-5 row-cols-1 row-cols-lg-2">
 
-    <form method="get">
+    <form method="post">
         {% csrf_token %}
 
         <div class="column">
 
             <div class="item shadow p-2 mb-2 bg-body rounded">
                 Attacking finishing
-                <input type="range" class="form-range" value="75" min="50" max="100"
-                    oninput="showAmount_attacking_finishing(this.value)" />
-                <span id="attacking_finishing">75</span>
+                <input type="range" class="form-range" value="{{ attacking_finishing }}" min="50" max="100"
+                    oninput="showAmount_attacking_finishing(this.value)" name="attacking_finishing" />
+                <span id="attacking_finishing">{{ attacking_finishing }}</span>
+            </div>
+            <div class="item shadow p-2 mb-2 bg-body rounded">
+                Attacking short passing
+                <input type="range" class="form-range" value="{{ attacking_short_passing }}" min="50" max="100"
+                    oninput="showAmount_attacking_short_passing(this.value)" name="attacking_short_passing" />
+                <span id="attacking_short_passing">{{ attacking_short_passing }}</span>
             </div>
             <div class="item shadow p-2 mb-2 bg-body rounded">
                 Dribbling
-                <input type="range" class="form-range" value="75" min="50" max="100"
-                    oninput="showAmount_dribbling(this.value)" />
-                <span id="dribbling">75</span>
+                <input type="range" class="form-range" value="{{ dribbling }}" min="50" max="100"
+                    oninput="showAmount_dribbling(this.value)" name="dribbling" />
+                <span id="dribbling">{{ dribbling }}</span>
             </div>
             <div class="item shadow p-2 mb-2 bg-body rounded">
 
                 Mentality positioning
-                <input type="range" class="form-range" value="75" min="50" max="100"
-                    oninput="showAmount_mentality_positioning(this.value)" />
-                <span id="mentality_positioning">75</span>
+                <input type="range" class="form-range" value="{{ mentality_positioning }}" min="50" max="100"
+                    oninput="showAmount_mentality_positioning(this.value)" name="mentality_positioning" />
+                <span id="mentality_positioning">{{ mentality_positioning }}</span>
             </div>
+        </div>
+
+        <div class="column">
+
             <div class="item shadow p-2 mb-2 bg-body rounded">
 
                 Movement reactions
-                <input type="range" class="form-range" value="75" min="50" max="100"
-                    oninput="showAmount_movement_reactions(this.value)" />
-                <span id="movement_reactions">75</span>
+                <input type="range" class="form-range" value="{{ movement_reactions }}" min="50" max="100"
+                    oninput="showAmount_movement_reactions(this.value)" name="movement_reactions" />
+                <span id="movement_reactions">{{ movement_reactions }}</span>
             </div>
             <div class="item shadow p-2 mb-2 bg-body rounded">
 
                 Passing
-                <input type="range" class="form-range" value="75" min="50" max="100"
-                    oninput="showAmount_passing(this.value)" />
-                <span id="passing">75</span>
+                <input type="range" class="form-range" value="{{ passing }}" min="50" max="100"
+                    oninput="showAmount_passing(this.value)" name="passing" />
+                <span id="passing">{{ passing }}</span>
             </div>
             <div class="item shadow p-2 mb-2 bg-body rounded">
 
                 Shooting
-                <input type="range" class="form-range" value="75" min="50" max="100"
-                    oninput="showAmount_shooting(this.value)" />
-                <span id="shooting">75</span>
+                <input type="range" class="form-range" value="{{ shooting }}" min="50" max="100"
+                    oninput="showAmount_shooting(this.value)" name="shooting" />
+                <span id="shooting">{{ shooting }}</span>
             </div>
             <div class="item shadow p-2 mb-2 bg-body rounded">
 
                 Skill ball control
-                <input type="range" class="form-range" value="75" min="50" max="100"
-                    oninput="showAmount_skill_ball_control(this.value)" />
-                <span id="skill_ball_control">75</span>
+                <input type="range" class="form-range" value="{{ skill_ball_control }}" min="50" max="100"
+                    oninput="showAmount_skill_ball_control(this.value)" name="skill_ball_control" />
+                <span id="skill_ball_control">{{ skill_ball_control }}</span>
             </div>
             <div class="item shadow p-2 mb-2 bg-body rounded">
 
                 Skill dribbling
-                <input type="range" class="form-range" value="75" min="50" max="100"
-                    oninput="showAmount_skill_dribbling(this.value)" />
-                <span id="skill_dribbling">75</span>
+                <input type="range" class="form-range" value="{{ skill_dribbling }}" min="50" max="100"
+                    oninput="showAmount_skill_dribbling(this.value)" name="skill_dribbling" />
+                <span id="skill_dribbling">{{ skill_dribbling }}</span>
             </div>
             <script>
                 function showAmount_attacking_finishing(newAmount_attacking_finishing) {
                     document.getElementById('attacking_finishing').innerHTML = newAmount_attacking_finishing;
+                }
+                function showAmount_attacking_short_passing(newAmount_attacking_short_passing) {
+                    document.getElementById('attacking_short_passing').innerHTML = newAmount_attacking_short_passing;
                 }
                 function showAmount_dribbling(newAmount_dribbling) {
                     document.getElementById('dribbling').innerHTML = newAmount_dribbling;
@@ -84,10 +97,10 @@
                     document.getElementById('passing').innerHTML = newAmount_passing;
                 }
                 function showAmount_shooting(newAmount_shooting) {
-                    document.getElementById('passing').innerHTML = newAmount_shooting;
+                    document.getElementById('shooting').innerHTML = newAmount_shooting;
                 }
                 function showAmount_skill_ball_control(newAmount_skill_ball_control) {
-                    document.getElementById('paskill_ball_controlssing').innerHTML = newAmount_skill_ball_control;
+                    document.getElementById('skill_ball_control').innerHTML = newAmount_skill_ball_control;
                 }
                 function showAmount_skill_dribbling(newAmount_skill_dribbling) {
                     document.getElementById('skill_dribbling').innerHTML = newAmount_skill_dribbling;
@@ -103,19 +116,21 @@
 
         <div class="item shadow p-2 mb-2 bg-body rounded">
             <h4>You have chosen parameters:</h4>
-            <p>Attacking finishing: 73</p>
-            <p>Dribbling: 75</p>
-            <p>Movement reactions: 81</p>
-            <p>Passing: 89</p>
-            <p>Shooting: 89</p>
-            <p>Skill ball control: 89</p>
-            <p>Skill dribbling: 89</p>
+            <p>Attacking finishing: {{ attacking_finishing }}</p>
+            <p>Attacking short passing: {{ attacking_short_passing }}</p>
+            <p>Dribbling: {{ dribbling }}</p>
+            <p>Mentality positioning: {{ mentality_positioning }}</p>
+            <p>Movement reactions: {{ movement_reactions }}</p>
+            <p>Passing: {{ passing }}</p>
+            <p>Shooting: {{ shooting }}</p>
+            <p>Skill ball control: {{ skill_ball_control }}</p>
+            <p>Skill dribbling: {{ skill_dribbling }}</p>
 
         </div>
         <center>
             <div class="item shadow p-2 mb-2 bg-body rounded">
                 <h4>Estimated value:</h4>
-                {{ pred_attacker }} euro
+                {{ pred_value }} {{ euro }}
             </div>
         </center>
     </div>

@@ -382,10 +382,6 @@ class MidfielderValueEstimation(TemplateView):
     model_mid = joblib.load("players/models/model_mid_16.pkl")
 
 
-class AttackerValueEstimation(TemplateView):
-    template_name = "players/attacker_value_estimation.html"
-
-    model_att = joblib.load("players/models/model_att_16.pkl")
 
 
 def defender_value_estimation(request):
@@ -399,9 +395,9 @@ def defender_value_estimation(request):
         defending = request.POST.get("defending")
 
 
-        model_def = joblib.load("players/models/model_def_16.pkl")
+        model = joblib.load("players/models/model_def_16.pkl")
         
-        pred_defender = int(model_def.predict([[
+        pred_value = int(model.predict([[
             defending, 
             defending_marking, 
             defending_sliding_tackle, 
@@ -418,7 +414,7 @@ def defender_value_estimation(request):
             "defending_standing_tackle": defending_standing_tackle, 
             "mentality_interceptions": mentality_interceptions, 
             "movement_reactions": movement_reactions, 
-            "pred_defender": pred_defender,
+            "pred_value": pred_value,
             "euro": euro,
             }
         return render(request, "players/defender_value_estimation.html", context)
@@ -430,9 +426,125 @@ def defender_value_estimation(request):
             "defending_standing_tackle": 75, 
             "mentality_interceptions": 75, 
             "movement_reactions": 75, 
-            "pred_defender": "Click estimation button",
+            "pred_value": "Click estimation button",
             "euro": "",
             }
         return render(request, "players/defender_value_estimation.html", context)
 
+def attacker_value_estimation(request):
+    if request.method == "POST":
+        attacking_finishing = request.POST.get("attacking_finishing")
+        attacking_short_passing = request.POST.get("attacking_short_passing")
+        dribbling = request.POST.get("dribbling")
+        mentality_positioning = request.POST.get("mentality_positioning")
+        movement_reactions = request.POST.get("movement_reactions")
+        passing = request.POST.get("passing")
+        shooting = request.POST.get("shooting")
+        skill_ball_control = request.POST.get("skill_ball_control")
+        skill_dribbling = request.POST.get("skill_dribbling")
 
+        model = joblib.load("players/models/model_att_16.pkl")
+        
+        pred_value = int(model.predict([[
+            attacking_finishing, 
+            attacking_short_passing, 
+            dribbling, 
+            mentality_positioning, 
+            movement_reactions, 
+            passing,
+            shooting,
+            skill_ball_control,
+            skill_dribbling,
+
+            ]])[0])
+       
+        context = {
+            "attacking_finishing": attacking_finishing, 
+            "attacking_short_passing": attacking_short_passing, 
+            "dribbling": dribbling,
+            "mentality_positioning": mentality_positioning, 
+            "movement_reactions": movement_reactions, 
+            "passing": passing, 
+            "shooting": shooting,
+            "skill_ball_control": skill_ball_control,
+            "skill_dribbling": skill_dribbling,
+            "euro": "euro",
+            "pred_value": pred_value
+            }
+        return render(request, "players/attacker_value_estimation.html", context)
+    else:
+        context = {
+            "attacking_finishing": 75, 
+            "attacking_short_passing": 75, 
+            "dribbling": 75,
+            "mentality_positioning": 75, 
+            "movement_reactions": 75, 
+            "passing": 75, 
+            "shooting": 75,
+            "skill_ball_control": 75,
+            "skill_dribbling": 75,
+            "pred_value": "Click estimation button",
+            "euro": "",
+            }
+        return render(request, "players/attacker_value_estimation.html", context)
+
+def midfielder_value_estimation(request):
+    if request.method == "POST":
+        attacking_short_passing = request.POST.get("attacking_short_passing")
+        dribbling = request.POST.get("dribbling")
+        mentality_positioning = request.POST.get("mentality_positioning")
+        mentality_vision = request.POST.get("mentality_vision")
+        movement_reactions = request.POST.get("movement_reactions")
+        passing = request.POST.get("passing")
+        shooting = request.POST.get("shooting")
+        skill_ball_control = request.POST.get("skill_ball_control")
+        skill_dribbling = request.POST.get("skill_dribbling")
+        skill_long_passing = request.POST.get("skill_long_passing")
+
+
+        model = joblib.load("players/models/model_mid_16.pkl")
+        
+        pred_value = int(model.predict([[
+            attacking_short_passing, 
+            dribbling, 
+            mentality_positioning, 
+            mentality_vision,
+            movement_reactions,
+            passing,
+            shooting,
+            skill_ball_control,
+            skill_dribbling,
+            skill_long_passing,
+            ]])[0])
+       
+        context = {
+            "attacking_short_passing": attacking_short_passing,
+            "dribbling": dribbling, 
+            "mentality_positioning": mentality_positioning, 
+            "mentality_vision": mentality_vision,
+            "movement_reactions": movement_reactions, 
+            "passing": passing,
+            "shooting": shooting,
+            "skill_ball_control": skill_ball_control,
+            "skill_dribbling": skill_dribbling,
+            "skill_long_passing": skill_long_passing,
+            "euro": "euro",
+            "pred_value": pred_value
+            }
+        return render(request, "players/midfielder_value_estimation.html", context)
+    else:
+        context = {
+            "attacking_short_passing": 75,
+            "dribbling": 75, 
+            "mentality_positioning": 75, 
+            "mentality_vision": 75,
+            "movement_reactions": 75, 
+            "passing": 75,
+            "shooting": 75,
+            "skill_ball_control": 75,
+            "skill_dribbling": 75,
+            "skill_long_passing": 75,
+            "pred_value": "Click estimation button",
+            "euro": "",
+            }
+        return render(request, "players/midfielder_value_estimation.html", context)
