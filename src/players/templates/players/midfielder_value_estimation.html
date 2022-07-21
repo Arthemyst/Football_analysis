@@ -6,12 +6,11 @@
         <h2>Position: midfielder</h2>
     </div>
 </center>
-<div class="row g-4 py-5 row-cols-1 row-cols-lg-2">
+<div class="flex row">
+    <div class="col-lg">
+        <form method="post">
+            {% csrf_token %}
 
-    <form method="post">
-        {% csrf_token %}
-
-        <div class="column">
 
             <div class="item shadow p-2 mb-2 bg-body rounded">
                 Attacking short passing
@@ -19,12 +18,14 @@
                     oninput="showAmount_attacking_short_passing(this.value)" name="attacking_short_passing" />
                 <span id="attacking_short_passing">{{ attacking_short_passing }}</span>
             </div>
+
             <div class="item shadow p-2 mb-2 bg-body rounded">
                 Dribbling
                 <input type="range" class="form-range" value="{{ dribbling }}" min="50" max="100"
                     oninput="showAmount_dribbling(this.value)" name="dribbling" />
                 <span id="dribbling">{{ dribbling }}</span>
             </div>
+
             <div class="item shadow p-2 mb-2 bg-body rounded">
 
                 Mentality positioning
@@ -32,6 +33,7 @@
                     oninput="showAmount_mentality_positioning(this.value)" name="mentality_positioning" />
                 <span id="mentality_positioning">{{ mentality_positioning }}</span>
             </div>
+
             <div class="item shadow p-2 mb-2 bg-body rounded">
 
                 Mentality vision
@@ -47,54 +49,53 @@
                     oninput="showAmount_movement_reactions(this.value)" name="movement_reactions" />
                 <span id="movement_reactions">{{ movement_reactions }}</span>
             </div>
+    </div>
+    <div class="col-lg">
+        <div class="item shadow p-2 mb-2 bg-body rounded">
 
-            <div class="item shadow p-2 mb-2 bg-body rounded">
-
-                Passing
-                <input type="range" class="form-range" value="{{ passing }}" min="50" max="100"
-                    oninput="showAmount_passing(this.value)" name="passing" />
-                <span id="passing">{{ passing }}</span>
-            </div>
-
-            <div class="item shadow p-2 mb-2 bg-body rounded">
-
-                Shooting
-                <input type="range" class="form-range" value="{{ shooting }}" min="50" max="100"
-                    oninput="showAmount_shooting(this.value)" name="shooting" />
-                <span id="shooting">{{ shooting }}</span>
-            </div>
-
-            <div class="item shadow p-2 mb-2 bg-body rounded">
-
-                Skill ball control
-                <input type="range" class="form-range" value="{{ skill_ball_control }}" min="50" max="100"
-                    oninput="showAmount_skill_ball_control(this.value)" name="skill_ball_control" />
-                <span id="skill_ball_control">{{ skill_ball_control }}</span>
-            </div>
-
-            <div class="item shadow p-2 mb-2 bg-body rounded">
-
-                Skill dribbling
-                <input type="range" class="form-range" value="{{ skill_dribbling }}" min="50" max="100"
-                    oninput="showAmount_skill_dribbling(this.value)" name="skill_dribbling" />
-                <span id="skill_dribbling">{{ skill_dribbling }}</span>
-            </div>
-
-            <div class="item shadow p-2 mb-2 bg-body rounded">
-
-                Skill long passing
-                <input type="range" class="form-range" value="{{ skill_long_passing }}" min="50" max="100"
-                    oninput="showAmount_skill_long_passing(this.value)" name="skill_long_passing" />
-                <span id="skill_long_passing">{{ skill_long_passing }}</span>
-            </div>
-
-
-            <center>
-                <input type="submit" value="Estimate" class="btn btn-lg btn-primary my-2 my-sm-0">
-            </center>
+            Passing
+            <input type="range" class="form-range" value="{{ passing }}" min="50" max="100"
+                oninput="showAmount_passing(this.value)" name="passing" />
+            <span id="passing">{{ passing }}</span>
         </div>
-    </form>
-    <div class="feature col">
+
+
+        <div class="item shadow p-2 mb-2 bg-body rounded">
+
+            Shooting
+            <input type="range" class="form-range" value="{{ shooting }}" min="50" max="100"
+                oninput="showAmount_shooting(this.value)" name="shooting" />
+            <span id="shooting">{{ shooting }}</span>
+        </div>
+
+        <div class="item shadow p-2 mb-2 bg-body rounded">
+
+            Skill ball control
+            <input type="range" class="form-range" value="{{ skill_ball_control }}" min="50" max="100"
+                oninput="showAmount_skill_ball_control(this.value)" name="skill_ball_control" />
+            <span id="skill_ball_control">{{ skill_ball_control }}</span>
+        </div>
+
+        <div class="item shadow p-2 mb-2 bg-body rounded">
+
+            Skill dribbling
+            <input type="range" class="form-range" value="{{ skill_dribbling }}" min="50" max="100"
+                oninput="showAmount_skill_dribbling(this.value)" name="skill_dribbling" />
+            <span id="skill_dribbling">{{ skill_dribbling }}</span>
+        </div>
+
+        <div class="item shadow p-2 mb-2 bg-body rounded">
+
+            Skill long passing
+            <input type="range" class="form-range" value="{{ skill_long_passing }}" min="50" max="100"
+                oninput="showAmount_skill_long_passing(this.value)" name="skill_long_passing" />
+            <span id="skill_long_passing">{{ skill_long_passing }}</span>
+        </div>
+
+    </div>
+
+
+    <div class="col-lg">
 
         <div class="item shadow p-2 mb-2 bg-body rounded">
             <h4>You have chosen parameters:</h4>
@@ -116,7 +117,13 @@
                 {{ pred_value }} {{ euro }}
             </div>
         </center>
+        <div>
+            <input type="submit" value="Estimate" class="block btn btn-lg btn-primary ">
+        </div>
+
     </div>
+    </form>
+
 </div>
 
 <script>
