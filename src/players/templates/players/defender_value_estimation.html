@@ -3,119 +3,118 @@
 <center>
     <div class="shadow p-2 mb-2 bg-body rounded">
         <h1>Player value estimator</h1>
-        <h2>Position: defender</h2>
+        <h2>Position: Defender</h2>
     </div>
 </center>
 
-<div class="row g-4 py-5 row-cols-1 row-cols-lg-2">
+<div class="flex row">
+    <div class="col-lg">
+        <form method="post">
+            {% csrf_token %}
 
-    <form method="post">
-        {% csrf_token %}
+            <div class="column">
 
-        <div class="column">
+                <div class="item shadow p-2 mb-2 bg-body rounded">
+                    Defending
+                    <input type="range" class="form-range " value="{{ defending }}" min="50" max="100"
+                        oninput="showAmount_defending(this.value)" name="defending" />
+                    <span id="defending">{{ defending }}</span>
+                </div>
 
-            <div class="item shadow p-2 mb-2 bg-body rounded">
-                Defending
-                <input type="range" class="form-range " value="{{ defending }}" min="50" max="100"
-                    oninput="showAmount_defending(this.value)" name="defending" />
-                <span id="defending">{{ defending }}</span>
+                <div class="item shadow p-2 mb-2 bg-body rounded">
+                    Defending marking
+                    <input type="range" class="form-range" value="{{ defending_marking }}" min="50" max="100"
+                        oninput="showAmount_defending_marking(this.value)" name="defending_marking" />
+                    <span id="defending_marking">{{ defending_marking }}</span>
+                </div>
+
+                <div class="item shadow p-2 mb-2 bg-body rounded">
+
+                    Defending sliding tackle
+                    <input type="range" class="form-range" value="{{ defending_sliding_tackle }}" min="50" max="100"
+                        oninput="showAmount_defending_sliding_tackle(this.value)" name="defending_sliding_tackle" />
+                    <span id="defending_sliding_tackle">{{ defending_sliding_tackle }}</span>
+                </div>
+
+                <div class="item shadow p-2 mb-2 bg-body rounded">
+
+                    Defending standing tackle
+                    <input type="range" class="form-range" value="{{ defending_standing_tackle }}" min="50" max="100"
+                        oninput="showAmount_defending_standing_tackle(this.value)" name="defending_standing_tackle" />
+                    <span id="defending_standing_tackle">{{ defending_standing_tackle }}</span>
+                </div>
+
+                <div class="item shadow p-2 mb-2 bg-body rounded">
+
+                    Mentality interceptions
+                    <input type="range" class="form-range" value="{{ mentality_interceptions }}" min="50" max="100"
+                        oninput="showAmount_mentality_interceptions(this.value)" name="mentality_interceptions" />
+                    <span id="mentality_interceptions">{{ mentality_interceptions }}</span>
+                </div>
+
+                <div class="item shadow p-2 mb-2 bg-body rounded">
+
+                    Movement reactions
+                    <input type="range" class="form-range" value="{{ movement_reactions }}" min="50" max="100"
+                        oninput="showAmount_movement_reactions(this.value)" name="movement_reactions" />
+                    <span id="movement_reactions">{{ movement_reactions }}</span>
+
+                </div>
+
             </div>
-            <div class="item shadow p-2 mb-2 bg-body rounded">
-                Defending marking
-                <input type="range" class="form-range" value="{{ defending_marking }}" min="50" max="100"
-                    oninput="showAmount_defending_marking(this.value)" name="defending_marking" />
-                <span id="defending_marking">{{ defending_marking }}</span>
-            </div>
-            <div class="item shadow p-2 mb-2 bg-body rounded">
-
-                Defending sliding tackle
-                <input type="range" class="form-range" value="{{ defending_sliding_tackle }}" min="50" max="100"
-                    oninput="showAmount_defending_sliding_tackle(this.value)" name="defending_sliding_tackle" />
-                <span id="defending_sliding_tackle">{{ defending_sliding_tackle }}</span>
-            </div>
-
-            <div class="item shadow p-2 mb-2 bg-body rounded">
-
-                Defending standing tackle
-                <input type="range" class="form-range" value="{{ defending_standing_tackle }}" min="50" max="100"
-                    oninput="showAmount_defending_standing_tackle(this.value)" name="defending_standing_tackle" />
-                <span id="defending_standing_tackle">{{ defending_standing_tackle }}</span>
-            </div>
-        </div>
-
-        <div class="column">
-
-            <div class="item shadow p-2 mb-2 bg-body rounded">
-
-                Mentality interceptions
-                <input type="range" class="form-range" value="{{ mentality_interceptions }}" min="50" max="100"
-                    oninput="showAmount_mentality_interceptions(this.value)" name="mentality_interceptions" />
-                <span id="mentality_interceptions">{{ mentality_interceptions }}</span>
-            </div>
-
-            <div class="item shadow p-2 mb-2 bg-body rounded">
-
-                Movement reactions
-                <input type="range" class="form-range" value="{{ movement_reactions }}" min="50" max="100"
-                    oninput="showAmount_movement_reactions(this.value)" name="movement_reactions" />
-                <span id="movement_reactions">{{ movement_reactions }}</span>
-
-            </div>
 
 
 
 
-            <center>
-
-                <input type="submit" value="Estimate" class="btn btn-lg btn-primary my-2 my-sm-0">
-            </center>
-
-
-    </form>
-</div>
-<div class="feature col">
-
-    <div class="item shadow p-2 mb-2 bg-body rounded">
-        <h4>You have chosen parameters:</h4>
-        <p>Defending: {{ defending }}</p>
-        <p>Defending marking: {{ defending_marking }}</p>
-        <p>Defending standing tackle: {{ defending_sliding_tackle }}</p>
-        <p>Defending sliding tackle: {{ defending_standing_tackle }}</p>
-        <p>Mentality interceptions: {{ mentality_interceptions }}</p>
-        <p>Movement reactions: {{ movement_reactions }}</p>
 
     </div>
-    <center>
+    <div class="col-lg">
+
         <div class="item shadow p-2 mb-2 bg-body rounded">
-            <h4>Estimated value:</h4>
-            {{ pred_value }} {{ euro }}
+            <h4>You have chosen parameters:</h4>
+            <p>Defending: {{ defending }}</p>
+            <p>Defending marking: {{ defending_marking }}</p>
+            <p>Defending standing tackle: {{ defending_sliding_tackle }}</p>
+            <p>Defending sliding tackle: {{ defending_standing_tackle }}</p>
+            <p>Mentality interceptions: {{ mentality_interceptions }}</p>
+            <p>Movement reactions: {{ movement_reactions }}</p>
+
         </div>
-    </center>
-</div>
-</div>
+        <center>
+            <div class="item shadow p-2 mb-2 bg-body rounded">
+                <h4>Estimated value:</h4>
+                {{ pred_value }} {{ euro }}
+            </div>
+        </center>
+        <div>
+            <input type="submit" value="Estimate" class="block btn btn-lg btn-primary ">
+        </div>
+        </form>
+    </div>
 
 
-<script>
-    function showAmount_defending(newAmount_defending) {
-        document.getElementById('defending').innerHTML = newAmount_defending;
-    }
-    function showAmount_defending_marking(newAmount_defending_marking) {
-        document.getElementById('defending_marking').innerHTML = newAmount_defending_marking;
-    }
-    function showAmount_defending_sliding_tackle(newAmount_defending_sliding_tackle) {
-        document.getElementById('defending_sliding_tackle').innerHTML = newAmount_defending_sliding_tackle;
-    }
-    function showAmount_movement_reactions(newAmount_movement_reactions) {
-        document.getElementById('movement_reactions').innerHTML = newAmount_movement_reactions;
-    }
-    function showAmount_mentality_interceptions(newAmount_mentality_interceptions) {
-        document.getElementById('mentality_interceptions').innerHTML = newAmount_mentality_interceptions;
-    }
-    function showAmount_defending_standing_tackle(newAmount_defending_standing_tackle) {
-        document.getElementById('defending_standing_tackle').innerHTML = newAmount_defending_standing_tackle;
-    }
+
+    <script>
+        function showAmount_defending(newAmount_defending) {
+            document.getElementById('defending').innerHTML = newAmount_defending;
+        }
+        function showAmount_defending_marking(newAmount_defending_marking) {
+            document.getElementById('defending_marking').innerHTML = newAmount_defending_marking;
+        }
+        function showAmount_defending_sliding_tackle(newAmount_defending_sliding_tackle) {
+            document.getElementById('defending_sliding_tackle').innerHTML = newAmount_defending_sliding_tackle;
+        }
+        function showAmount_movement_reactions(newAmount_movement_reactions) {
+            document.getElementById('movement_reactions').innerHTML = newAmount_movement_reactions;
+        }
+        function showAmount_mentality_interceptions(newAmount_mentality_interceptions) {
+            document.getElementById('mentality_interceptions').innerHTML = newAmount_mentality_interceptions;
+        }
+        function showAmount_defending_standing_tackle(newAmount_defending_standing_tackle) {
+            document.getElementById('defending_standing_tackle').innerHTML = newAmount_defending_standing_tackle;
+        }
 
 
-</script>
+    </script>
 
-{% endblock %}
+    {% endblock %}
