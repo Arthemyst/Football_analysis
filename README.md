@@ -7,6 +7,13 @@ Data of players are uploaded from FIFA databases prepared by member of kaggle.co
 Databases are separated by years, from 2016 to 2020. In program we can look parameters for each player. We can compare players parameters, make visualisation of clubs.
 Vizualization works with website with usage of Django framework and is connected to docker.
 
+Features:
+- compare players parameters
+- find players in club and filter by year
+- find detail of player in list of all players
+- find player in search field
+- estimate player value by choosing specific parameters related to position on field (midfielder, attacker, defender)
+
 ## Setup
 
 The first thing to do is to clone the repository:
