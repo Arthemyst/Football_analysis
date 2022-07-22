@@ -53,7 +53,7 @@ Application runs on docker. Please run docker-compose to install dependiences an
 $ docker-compose -f docker/docker-compose.yaml up --build
 ```
 
-To test applications:
+To test applications management commands:
 ```sh
 (env)$ docker exec -it docker_web_1 /bin/bash
 (env)$ python3 -m pytest players/tests/tests_prepare_data.py
