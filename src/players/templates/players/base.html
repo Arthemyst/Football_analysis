@@ -35,7 +35,14 @@
         @media (min-width: 320px) {
             .bd-placeholder-img-lg {
                 font-size: 3.5rem;
+
             }
+        }
+
+        .block {
+            display: block;
+            width: 100%;
+
         }
     </style>
 
@@ -67,7 +74,7 @@
                     {% if user.is_authenticated %}
 
                     <div class="btn-group">
-                        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
                             aria-expanded="false">
                             Profile
                         </button>
@@ -81,9 +88,9 @@
 
                     {% else %}
 
-                    <div class="btn-group">
+                    <div class="btn-group mx-2">
 
-                        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
                             aria-expanded="false">
                             Profile
                         </button>
@@ -97,8 +104,8 @@
 
                     {% endif %}
 
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                    <div class="btn-group mx-2">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
                             aria-expanded="false">
                             Player value estimator
                         </button>
@@ -111,21 +118,28 @@
                             </li>
                         </ul>
                     </div>
-                    <ul>
-                        <li class="nav-item active">
-                            <a class="nav-link px-2 text-white" href="{% url 'player-list' %}">Players</a>
-                        </li>
-                    </ul>
-                    <ul>
-                        <li class="nav-item active">
-                            <a class="nav-link px-2 text-white" href="{% url 'club-search' %}">Clubs</a>
-                        </li>
-                    </ul>
-                    <ul>
-                        <li class="nav-item active">
-                            <a class="nav-link px-2 text-white" href="{% url 'compare-players' %}">Compare players</a>
-                        </li>
-                    </ul>
+                    <div class="btn-group">
+                        <ul>
+                            <li class="nav-item active">
+                                <a class="nav-link px-2 text-white" href="{% url 'player-list' %}">Players</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="btn-group">
+                        <ul>
+                            <li class="nav-item active">
+                                <a class="nav-link px-2 text-white" href="{% url 'club-search' %}">Clubs</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="btn-group">
+                        <ul>
+                            <li class="nav-item active">
+                                <a class="nav-link px-2 text-white" href="{% url 'compare-players' %}">Compare
+                                    players</a>
+                            </li>
+                        </ul>
+                    </div>
 
                 </div>
 
