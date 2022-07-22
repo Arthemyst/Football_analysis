@@ -244,116 +244,104 @@ def compare_players(request):
         searched_player1 = request.GET.get("player1")
         searched_player2 = request.GET.get("player2")
 
-        player1 = Player.objects.filter(
-            playerstatistics__player__long_name__icontains=searched_player1,
-            playerstatistics__year=2020,
-        )
-        player2 = Player.objects.filter(
-            playerstatistics__player__long_name__icontains=searched_player2,
-            playerstatistics__year=2020,
-        )
-        player1_position = PlayerStatistics.objects.filter(
-            player__long_name__icontains=searched_player1
-        ).values_list("team_position")
-        player2_position = PlayerStatistics.objects.filter(
-            player__long_name=searched_player2
-        ).values_list("team_position")
-        player1_position_per_year = PlayerStatistics.objects.filter(
-            player__long_name=searched_player1
-        ).values_list("year", "team_position")
-        player2_position_per_year = PlayerStatistics.objects.filter(
-            player__long_name=searched_player2
-        ).values_list("year", "team_position")
-        player1_value_per_year = PlayerStatistics.objects.filter(
-            player__long_name=searched_player1
-        ).values_list("year", "value_eur")
-        player2_value_per_year = PlayerStatistics.objects.filter(
-            player__long_name=searched_player2
-        ).values_list("year", "value_eur")
-        player1_club_per_year = PlayerStatistics.objects.filter(
-            player__long_name=searched_player1
-        ).values_list("year", "club")
-        player2_club_per_year = PlayerStatistics.objects.filter(
-            player__long_name=searched_player2
-        ).values_list("year", "club")
-        player1_long_name = Player.objects.filter(
-            long_name=searched_player1
-        ).values_list("long_name")
-        player2_long_name = Player.objects.filter(
-            long_name=searched_player2
-        ).values_list("long_name")
-        player1_nationality = Player.objects.filter(
-            long_name=searched_player1
-        ).values_list("nationality")
-        player2_nationality = Player.objects.filter(
-            long_name=searched_player2
-        ).values_list("nationality")
-        player1_overall_per_year = PlayerStatistics.objects.filter(
-            player__long_name=searched_player1
-        ).values_list("year", "overall")
-        player2_overall_per_year = PlayerStatistics.objects.filter(
-            player__long_name=searched_player2
-        ).values_list("year", "overall")
-        player1_value_per_year = (
-            PlayerStatistics.objects.filter(player__long_name=searched_player1)
-            .values_list("value_eur", "year")
-            .order_by("year")
-        )
-        player2_value_per_year = (
-            PlayerStatistics.objects.filter(player__long_name=searched_player2)
-            .values_list("value_eur", "year")
-            .order_by("year")
-        )
-
-        player1_value_per_year = (
-            PlayerStatistics.objects.filter(player__long_name=searched_player1)
-            .values_list("value_eur", "year")
-            .order_by("year")
-        )
-        player2_value_per_year = (
-            PlayerStatistics.objects.filter(player__long_name=searched_player2)
-            .values_list("value_eur", "year")
-            .order_by("year")
-        )
-
-        fig = go.Figure()
-        fig.add_trace(
-            go.Scatter(
-                x=[c[1] for c in player1_value_per_year],
-                y=[c[0] for c in player1_value_per_year],
-                name=f"{searched_player1}",
+        if searched_player1 == searched_player2:
+            same_players = True
+            context = {"same_players": same_players}
+        else:
+            player1 = Player.objects.filter(
+                playerstatistics__player__long_name__icontains=searched_player1,
+                playerstatistics__year=2020,
             )
-        )
-        fig.add_trace(
-            go.Scatter(
-                x=[c[1] for c in player2_value_per_year],
-                y=[c[0] for c in player2_value_per_year],
-                name=f"{searched_player2}",
+            player2 = Player.objects.filter(
+                playerstatistics__player__long_name__icontains=searched_player2,
+                playerstatistics__year=2020,
             )
-        )
-        fig.update_xaxes(dtick="d")
-        fig.update_layout(xaxis_title="Year", yaxis_title="Value eur")
-        chart = fig.to_html()
+            player1_position = PlayerStatistics.objects.filter(
+                player__long_name__icontains=searched_player1
+            ).values_list("team_position")
+            player2_position = PlayerStatistics.objects.filter(
+                player__long_name=searched_player2
+            ).values_list("team_position")
+            player1_position_per_year = PlayerStatistics.objects.filter(
+                player__long_name=searched_player1
+            ).values_list("year", "team_position").order_by("year")
+            player2_position_per_year = PlayerStatistics.objects.filter(
+                player__long_name=searched_player2
+            ).values_list("year", "team_position").order_by("year")
+            player1_club_per_year = PlayerStatistics.objects.filter(
+                player__long_name=searched_player1
+            ).values_list("year", "club").order_by("year")
+            player2_club_per_year = PlayerStatistics.objects.filter(
+                player__long_name=searched_player2
+            ).values_list("year", "club").order_by("year")
+            player1_long_name = Player.objects.filter(
+                long_name=searched_player1
+            ).values_list("long_name")
+            player2_long_name = Player.objects.filter(
+                long_name=searched_player2
+            ).values_list("long_name")
+            player1_short_name = Player.objects.filter(
+                long_name=searched_player1
+            ).values_list("short_name")
+            player2_short_name = Player.objects.filter(
+                long_name=searched_player2
+            ).values_list("short_name")
+            player1_nationality = Player.objects.filter(
+                long_name=searched_player1
+            ).values_list("nationality")
+            player2_nationality = Player.objects.filter(
+                long_name=searched_player2
+            ).values_list("nationality")
+            player1_value_per_year = (
+                PlayerStatistics.objects.filter(player__long_name=searched_player1)
+                .values_list("value_eur", "year")
+                .order_by("year")
+            )
+            player2_value_per_year = (
+                PlayerStatistics.objects.filter(player__long_name=searched_player2)
+                .values_list("value_eur", "year")
+                .order_by("year")
+            )
 
-        context = {
-            "player1": player1,
-            "player2": player2,
-            "player1_position": player1_position,
-            "player2_position": player2_position,
-            "player1_position_per_year": player1_position_per_year,
-            "player2_position_per_year": player2_position_per_year,
-            "player1_value_per_year": player1_value_per_year,
-            "player2_value_per_year": player2_value_per_year,
-            "player1_club_per_year": player1_club_per_year,
-            "player2_club_per_year": player2_club_per_year,
-            "player1_long_name": player1_long_name,
-            "player2_long_name": player2_long_name,
-            "player1_nationality": player1_nationality,
-            "player2_nationality": player2_nationality,
-            "player1_overall_per_year": player1_overall_per_year,
-            "player2_overall_per_year": player2_overall_per_year,
-            "chart": chart,
-        }
+
+            fig = go.Figure()
+            fig.add_trace(
+                go.Scatter(
+                    x=[c[1] for c in player1_value_per_year],
+                    y=[c[0] for c in player1_value_per_year],
+                    name=f"{searched_player1}",
+                )
+            )
+            fig.add_trace(
+                go.Scatter(
+                    x=[c[1] for c in player2_value_per_year],
+                    y=[c[0] for c in player2_value_per_year],
+                    name=f"{searched_player2}",
+                )
+            )
+            fig.update_xaxes(dtick="d")
+            fig.update_layout(xaxis_title="Year", yaxis_title="Value eur")
+            chart = fig.to_html()
+
+            context = {
+                "player1": player1,
+                "player2": player2,
+                "player1_position": player1_position,
+                "player2_position": player2_position,
+                "player1_position_per_year": player1_position_per_year,
+                "player2_position_per_year": player2_position_per_year,
+                "player1_value_per_year": player1_value_per_year,
+                "player2_value_per_year": player2_value_per_year,
+                "player1_club_per_year": player1_club_per_year,
+                "player2_club_per_year": player2_club_per_year,
+                "player1_long_name": player1_long_name,
+                "player2_long_name": player2_long_name,
+                "player1_nationality": player1_nationality,
+                "player2_nationality": player2_nationality,
+                "player1_short_name": player1_short_name,
+                "player2_short_name": player2_short_name,
+                "chart": chart,
+            }
         return render(request, "players/compare_chosen_players.html", context)
     else:
         return render(request, "players/compare_chosen_players.html.html", {})
