@@ -43,21 +43,37 @@ class Command(BaseCommand):
     def handle(self, input, output, *args, **options):
         start = time.time()
         csv_files = self.list_csv_files(input)
-        models_list = []
+        midfield_models_list = []
+        attack_models_list = []
+        defend_models_list = []
         for path in csv_files:
             logging.info(f"Preparing models from {path}...")
             dataframe = self.read_csv(path)
-            # midfielders = self.position_filter("midfielders", dataframe)
-            # attackers = self.position_filter("attackers", dataframe)
+            midfielders = self.position_filter("midfielders", dataframe)
+            model_mid = self.model_to_estimate_player_value(
+                midfielders, MIDFIELD_COLUMNS_FOR_ESTIMATION )
+            attackers = self.position_filter("attackers", dataframe)
+            model_att = self.model_to_estimate_player_value(
+                attackers, ATTACK_COLUMNS_FOR_ESTIMATION )
             defenders = self.position_filter("defenders", dataframe)
-            model = self.model_to_estimate_player_value(
+            model_def = self.model_to_estimate_player_value(
                 defenders, DEFEND_COLUMNS_FOR_ESTIMATION )
-            logging.info(f"Model score: {round(model[1], 2)}")
+            logging.info(f"Midfielders value estimation model score: {round(model_mid[1], 2)}")
+            logging.info(f"Attackers value estimation model score: {round(model_att[1], 2)}")
+            logging.info(f"Defenders calue estimation model score: {round(model_def[1], 2)}")
 
-            models_list.append(tuple(model))
+            midfield_models_list.append(tuple(model_mid))
+            attack_models_list.append(tuple(model_att))
+            defend_models_list.append(tuple(model_def))
 
-        max_model = max(models_list, key=lambda item: item[1])
-        self.save_file(max_model, output)
+
+        max_midfield_model = max(midfield_models_list, key=lambda item: item[1])
+        self.save_file(max_midfield_model, output)
+        max_attack_model = max(attack_models_list, key=lambda item: item[1])
+        self.save_file(max_attack_model, output)
+        max_defend_model = max(defend_models_list, key=lambda item: item[1])
+        self.save_file(max_defend_model, output)
+        
         end = time.time()
         logging.info(f"Operation time: {int(end - start)/60} min")
 
