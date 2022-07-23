@@ -2,15 +2,28 @@ import logging
 import logging.config
 from pathlib import Path
 from typing import List
-
 import pandas as pd
 from django.core.management.base import BaseCommand
-
-from players.constants import (DEFAULT_COLUMNS, UNOPTIMIZABLE_COLUMNS,
-                               VALUES_COLUMNS)
-from players.exceptions import (NoFilesException,
-                                NotExistingDirectoryException,
-                                WrongFileTypeException)
+from players.constants import (
+    MIDFIELD_POSITION_COLUMNS,
+    ATTACK_POSITION_COLUMNS,
+    DEFEND_POSITION_COLUMNS,
+    DEFEND_COLUMNS_FOR_ESTIMATION,
+    ATTACK_COLUMNS_FOR_ESTIMATION,
+    MIDFIELD_COLUMNS_FOR_ESTIMATION,
+)
+from players.exceptions import (
+    NoFilesException,
+    NotExistingDirectoryException,
+    WrongFileTypeException,
+)
+import joblib
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.model_selection import GridSearchCV
+import joblib
+import time
 
 logger = logging.getLogger(__name__)
 
@@ -28,14 +41,25 @@ class Command(BaseCommand):
         )
 
     def handle(self, input, output, *args, **options):
+        start = time.time()
         csv_files = self.list_csv_files(input)
-
+        models_list = []
         for path in csv_files:
             logging.info(f"Preparing models from {path}...")
             dataframe = self.read_csv(path)
-            dataframe = self.remove_goalkeepers(dataframe)
-            dataframe = self.optimize_types(dataframe, path)
-            self.save_file(dataframe, output, path)
+            # midfielders = self.position_filter("midfielders", dataframe)
+            # attackers = self.position_filter("attackers", dataframe)
+            defenders = self.position_filter("defenders", dataframe)
+            model = self.model_to_estimate_player_value(
+                defenders, DEFEND_COLUMNS_FOR_ESTIMATION )
+            logging.info(f"Model score: {round(model[1], 2)}")
+
+            models_list.append(tuple(model))
+
+        max_model = max(models_list, key=lambda item: item[1])
+        self.save_file(max_model, output)
+        end = time.time()
+        logging.info(f"Operation time: {int(end - start)/60} min")
 
     def list_csv_files(self, directory: str) -> List:
         # Directory validation and list matching csv files
@@ -54,18 +78,49 @@ class Command(BaseCommand):
         df = pd.read_csv(directory)
         return df
 
+    def position_filter(self, position, dataframe):
 
-def columns_for_estimation(dataframe, position):
-    if position == "attacker":
-        columns = columns_attacker
-    elif position == "defender":
-        columns = columns_defender
-    elif position == "midfielder":
-        columns = columns_midfielder
+        if position == "midfielders":
+            df = dataframe[dataframe["team_position"].isin(MIDFIELD_POSITION_COLUMNS)]
+            df = df[df["value_eur"] != 0]
+            return df
+        elif position == "attackers":
+            df = dataframe[dataframe["team_position"].isin(ATTACK_POSITION_COLUMNS)]
+            df = df[df["value_eur"] != 0]
+            return df
+        elif position == "defenders":
+            df = dataframe[dataframe["team_position"].isin(DEFEND_POSITION_COLUMNS)]
+            df = df[df["value_eur"] != 0]
+            return df
+        else:
+            print("wrong position")
 
-    dataframe = dataframe[dataframe["value_eur"] != 0]
-    corr = dataframe[columns].corr()
-    best_corr = corr[corr["value_eur"] > 0.4]
-    columns_for_estimation = [column for column in best_corr.index]
+    def model_to_estimate_player_value(self, dataframe, columns_list):
 
-    return columns_for_estimation
+        X = dataframe[columns_list]
+        y = X.pop("value_eur")
+        scaler = MinMaxScaler()
+        scaler.fit(X)
+        scaler.transform(X)
+        X_train, X_test, y_train, y_test = train_test_split(X, y)
+        param_grid = [
+            {
+                "max_depth": [3, 4, 5, 6, 7, 8, 9, 10, 20],
+                "min_samples_leaf": [3, 4, 5, 10, 15],
+            }
+        ]
+        gs = GridSearchCV(RandomForestRegressor(), param_grid=param_grid, scoring="r2")
+        model = gs.fit(X_train, y_train)
+        model_score = gs.score(X_test, y_test)
+        return model, model_score
+
+    def save_file(self, model, directory):
+        try:
+            joblib.dump(model[0], f"{Path(directory)}/model_defend.pkl")
+            logging.info(f"Prepared new model for defend players")
+            logging.info(f"Best score: {round(model[1], 2)} \n")
+
+        except OSError as e:
+            raise NotExistingDirectoryException(
+                "Cannot save file into a non-existent directory"
+            )

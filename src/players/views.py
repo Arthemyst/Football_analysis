@@ -18,9 +18,6 @@ import plotly.express as px
 import plotly.graph_objects as go
 from players.constants import (
     DEFAULT_COLUMNS,
-    DEFENDERS_COLUMNS_FOR_ESTIMATION,
-    ATTACKERS_COLUMNS_FOR_ESTIMATION,
-    MIDFIELDERS_COLUMNS_FOR_ESTIMATION,
 )
 from players.models import Player, PlayerStatistics
 
@@ -28,7 +25,7 @@ from .forms import EditProfileForm, PasswordChangingForm, SignUpForm
 
 model_mid = joblib.load("players/models/model_mid_16.pkl")
 model_att = joblib.load("players/models/model_att_16.pkl")
-model_def = joblib.load("players/models/model_def_16.pkl")
+model_def = joblib.load("players/models/model_defend.pkl")
 
 
 class PlayerListView(ListView):

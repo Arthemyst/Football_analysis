@@ -92,3 +92,56 @@ VALUES_COLUMNS = [
     "overall",
     "value_eur",
 ]
+
+MIDFIELD_POSITION_COLUMNS = [
+    "CAM",
+    "RM",
+    "RDM",
+    "LDM",
+    "LCM",
+    "CDM",
+    "LAM",
+    "RAM",
+    "CM",
+    "RCM",
+]
+ATTACK_POSITION_COLUMNS = ["RW", "LM", "ST", "LW", "LF", "RF", "LS", "RS", "CF"]
+DEFEND_POSITION_COLUMNS = ["RCB", "CB", "LCB", "LWB", "RWB", "RB", "LB"]
+
+DEFEND_COLUMNS_FOR_ESTIMATION =                    [
+                        "defending",
+                        "defending_marking",
+                        "defending_sliding_tackle",
+                        "defending_standing_tackle",
+                        "mentality_interceptions",
+                        "movement_reactions",
+                        "value_eur",
+                    ]
+
+ATTACK_COLUMNS_FOR_ESTIMATION =                     [
+                        "attacking_finishing",
+                        "attacking_short_passing",
+                        "dribbling",
+                        "mentality_positioning",
+                        "movement_reactions",
+                        "passing",
+                        "shooting",
+                        "skill_ball_control",
+                        "skill_dribbling",
+                        "value_eur",
+                    ]
+
+MIDFIELD_COLUMNS_FOR_ESTIMATION =                     [
+                        "attacking_short_passing",
+                        "dribbling",
+                        "mentality_positioning",
+                        "mentality_vision",
+                        "movement_reactions",
+                        "passing",
+                        "shooting",
+                        "skill_ball_control",
+                        "skill_dribbling",
+                        "skill_long_passing",
+                        "value_eur",
+                    ]
+
