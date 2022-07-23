@@ -2,8 +2,10 @@ import logging
 import logging.config
 from pathlib import Path
 from typing import List
+
 import pandas as pd
 from django.core.management.base import BaseCommand
+
 from players.constants import (DEFAULT_COLUMNS, UNOPTIMIZABLE_COLUMNS,
                                VALUES_COLUMNS)
 from players.exceptions import (NoFilesException,
@@ -12,6 +14,7 @@ from players.exceptions import (NoFilesException,
 
 logger = logging.getLogger(__name__)
 
+
 class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument(
@@ -19,7 +22,9 @@ class Command(BaseCommand):
         )
 
         parser.add_argument(
-            "output", type=str, help="Directory path with output estimation models files"
+            "output",
+            type=str,
+            help="Directory path with output estimation models files",
         )
 
     def handle(self, input, output, *args, **options):
@@ -48,6 +53,8 @@ class Command(BaseCommand):
     def read_csv(self, directory):
         df = pd.read_csv(directory)
         return df
+
+
 def columns_for_estimation(dataframe, position):
     if position == "attacker":
         columns = columns_attacker
@@ -56,9 +63,9 @@ def columns_for_estimation(dataframe, position):
     elif position == "midfielder":
         columns = columns_midfielder
 
-    dataframe = dataframe[dataframe['value_eur'] != 0]
+    dataframe = dataframe[dataframe["value_eur"] != 0]
     corr = dataframe[columns].corr()
-    best_corr = corr[corr['value_eur'] > 0.4]
+    best_corr = corr[corr["value_eur"] > 0.4]
     columns_for_estimation = [column for column in best_corr.index]
 
     return columns_for_estimation

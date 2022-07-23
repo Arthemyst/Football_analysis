@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pandas as pd
 import pytest
+
 from players.exceptions import NoFilesException, NotExistingDirectoryException
 from players.management.commands.prepare_data import Command
 
