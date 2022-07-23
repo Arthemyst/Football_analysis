@@ -46,11 +46,18 @@ Application runs on docker. Please run docker-compose to install dependiences an
 $ docker-compose -f docker/docker-compose.yaml up --build
 ```
 
-To test applications:
+To test management commands during application running:
 ```sh
 (env)$ docker exec -it docker_web_1 /bin/bash
 (env)$ python3 -m pytest players/tests/tests_prepare_data.py
 (env)$ python3 -m pytest players/tests/tests_add_data.py
+```
+
+To transform data from inpu csv files:
+Warning: need to download data from https://www.kaggle.com/stefanoleone992/fifa-20-complete-player-dataset and create directory in players/ named "input_data".
+```sh
+(env)$ docker exec -it docker_web_1 /bin/bash
+(env)$ python3 manage.py prepare_data players/input_data players/data
 ```
 
 To load data to database:
