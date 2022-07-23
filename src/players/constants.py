@@ -92,37 +92,3 @@ VALUES_COLUMNS = [
     "overall",
     "value_eur",
 ]
-
-DEFENDERS_COLUMNS_FOR_ESTIMATION = [
-    "defending",
-    "defending_marking",
-    "defending_sliding_tackle",
-    "defending_standing_tackle",
-    "mentality_interceptions",
-    "movement_reactions",
-]
-
-ATTACKERS_COLUMNS_FOR_ESTIMATION = [
-    "attacking_finishing",
-    "attacking_short_passing",
-    "dribbling",
-    "mentality_positioning",
-    "movement_reactions",
-    "passing",
-    "shooting",
-    "skill_ball_control",
-    "skill_dribbling",
-]
-
-MIDFIELDERS_COLUMNS_FOR_ESTIMATION = [
-    "attacking_short_passing",
-    "dribbling",
-    "mentality_positioning",
-    "mentality_vision",
-    "movement_reactions",
-    "passing",
-    "shooting",
-    "skill_ball_control",
-    "skill_dribbling",
-    "skill_long_passing",
-]

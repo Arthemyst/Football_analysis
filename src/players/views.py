@@ -16,7 +16,12 @@ from django.views.generic.list import ListView
 
 import plotly.express as px
 import plotly.graph_objects as go
-from players.constants import DEFAULT_COLUMNS
+from players.constants import (
+    DEFAULT_COLUMNS,
+    DEFENDERS_COLUMNS_FOR_ESTIMATION,
+    ATTACKERS_COLUMNS_FOR_ESTIMATION,
+    MIDFIELDERS_COLUMNS_FOR_ESTIMATION,
+)
 from players.models import Player, PlayerStatistics
 
 from .forms import EditProfileForm, PasswordChangingForm, SignUpForm
