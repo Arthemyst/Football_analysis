@@ -47,19 +47,22 @@ class Command(BaseCommand):
         attack_models_list = []
         defend_models_list = []
         for path in csv_files:
-            logging.info(f"Preparing models from {path}...")
+            logging.info(f"\n Preparing models from {path}...")
             dataframe = self.read_csv(path)
+
             midfielders = self.position_filter("midfielders", dataframe)
             model_mid = self.model_to_estimate_player_value(
-                midfielders, MIDFIELD_COLUMNS_FOR_ESTIMATION )
+                midfielders, MIDFIELD_COLUMNS_FOR_ESTIMATION)
+            logging.info(f"Midfielders value estimation model score: {round(model_mid[1], 2)}")
+
             attackers = self.position_filter("attackers", dataframe)
             model_att = self.model_to_estimate_player_value(
-                attackers, ATTACK_COLUMNS_FOR_ESTIMATION )
+                attackers, ATTACK_COLUMNS_FOR_ESTIMATION)
+            logging.info(f"Attackers value estimation model score: {round(model_att[1], 2)}")
+
             defenders = self.position_filter("defenders", dataframe)
             model_def = self.model_to_estimate_player_value(
-                defenders, DEFEND_COLUMNS_FOR_ESTIMATION )
-            logging.info(f"Midfielders value estimation model score: {round(model_mid[1], 2)}")
-            logging.info(f"Attackers value estimation model score: {round(model_att[1], 2)}")
+                defenders, DEFEND_COLUMNS_FOR_ESTIMATION)
             logging.info(f"Defenders calue estimation model score: {round(model_def[1], 2)}")
 
             midfield_models_list.append(tuple(model_mid))
@@ -68,12 +71,12 @@ class Command(BaseCommand):
 
 
         max_midfield_model = max(midfield_models_list, key=lambda item: item[1])
-        self.save_file(max_midfield_model, output)
+        self.save_file(max_midfield_model, output, "midfield")
         max_attack_model = max(attack_models_list, key=lambda item: item[1])
-        self.save_file(max_attack_model, output)
+        self.save_file(max_attack_model, output, "attack")
         max_defend_model = max(defend_models_list, key=lambda item: item[1])
-        self.save_file(max_defend_model, output)
-        
+        self.save_file(max_defend_model, output, "defend")
+
         end = time.time()
         logging.info(f"Operation time: {int(end - start)/60} min")
 
@@ -130,10 +133,10 @@ class Command(BaseCommand):
         model_score = gs.score(X_test, y_test)
         return model, model_score
 
-    def save_file(self, model, directory):
+    def save_file(self, model, directory, name):
         try:
-            joblib.dump(model[0], f"{Path(directory)}/model_defend.pkl")
-            logging.info(f"Prepared new model for defend players")
+            joblib.dump(model[0], f"{Path(directory)}/model_{name}.pkl")
+            logging.info(f"Prepared new model for {name} players")
             logging.info(f"Best score: {round(model[1], 2)} \n")
 
         except OSError as e:

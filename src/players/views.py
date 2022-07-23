@@ -1,7 +1,7 @@
 from math import floor, log
 from typing import Any, Dict
 from urllib import request
-
+import os
 import joblib
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import PasswordChangeView
@@ -14,7 +14,6 @@ from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 
-import plotly.express as px
 import plotly.graph_objects as go
 from players.constants import (
     DEFAULT_COLUMNS,
@@ -22,10 +21,21 @@ from players.constants import (
 from players.models import Player, PlayerStatistics
 
 from .forms import EditProfileForm, PasswordChangingForm, SignUpForm
-
-model_mid = joblib.load("players/models/model_mid_16.pkl")
-model_att = joblib.load("players/models/model_att_16.pkl")
-model_def = joblib.load("players/models/model_defend.pkl")
+mid_model_path = "players/models/model_midfield.pkl"
+att_model_path = "players/models/model_attack.pkl"
+def_model_path = "players/models/model_defend.pkl"
+if os.path.exists(mid_model_path):
+    model_mid = joblib.load(mid_model_path)
+else:
+    model_mid = None
+if os.path.exists(att_model_path):
+    model_att = joblib.load(att_model_path)
+else:
+    model_att = None
+if os.path.exists(def_model_path):
+    model_def = joblib.load(def_model_path)
+else:
+    model_def = None
 
 
 class PlayerListView(ListView):
@@ -377,12 +387,6 @@ class PlayerSearchView(ListView):
         return players
 
 
-class MidfielderValueEstimation(TemplateView):
-    template_name = "players/midfielder_value_estimation.html"
-
-    model_mid = joblib.load("players/models/model_mid_16.pkl")
-
-
 def defender_value_estimation(request):
     if request.method == "POST":
         defending = request.POST.get("defending")
@@ -392,23 +396,27 @@ def defender_value_estimation(request):
         movement_reactions = request.POST.get("movement_reactions")
         mentality_interceptions = request.POST.get("mentality_interceptions")
         defending = request.POST.get("defending")
-
-        pred_value = int(
-            model_def.predict(
-                [
+        
+        if model_def != None:
+            pred_value = change_number_format(int(
+                model_def.predict(
                     [
-                        defending,
-                        defending_marking,
-                        defending_sliding_tackle,
-                        defending_standing_tackle,
-                        mentality_interceptions,
-                        movement_reactions,
+                        [
+                            defending,
+                            defending_marking,
+                            defending_sliding_tackle,
+                            defending_standing_tackle,
+                            mentality_interceptions,
+                            movement_reactions,
+                        ]
                     ]
-                ]
-            )[0]
-        )
-        euro = "euro"
-
+                )[0])
+            )
+            
+            euro = "euro"
+        else:
+            pred_value = "Result will be soon..."
+            euro = ""
         context = {
             "defending": defending,
             "defending_marking": defending_marking,
@@ -416,7 +424,7 @@ def defender_value_estimation(request):
             "defending_standing_tackle": defending_standing_tackle,
             "mentality_interceptions": mentality_interceptions,
             "movement_reactions": movement_reactions,
-            "pred_value": change_number_format(pred_value),
+            "pred_value": pred_value,
             "euro": euro,
         }
         return render(request, "players/defender_value_estimation.html", context)
@@ -445,25 +453,28 @@ def attacker_value_estimation(request):
         shooting = request.POST.get("shooting")
         skill_ball_control = request.POST.get("skill_ball_control")
         skill_dribbling = request.POST.get("skill_dribbling")
-
-        pred_value = int(
-            model_att.predict(
-                [
+        if model_att:
+            pred_value = change_number_format(int(
+                model_att.predict(
                     [
-                        attacking_finishing,
-                        attacking_short_passing,
-                        dribbling,
-                        mentality_positioning,
-                        movement_reactions,
-                        passing,
-                        shooting,
-                        skill_ball_control,
-                        skill_dribbling,
+                        [
+                            attacking_finishing,
+                            attacking_short_passing,
+                            dribbling,
+                            mentality_positioning,
+                            movement_reactions,
+                            passing,
+                            shooting,
+                            skill_ball_control,
+                            skill_dribbling,
+                        ]
                     ]
-                ]
-            )[0]
-        )
-
+                )[0])
+            )
+            euro = "euro"
+        else:
+            pred_value = "Result will be soon..."
+            euro = ""
         context = {
             "attacking_finishing": attacking_finishing,
             "attacking_short_passing": attacking_short_passing,
@@ -474,8 +485,8 @@ def attacker_value_estimation(request):
             "shooting": shooting,
             "skill_ball_control": skill_ball_control,
             "skill_dribbling": skill_dribbling,
-            "euro": "euro",
-            "pred_value": change_number_format(pred_value),
+            "euro": euro,
+            "pred_value": pred_value,
         }
         return render(request, "players/attacker_value_estimation.html", context)
     else:
@@ -508,24 +519,29 @@ def midfielder_value_estimation(request):
         skill_dribbling = request.POST.get("skill_dribbling")
         skill_long_passing = request.POST.get("skill_long_passing")
 
-        pred_value = int(
-            model_mid.predict(
-                [
+        if model_mid:
+            pred_value = change_number_format(int(
+                model_mid.predict(
                     [
-                        attacking_short_passing,
-                        dribbling,
-                        mentality_positioning,
-                        mentality_vision,
-                        movement_reactions,
-                        passing,
-                        shooting,
-                        skill_ball_control,
-                        skill_dribbling,
-                        skill_long_passing,
+                        [
+                            attacking_short_passing,
+                            dribbling,
+                            mentality_positioning,
+                            mentality_vision,
+                            movement_reactions,
+                            passing,
+                            shooting,
+                            skill_ball_control,
+                            skill_dribbling,
+                            skill_long_passing,
+                        ]
                     ]
-                ]
-            )[0]
-        )
+                )[0])
+            )
+            euro = "euro"
+        else:
+            pred_value = "Result will be soon..."
+            euro = ""
 
         context = {
             "attacking_short_passing": attacking_short_passing,
@@ -538,8 +554,8 @@ def midfielder_value_estimation(request):
             "skill_ball_control": skill_ball_control,
             "skill_dribbling": skill_dribbling,
             "skill_long_passing": skill_long_passing,
-            "euro": "euro",
-            "pred_value": change_number_format(pred_value),
+            "euro": euro,
+            "pred_value": pred_value,
         }
         return render(request, "players/midfielder_value_estimation.html", context)
     else:
