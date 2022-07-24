@@ -9,8 +9,8 @@ Databases are separated by years, from 2016 to 2020.
 Process of preparing data:
 1. Extract data from cvs files,
 2. Transform data - automated in prepare_data management command,
-3. Upload data to the postgresql database - automated in add_data management command
-4. Create players value estimation models separated by positions (midfielders, attackers, defenders) - automated in prepare_value_estimation_models management command
+3. Upload data to the postgresql database - automated in add_data management command,
+4. Create players value estimation models separated by positions (midfielders, attackers, defenders) - automated in prepare_value_estimation_models management command.
 
 In program we can look how parameters was changing during years. We can compare players parameters, make visualisation of clubs, positions, nationality.
 Data vizualization is based on python libraries like pandas, plotly, nupmy.
