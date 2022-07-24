@@ -1,13 +1,23 @@
 from django.urls import path
 
-from players.views import (ClubFinderView, HomeView, PasswordsChangeView,
-                           PlayerDetailView, PlayerListView,
-                           PlayersCompareView, ProfileTemplateView,
-                           UserEditView, UserRegisterView,
-                           attacker_value_estimation, compare_players,
-                           defender_value_estimation,
-                           midfielder_value_estimation, search_club,
-                           search_club_year, search_player)
+from players.views import (
+    ClubFinderView,
+    HomeView,
+    PasswordsChangeView,
+    PlayerDetailView,
+    PlayerListView,
+    PlayersCompareView,
+    ProfileTemplateView,
+    UserEditView,
+    UserRegisterView,
+    attacker_value_estimation,
+    compare_players,
+    defender_value_estimation,
+    midfielder_value_estimation,
+    search_club,
+    search_club_year,
+    search_player,
+)
 
 urlpatterns = [
     path("", HomeView.as_view(template_name="players/index.html"), name="home"),

@@ -1,7 +1,8 @@
+import os
 from math import floor, log
 from typing import Any, Dict
 from urllib import request
-import os
+
 import joblib
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import PasswordChangeView
@@ -15,12 +16,11 @@ from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 
 import plotly.graph_objects as go
-from players.constants import (
-    DEFAULT_COLUMNS
-)
+from players.constants import DEFAULT_COLUMNS
 from players.models import Player, PlayerStatistics
 
 from .forms import EditProfileForm, PasswordChangingForm, SignUpForm
+
 mid_model_path = "players/models/model_midfield.pkl"
 att_model_path = "players/models/model_attack.pkl"
 def_model_path = "players/models/model_defend.pkl"
@@ -397,23 +397,25 @@ def defender_value_estimation(request):
         movement_reactions = request.POST.get("movement_reactions")
         mentality_interceptions = request.POST.get("mentality_interceptions")
         defending = request.POST.get("defending")
-        
+
         if model_def != None:
-            pred_value = change_number_format(int(
-                model_def.predict(
-                    [
+            pred_value = change_number_format(
+                int(
+                    model_def.predict(
                         [
-                            defending,
-                            defending_marking,
-                            defending_sliding_tackle,
-                            defending_standing_tackle,
-                            mentality_interceptions,
-                            movement_reactions,
+                            [
+                                defending,
+                                defending_marking,
+                                defending_sliding_tackle,
+                                defending_standing_tackle,
+                                mentality_interceptions,
+                                movement_reactions,
+                            ]
                         ]
-                    ]
-                )[0])
+                    )[0]
+                )
             )
-            
+
             euro = "euro"
         else:
             pred_value = "Result will be soon..."
@@ -455,22 +457,24 @@ def attacker_value_estimation(request):
         skill_ball_control = request.POST.get("skill_ball_control")
         skill_dribbling = request.POST.get("skill_dribbling")
         if model_att:
-            pred_value = change_number_format(int(
-                model_att.predict(
-                    [
+            pred_value = change_number_format(
+                int(
+                    model_att.predict(
                         [
-                            attacking_finishing,
-                            attacking_short_passing,
-                            dribbling,
-                            mentality_positioning,
-                            movement_reactions,
-                            passing,
-                            shooting,
-                            skill_ball_control,
-                            skill_dribbling,
+                            [
+                                attacking_finishing,
+                                attacking_short_passing,
+                                dribbling,
+                                mentality_positioning,
+                                movement_reactions,
+                                passing,
+                                shooting,
+                                skill_ball_control,
+                                skill_dribbling,
+                            ]
                         ]
-                    ]
-                )[0])
+                    )[0]
+                )
             )
             euro = "euro"
         else:
@@ -521,23 +525,25 @@ def midfielder_value_estimation(request):
         skill_long_passing = request.POST.get("skill_long_passing")
 
         if model_mid:
-            pred_value = change_number_format(int(
-                model_mid.predict(
-                    [
+            pred_value = change_number_format(
+                int(
+                    model_mid.predict(
                         [
-                            attacking_short_passing,
-                            dribbling,
-                            mentality_positioning,
-                            mentality_vision,
-                            movement_reactions,
-                            passing,
-                            shooting,
-                            skill_ball_control,
-                            skill_dribbling,
-                            skill_long_passing,
+                            [
+                                attacking_short_passing,
+                                dribbling,
+                                mentality_positioning,
+                                mentality_vision,
+                                movement_reactions,
+                                passing,
+                                shooting,
+                                skill_ball_control,
+                                skill_dribbling,
+                                skill_long_passing,
+                            ]
                         ]
-                    ]
-                )[0])
+                    )[0]
+                )
             )
             euro = "euro"
         else:

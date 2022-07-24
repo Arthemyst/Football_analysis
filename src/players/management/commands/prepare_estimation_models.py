@@ -1,30 +1,27 @@
 import logging
 import logging.config
+import multiprocessing as mp
+import time
 from pathlib import Path
 from typing import List
+
+import joblib
 import pandas as pd
 from django.core.management.base import BaseCommand
-from players.constants import (
-    MIDFIELD_POSITION_COLUMNS,
-    ATTACK_POSITION_COLUMNS,
-    DEFEND_POSITION_COLUMNS,
-    DEFEND_COLUMNS_FOR_ESTIMATION,
-    ATTACK_COLUMNS_FOR_ESTIMATION,
-    MIDFIELD_COLUMNS_FOR_ESTIMATION,
-    random_grid,
-)
-from players.exceptions import (
-    NoFilesException,
-    NotExistingDirectoryException,
-)
-import joblib
-from sklearn.model_selection import train_test_split
+
+from players.constants import (ATTACK_COLUMNS_FOR_ESTIMATION,
+                               ATTACK_POSITION_COLUMNS,
+                               DEFEND_COLUMNS_FOR_ESTIMATION,
+                               DEFEND_POSITION_COLUMNS,
+                               MIDFIELD_COLUMNS_FOR_ESTIMATION,
+                               MIDFIELD_POSITION_COLUMNS, random_grid)
+from players.exceptions import NoFilesException, NotExistingDirectoryException
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
-import joblib
-import time
-import multiprocessing as mp
+
 logger = logging.getLogger(__name__)
+
 
 class Command(BaseCommand):
     def add_arguments(self, parser):
@@ -48,27 +45,34 @@ class Command(BaseCommand):
             logging.info(f"\nPreparing models from {path}...\n")
             dataframe = self.read_csv(path)
 
-            model_mid = mp.Process(target=self.model_creation(dataframe, "midfielders", MIDFIELD_COLUMNS_FOR_ESTIMATION, midfield_models_list))
-            model_att = mp.Process(target=self.model_creation( dataframe, "attackers", ATTACK_COLUMNS_FOR_ESTIMATION, attack_models_list))
-            model_def = mp.Process(target=self.model_creation(dataframe, "defenders", DEFEND_COLUMNS_FOR_ESTIMATION, defend_models_list))
-
-            model_mid.start()
-            model_att.start()
-            model_def.start()
-            #model_mid.join()
-            #model_att.join()
-            #model_def.join()
-
+            self.model_creation(
+                dataframe,
+                "midfielders",
+                MIDFIELD_COLUMNS_FOR_ESTIMATION,
+                midfield_models_list,
+            )
+            self.model_creation(
+                dataframe,
+                "attackers",
+                ATTACK_COLUMNS_FOR_ESTIMATION,
+                attack_models_list,
+            )
+            self.model_creation(
+                dataframe,
+                "defenders",
+                DEFEND_COLUMNS_FOR_ESTIMATION,
+                defend_models_list,
+            )
 
         max_midfield_model = max(midfield_models_list, key=lambda item: item[1])
         self.save_file(max_midfield_model, output, "midfield")
-        
+
         max_attack_model = max(attack_models_list, key=lambda item: item[1])
         self.save_file(max_attack_model, output, "attack")
 
         max_defend_model = max(defend_models_list, key=lambda item: item[1])
         self.save_file(max_defend_model, output, "defend")
-        
+
         end = time.time()
         logging.info(f"Operation time: {round((end - start)/60, 2)} min")
 
@@ -118,8 +122,6 @@ class Command(BaseCommand):
         model = rf.fit(X_train, y_train.values)
         model_score = rf.score(X_test, y_test.values)
         return (model, model_score)
-        
-        
 
     def save_file(self, model, directory, name):
         try:
@@ -132,11 +134,11 @@ class Command(BaseCommand):
                 "Cannot save file into a non-existent directory"
             )
 
-
     def model_creation(self, dataframe, position, columns_list, models_list):
 
         chosen_position = self.position_filter(position, dataframe)
         model = self.model_to_estimate_player_value(chosen_position, columns_list)
-        logging.info(f"{position.capitalize()} value estimation model score: {round(model[1], 2)}")
+        logging.info(
+            f"{position.capitalize()} value estimation model score: {round(model[1], 2)}"
+        )
         models_list.append(tuple(model))
-

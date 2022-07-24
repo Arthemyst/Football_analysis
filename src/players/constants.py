@@ -108,47 +108,48 @@ MIDFIELD_POSITION_COLUMNS = [
 ATTACK_POSITION_COLUMNS = ["RW", "LM", "ST", "LW", "LF", "RF", "LS", "RS", "CF"]
 DEFEND_POSITION_COLUMNS = ["RCB", "CB", "LCB", "LWB", "RWB", "RB", "LB"]
 
-DEFEND_COLUMNS_FOR_ESTIMATION =                    [
-                        "defending",
-                        "defending_marking",
-                        "defending_sliding_tackle",
-                        "defending_standing_tackle",
-                        "mentality_interceptions",
-                        "movement_reactions",
-                        "value_eur",
-                    ]
+DEFEND_COLUMNS_FOR_ESTIMATION = [
+    "defending",
+    "defending_marking",
+    "defending_sliding_tackle",
+    "defending_standing_tackle",
+    "mentality_interceptions",
+    "movement_reactions",
+    "value_eur",
+]
 
-ATTACK_COLUMNS_FOR_ESTIMATION =                     [
-                        "attacking_finishing",
-                        "attacking_short_passing",
-                        "dribbling",
-                        "mentality_positioning",
-                        "movement_reactions",
-                        "passing",
-                        "shooting",
-                        "skill_ball_control",
-                        "skill_dribbling",
-                        "value_eur",
-                    ]
+ATTACK_COLUMNS_FOR_ESTIMATION = [
+    "attacking_finishing",
+    "attacking_short_passing",
+    "dribbling",
+    "mentality_positioning",
+    "movement_reactions",
+    "passing",
+    "shooting",
+    "skill_ball_control",
+    "skill_dribbling",
+    "value_eur",
+]
 
-MIDFIELD_COLUMNS_FOR_ESTIMATION =                     [
-                        "attacking_short_passing",
-                        "dribbling",
-                        "mentality_positioning",
-                        "mentality_vision",
-                        "movement_reactions",
-                        "passing",
-                        "shooting",
-                        "skill_ball_control",
-                        "skill_dribbling",
-                        "skill_long_passing",
-                        "value_eur",
-                    ]
+MIDFIELD_COLUMNS_FOR_ESTIMATION = [
+    "attacking_short_passing",
+    "dribbling",
+    "mentality_positioning",
+    "mentality_vision",
+    "movement_reactions",
+    "passing",
+    "shooting",
+    "skill_ball_control",
+    "skill_dribbling",
+    "skill_long_passing",
+    "value_eur",
+]
 
-random_grid = {'bootstrap': [True, False],
-               'max_depth': [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, None],
-               'max_features': ['auto', 'sqrt'],
-               'min_samples_leaf': [1, 2, 4],
-               'min_samples_split': [2, 5, 10],
-               'n_estimators': [130, 180, 230]}
-               
+random_grid = {
+    "bootstrap": [True, False],
+    "max_depth": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, None],
+    "max_features": ["auto", "sqrt"],
+    "min_samples_leaf": [1, 2, 4],
+    "min_samples_split": [2, 5, 10],
+    "n_estimators": [130, 180, 230],
+}
