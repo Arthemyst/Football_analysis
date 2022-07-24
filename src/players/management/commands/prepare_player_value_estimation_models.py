@@ -15,7 +15,6 @@ from players.constants import (
 from players.exceptions import (
     NoFilesException,
     NotExistingDirectoryException,
-    WrongFileTypeException,
 )
 import joblib
 from sklearn.model_selection import train_test_split
@@ -47,9 +46,17 @@ class Command(BaseCommand):
         attack_models_list = []
         defend_models_list = []
         for path in csv_files:
-            logging.info(f"\n Preparing models from {path}...")
+            logging.info(f"\n Preparing models from {path}...\n")
             dataframe = self.read_csv(path)
 
+            model_mid = self.model_creation(dataframe, "midfielders", MIDFIELD_COLUMNS_FOR_ESTIMATION)
+            model_att = self.model_creation( dataframe, "attackers", ATTACK_COLUMNS_FOR_ESTIMATION)
+            model_def = self.model_creation(dataframe, "defenders", DEFEND_COLUMNS_FOR_ESTIMATION)
+
+
+
+
+            """
             midfielders = self.position_filter("midfielders", dataframe)
             model_mid = self.model_to_estimate_player_value(
                 midfielders, MIDFIELD_COLUMNS_FOR_ESTIMATION)
@@ -64,7 +71,7 @@ class Command(BaseCommand):
             model_def = self.model_to_estimate_player_value(
                 defenders, DEFEND_COLUMNS_FOR_ESTIMATION)
             logging.info(f"Defenders calue estimation model score: {round(model_def[1], 2)}")
-
+            """
             midfield_models_list.append(tuple(model_mid))
             attack_models_list.append(tuple(model_att))
             defend_models_list.append(tuple(model_def))
@@ -72,13 +79,15 @@ class Command(BaseCommand):
 
         max_midfield_model = max(midfield_models_list, key=lambda item: item[1])
         self.save_file(max_midfield_model, output, "midfield")
+        
         max_attack_model = max(attack_models_list, key=lambda item: item[1])
         self.save_file(max_attack_model, output, "attack")
+
         max_defend_model = max(defend_models_list, key=lambda item: item[1])
         self.save_file(max_defend_model, output, "defend")
-
+        
         end = time.time()
-        logging.info(f"Operation time: {int(end - start)/60} min")
+        logging.info(f"Operation time: {round((end - start)/60, 2)} min")
 
     def list_csv_files(self, directory: str) -> List:
         # Directory validation and list matching csv files
@@ -129,7 +138,7 @@ class Command(BaseCommand):
             }
         ]
         gs = GridSearchCV(RandomForestRegressor(), param_grid=param_grid, scoring="r2")
-        model = gs.fit(X_train, y_train)
+        model = gs.fit(X_train, y_train.values)
         model_score = gs.score(X_test, y_test)
         return model, model_score
 
@@ -143,3 +152,14 @@ class Command(BaseCommand):
             raise NotExistingDirectoryException(
                 "Cannot save file into a non-existent directory"
             )
+
+
+
+    def model_creation(self, dataframe, position, columns_list):
+            logging.info(f"{position.capitalize()} value estimation model preparation...")
+
+            chosen_position = self.position_filter(position, dataframe)
+            model = self.model_to_estimate_player_value(
+                chosen_position, columns_list)
+            logging.info(f"{position.capitalize()} value estimation model score: {round(model[1], 2)}")
+            return model
