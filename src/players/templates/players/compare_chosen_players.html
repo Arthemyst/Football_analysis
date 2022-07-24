@@ -7,7 +7,7 @@
 
             <div class="feature col">
                 <div class="shadow p-3 mb-5 bg-body rounded">
-                    <h2 class="pb-2 border-bottom">{{player1.0}}</h2>
+                    <h2 class="pb-2 border-bottom">{{player1_short_name.0.0}}</h2>
                     <p>Long name: {{player1_long_name.0.0}}</p>
                     <p>Nationality: {{player1_nationality.0.0}}</p>
 
@@ -41,7 +41,18 @@
                         <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample2" role="button"
                             aria-expanded="false" aria-controls="multiCollapseExample2">Club per year</a>
                     </p>
+                    <div class="col">
+                        <div class="collapse multi-collapse" id="multiCollapseExample2">
+                            <div class="card card-body">
 
+                                <ul class="list-group list-group-flush">
+                                    {% for year, club in player1_club_per_year %}
+                                    <li class="list-group-item">{{year}} - {{club}}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
             </div>
@@ -49,7 +60,7 @@
 
             <div class="feature col">
                 <div class="shadow p-3 mb-5 bg-body rounded">
-                    <h2 class="pb-2 border-bottom">{{player2.0}}</h2>
+                    <h2 class="pb-2 border-bottom">{{player2_short_name.0.0}}</h2>
                     <p>Long name: {{player2_long_name.0.0}}</p>
                     <p>Nationality: {{player2_nationality.0.0}}</p>
 
@@ -64,11 +75,11 @@
                 <div class="feature cols">
 
                     <p>
-                        <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample5" role="button"
+                        <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample3" role="button"
                             aria-expanded="false" aria-controls="multiCollapseExample1">Position per year</a>
                     </p>
                     <div class="col">
-                        <div class="collapse multi-collapse" id="multiCollapseExample5">
+                        <div class="collapse multi-collapse" id="multiCollapseExample3">
                             <div class="card card-body">
 
                                 <ul class="list-group list-group-flush">
@@ -80,16 +91,29 @@
                         </div>
                     </div>
                     <p>
-                        <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample6" role="button"
-                            aria-expanded="false" aria-controls="multiCollapseExample2">Club per year</a>
+                        <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample4" role="button"
+                            aria-expanded="false" aria-controls="multiCollapseExample4">Club per year</a>
                     </p>
-                    
+                    <div class="col">
+                        <div class="collapse multi-collapse" id="multiCollapseExample4">
+                            <div class="card card-body">
+
+                                <ul class="list-group list-group-flush">
+                                    {% for year, club in player2_club_per_year %}
+                                    <li class="list-group-item">{{year}} - {{club}}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         {{ chart|safe }}
     </div>
 
+    {% elif same_players%}
+    <p>You have chosen same players...</p>
 
     {% else %}
     <p>You need choose both players...</p>
