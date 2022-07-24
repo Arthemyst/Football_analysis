@@ -4,7 +4,14 @@
 
 Program will be used to vizualization data about football players.
 Data of players are uploaded from FIFA databases prepared by member of kaggle.com community: https://www.kaggle.com/stefanoleone992/fifa-20-complete-player-dataset
-Databases are separated by years, from 2016 to 2020. In program we can look how parameters are related to player overall rate and player value. We can compare players parameters, make visualisation of clubs, positions, nationality rankings etc.
+Databases are separated by years, from 2016 to 2020.
+
+Process of preparing data:
+1. Extracted data from cvs files,
+2. Transformed data - automated in prepare_data management command,
+3. Loaded data to postgresql database - automated in add_data management command
+
+In program we can look how parameters are related to player overall rate and player value. We can compare players parameters, make visualisation of clubs, positions, nationality rankings etc.
 Data vizualization is based on python libraries like pandas, plotly, nupmy.
 Vizualization works with website with usage of Django framework.
 
@@ -47,6 +54,8 @@ $ docker-compose -f docker/docker-compose.yaml up --build
 ```
 
 To test management commands during application running:
+
+
 ```sh
 (env)$ docker exec -it docker_web_1 /bin/bash
 (env)$ python3 -m pytest players/tests/tests_prepare_data.py
