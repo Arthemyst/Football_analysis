@@ -11,6 +11,7 @@ from players.constants import (
     DEFEND_COLUMNS_FOR_ESTIMATION,
     ATTACK_COLUMNS_FOR_ESTIMATION,
     MIDFIELD_COLUMNS_FOR_ESTIMATION,
+    random_grid,
 )
 from players.exceptions import (
     NoFilesException,
@@ -20,12 +21,10 @@ import joblib
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import MinMaxScaler
-from sklearn.model_selection import GridSearchCV
 import joblib
 import time
-
+import multiprocessing as mp
 logger = logging.getLogger(__name__)
-
 
 class Command(BaseCommand):
     def add_arguments(self, parser):
@@ -46,35 +45,19 @@ class Command(BaseCommand):
         attack_models_list = []
         defend_models_list = []
         for path in csv_files:
-            logging.info(f"\n Preparing models from {path}...\n")
+            logging.info(f"\nPreparing models from {path}...\n")
             dataframe = self.read_csv(path)
 
-            model_mid = self.model_creation(dataframe, "midfielders", MIDFIELD_COLUMNS_FOR_ESTIMATION)
-            model_att = self.model_creation( dataframe, "attackers", ATTACK_COLUMNS_FOR_ESTIMATION)
-            model_def = self.model_creation(dataframe, "defenders", DEFEND_COLUMNS_FOR_ESTIMATION)
+            model_mid = mp.Process(target=self.model_creation(dataframe, "midfielders", MIDFIELD_COLUMNS_FOR_ESTIMATION, midfield_models_list))
+            model_att = mp.Process(target=self.model_creation( dataframe, "attackers", ATTACK_COLUMNS_FOR_ESTIMATION, attack_models_list))
+            model_def = mp.Process(target=self.model_creation(dataframe, "defenders", DEFEND_COLUMNS_FOR_ESTIMATION, defend_models_list))
 
-
-
-
-            """
-            midfielders = self.position_filter("midfielders", dataframe)
-            model_mid = self.model_to_estimate_player_value(
-                midfielders, MIDFIELD_COLUMNS_FOR_ESTIMATION)
-            logging.info(f"Midfielders value estimation model score: {round(model_mid[1], 2)}")
-
-            attackers = self.position_filter("attackers", dataframe)
-            model_att = self.model_to_estimate_player_value(
-                attackers, ATTACK_COLUMNS_FOR_ESTIMATION)
-            logging.info(f"Attackers value estimation model score: {round(model_att[1], 2)}")
-
-            defenders = self.position_filter("defenders", dataframe)
-            model_def = self.model_to_estimate_player_value(
-                defenders, DEFEND_COLUMNS_FOR_ESTIMATION)
-            logging.info(f"Defenders calue estimation model score: {round(model_def[1], 2)}")
-            """
-            midfield_models_list.append(tuple(model_mid))
-            attack_models_list.append(tuple(model_att))
-            defend_models_list.append(tuple(model_def))
+            model_mid.start()
+            model_att.start()
+            model_def.start()
+            #model_mid.join()
+            #model_att.join()
+            #model_def.join()
 
 
         max_midfield_model = max(midfield_models_list, key=lambda item: item[1])
@@ -130,17 +113,13 @@ class Command(BaseCommand):
         scaler = MinMaxScaler()
         scaler.fit(X)
         scaler.transform(X)
-        X_train, X_test, y_train, y_test = train_test_split(X, y)
-        param_grid = [
-            {
-                "max_depth": [3, 4, 5, 6, 7, 8, 9, 10, 20],
-                "min_samples_leaf": [3, 4, 5, 10, 15],
-            }
-        ]
-        gs = GridSearchCV(RandomForestRegressor(), param_grid=param_grid, scoring="r2")
-        model = gs.fit(X_train, y_train.values)
-        model_score = gs.score(X_test, y_test)
-        return model, model_score
+        X_train, X_test, y_train, y_test = train_test_split(X.values, y)
+        rf = RandomForestRegressor()
+        model = rf.fit(X_train, y_train.values)
+        model_score = rf.score(X_test, y_test.values)
+        return (model, model_score)
+        
+        
 
     def save_file(self, model, directory, name):
         try:
@@ -154,12 +133,10 @@ class Command(BaseCommand):
             )
 
 
+    def model_creation(self, dataframe, position, columns_list, models_list):
 
-    def model_creation(self, dataframe, position, columns_list):
-            logging.info(f"{position.capitalize()} value estimation model preparation...")
+        chosen_position = self.position_filter(position, dataframe)
+        model = self.model_to_estimate_player_value(chosen_position, columns_list)
+        logging.info(f"{position.capitalize()} value estimation model score: {round(model[1], 2)}")
+        models_list.append(tuple(model))
 
-            chosen_position = self.position_filter(position, dataframe)
-            model = self.model_to_estimate_player_value(
-                chosen_position, columns_list)
-            logging.info(f"{position.capitalize()} value estimation model score: {round(model[1], 2)}")
-            return model

@@ -16,7 +16,7 @@ from django.views.generic.list import ListView
 
 import plotly.graph_objects as go
 from players.constants import (
-    DEFAULT_COLUMNS,
+    DEFAULT_COLUMNS
 )
 from players.models import Player, PlayerStatistics
 
@@ -24,6 +24,7 @@ from .forms import EditProfileForm, PasswordChangingForm, SignUpForm
 mid_model_path = "players/models/model_midfield.pkl"
 att_model_path = "players/models/model_attack.pkl"
 def_model_path = "players/models/model_defend.pkl"
+
 if os.path.exists(mid_model_path):
     model_mid = joblib.load(mid_model_path)
 else:
