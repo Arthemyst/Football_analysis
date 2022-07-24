@@ -2,24 +2,26 @@
 
 ## Introduction
 
-Program will be used to vizualization data about football players.
-Data of players are uploaded from FIFA databases prepared by member of kaggle.com community: https://www.kaggle.com/stefanoleone992/fifa-20-complete-player-dataset
+The program will be used to visualize data about football players
+Players data are collected from FIFA databases prepared by a member of the kaggle.com community: https://www.kaggle.com/stefanoleone992/fifa-20-complete-player-dataset
 Databases are separated by years, from 2016 to 2020.
 
 Process of preparing data:
-1. Extracted data from cvs files,
-2. Transformed data - automated in prepare_data management command,
-3. Loaded data to postgresql database - automated in add_data management command
+1. Extract data from cvs files,
+2. Transform data - automated in prepare_data management command,
+3. Upload data to the postgresql database - automated in add_data management command
+4. Create players value estimation models separated by positions (midfielders, attackers, defenders) - automated in prepare_value_estimation_models management command
 
-In program we can look how parameters are related to player overall rate and player value. We can compare players parameters, make visualisation of clubs, positions, nationality rankings etc.
+In program we can look how parameters was changing during years. We can compare players parameters, make visualisation of clubs, positions, nationality.
 Data vizualization is based on python libraries like pandas, plotly, nupmy.
-Vizualization works with website with usage of Django framework.
+Estimation models are based on scikit-learn library and the Random Forest Regressor used.
+Vizualization of website is based on Django framework.
 
 Features:
 - compare players parameters
-- find players in club and filter by year
-- find detail of player in list of all players
-- find player in search field
+- find players in club and filter these by year
+- find detail of player
+- find player in dedicated search field
 - estimate player value by choosing specific parameters related to position on field (midfielder, attacker, defender)
 
 ## Setup
@@ -62,7 +64,7 @@ To test management commands during application running:
 (env)$ python3 -m pytest players/tests/tests_add_data.py
 ```
 
-To transform data from inpu csv files:
+To transform data from input csv files:
 Warning: need to download data from https://www.kaggle.com/stefanoleone992/fifa-20-complete-player-dataset and create directory in players/ named "input_data".
 ```sh
 (env)$ docker exec -it docker_web_1 /bin/bash
@@ -74,4 +76,8 @@ To load data to database:
 (env)$ docker exec -it docker_web_1 /bin/bash
 (env)$ python3 manage.py add_data players/data
 ```
-
+To prepare players value estimation models:
+```sh
+(env)$ docker exec -it docker_web_1 /bin/bash
+(env)$ python3 manage.py prepare_estimation_models players/data players/models
+```
