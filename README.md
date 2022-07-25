@@ -32,6 +32,9 @@ Home page before logging
 Home page after logging
 ![home_after_log](https://user-images.githubusercontent.com/59807704/180871959-8c1d1460-a4af-4cbc-b5cc-1ce2d6ada500.png)
 
+Page with players list
+![players_list](https://user-images.githubusercontent.com/59807704/180872045-0497ffae-3910-4aef-b15d-1d9e9476fbe9.png)
+
 ## Setup
 
 The first thing to do is to clone the repository:
