@@ -41,6 +41,9 @@ Page with details of chosen player
 Page for searching club
 ![club_search](https://user-images.githubusercontent.com/59807704/180872401-d0be0544-2e38-4acf-8709-0047ae267f54.png)
 
+Page with searched club
+![club_searched](https://user-images.githubusercontent.com/59807704/180872500-4189fc4b-a127-495e-8f67-4c5d0daa7b7a.png)
+
 ## Setup
 
 The first thing to do is to clone the repository:
