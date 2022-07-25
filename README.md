@@ -29,6 +29,9 @@ Features:
 Home page before logging
 ![home](https://user-images.githubusercontent.com/59807704/180871565-3b0e32b4-247c-4477-a9da-93d00c733e13.png)
 
+Home page after logging
+![home_after_log](https://user-images.githubusercontent.com/59807704/180871959-8c1d1460-a4af-4cbc-b5cc-1ce2d6ada500.png)
+
 ## Setup
 
 The first thing to do is to clone the repository:
