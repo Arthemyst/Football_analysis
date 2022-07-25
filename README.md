@@ -47,6 +47,9 @@ Page with searched club
 Page with players comparison
 ![compare](https://user-images.githubusercontent.com/59807704/180872629-8b1b26f2-c9ca-4f78-ae46-ec193b1b1450.png)
 
+Page for player value estimation
+![estimat](https://user-images.githubusercontent.com/59807704/180872835-73fe3912-2a0b-4759-b89e-af274b8f71ee.png)
+
 ## Setup
 
 The first thing to do is to clone the repository:
