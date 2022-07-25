@@ -5,8 +5,7 @@ import pandas as pd
 import pytest
 
 import sklearn
-from players.constants import (ATTACK_COLUMNS_FOR_ESTIMATION,
-                               ATTACK_POSITION_COLUMNS)
+from players.constants import ATTACK_COLUMNS_FOR_ESTIMATION
 from players.exceptions import NoFilesException, NotExistingDirectoryException
 from players.management.commands.prepare_estimation_models import Command
 
@@ -21,6 +20,14 @@ def test_list_csv_files_succeed(command):
     list_csv_files = command.list_csv_files(path)
 
     assert list_csv_files == sorted(list_csv_files)
+
+
+def test_list_files_not_csv_file(command):
+    # check to load csv files from not existing dir
+    path = "players/wrong_tests_inputs/"
+
+    with pytest.raises(NoFilesException, match="No such file or directory"):
+        list_files = command.list_csv_files(path)
 
 
 def test_read_csv_with_proper_amount_of_columns(command):
@@ -76,3 +83,27 @@ def test_model_creation_succeed(command):
         type(attack_models_list[0][0]) == sklearn.ensemble._forest.RandomForestRegressor
     )
     assert type(attack_models_list[0][1]) == float
+
+
+def test_handle_input_wrong_path(tmp_path, command):
+    # check handle module by inputing wrong path and outputing right path
+    input = "players/input_data_wrong_path"
+    output = tmp_path / "players_temp"
+    filepath = tmp_path / "players_temp/players_16.csv"
+
+    with pytest.raises(NoFilesException, match="No such file or directory"):
+        handle = command.handle(input, output)
+
+
+def test_handle_input_right_path(tmp_path, command):
+    # check handle module by inputing right path and outputing right path
+    input = "players/tests/fixtures/test_handle_input_right_path_for_prepare_estimation_models"
+    output = tmp_path / "models_temp"
+    output.mkdir()
+    command.handle(input, output)
+    list_of_files = [
+        item
+        for item in Path(output).iterdir()
+        if item.is_file() and item.name.endswith(".pkl")
+    ]
+    assert len(list_of_files) == 3
