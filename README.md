@@ -24,6 +24,11 @@ Features:
 - find player in dedicated search field
 - estimate player value by choosing specific parameters related to position on field (midfielder, attacker, defender)
 
+## Images from website
+
+Home page before logging
+![home](https://user-images.githubusercontent.com/59807704/180871565-3b0e32b4-247c-4477-a9da-93d00c733e13.png)
+
 ## Setup
 
 The first thing to do is to clone the repository:
