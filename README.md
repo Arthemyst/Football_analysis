@@ -38,6 +38,9 @@ Page with players list
 Page with details of chosen player
 ![player_detail](https://user-images.githubusercontent.com/59807704/180872320-25414485-3461-44af-8d40-70b27d8f9c68.png)
 
+Page for searching club
+![club_search](https://user-images.githubusercontent.com/59807704/180872401-d0be0544-2e38-4acf-8709-0047ae267f54.png)
+
 ## Setup
 
 The first thing to do is to clone the repository:
