@@ -36,6 +36,7 @@ Page with players list
 ![players_list](https://user-images.githubusercontent.com/59807704/180872045-0497ffae-3910-4aef-b15d-1d9e9476fbe9.png)
 
 Page with details of chosen player
+![player_detail](https://user-images.githubusercontent.com/59807704/180872320-25414485-3461-44af-8d40-70b27d8f9c68.png)
 
 ## Setup
 
