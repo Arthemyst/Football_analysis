@@ -44,6 +44,9 @@ Page for searching club
 Page with searched club
 ![club_searched](https://user-images.githubusercontent.com/59807704/180872500-4189fc4b-a127-495e-8f67-4c5d0daa7b7a.png)
 
+Page with players comparison
+![compare](https://user-images.githubusercontent.com/59807704/180872629-8b1b26f2-c9ca-4f78-ae46-ec193b1b1450.png)
+
 ## Setup
 
 The first thing to do is to clone the repository:
