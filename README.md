@@ -35,6 +35,8 @@ Home page after logging
 Page with players list
 ![players_list](https://user-images.githubusercontent.com/59807704/180872045-0497ffae-3910-4aef-b15d-1d9e9476fbe9.png)
 
+Page with details of chosen player
+
 ## Setup
 
 The first thing to do is to clone the repository:
