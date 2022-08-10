@@ -15,4 +15,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
+      env:
+        DEBUG: True
+        SECRET_KEY: your-secret-key
+        DATABASE_URL: psql://postgres:postgres@database:5432/postgres
+        ALLOWED_HOSTS: 127.0.0.1,localhost
       run: docker-compose -f docker/docker-compose.yaml up --build
