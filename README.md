@@ -24,6 +24,32 @@ Features:
 - find player in dedicated search field
 - estimate player value by choosing specific parameters related to position on field (midfielder, attacker, defender)
 
+## Images from website
+
+Home page before logging
+![home](https://user-images.githubusercontent.com/59807704/180871565-3b0e32b4-247c-4477-a9da-93d00c733e13.png)
+
+Home page after logging
+![home_after_log](https://user-images.githubusercontent.com/59807704/180871959-8c1d1460-a4af-4cbc-b5cc-1ce2d6ada500.png)
+
+Page with players list
+![players_list](https://user-images.githubusercontent.com/59807704/180872045-0497ffae-3910-4aef-b15d-1d9e9476fbe9.png)
+
+Page with details of chosen player
+![player_detail](https://user-images.githubusercontent.com/59807704/180872320-25414485-3461-44af-8d40-70b27d8f9c68.png)
+
+Page for searching club
+![club_search](https://user-images.githubusercontent.com/59807704/180872401-d0be0544-2e38-4acf-8709-0047ae267f54.png)
+
+Page with searched club
+![club_searched](https://user-images.githubusercontent.com/59807704/180872500-4189fc4b-a127-495e-8f67-4c5d0daa7b7a.png)
+
+Page with players comparison
+![compare](https://user-images.githubusercontent.com/59807704/180872629-8b1b26f2-c9ca-4f78-ae46-ec193b1b1450.png)
+
+Page for player value estimation
+![estimat](https://user-images.githubusercontent.com/59807704/180872835-73fe3912-2a0b-4759-b89e-af274b8f71ee.png)
+
 ## Setup
 
 The first thing to do is to clone the repository:
