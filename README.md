@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The program will be used to visualize data about football players
+The program will be used to visualize data about football players. 
 Players data are collected from FIFA databases prepared by a member of the kaggle.com community: https://www.kaggle.com/stefanoleone992/fifa-20-complete-player-dataset
 Databases are separated by years, from 2016 to 2020.
 
