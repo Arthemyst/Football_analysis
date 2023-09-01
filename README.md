@@ -92,6 +92,14 @@ To test management commands during application running:
 
 ```
 
+Please first create superuser and migrate database:
+```sh
+(env)$ docker exec -it docker_web_1 /bin/bash
+(env)$ python3 manage.py createsuperuser
+(env)$ python3 manage.py migrate
+(env)$ python3 manage.py makemigrations
+```
+
 To transform data from input csv files:
 Warning: need to download data from https://www.kaggle.com/stefanoleone992/fifa-20-complete-player-dataset and create directory in players/ named "input_data".
 ```sh

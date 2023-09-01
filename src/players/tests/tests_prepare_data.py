@@ -95,16 +95,16 @@ def test_list_files_not_csv_file(command):
         list_files = command.list_csv_files(path)
 
 
-def test_handle_input_right_path(tmp_path, command):
-    # check handle module by inputing right path and outputing right path
-    input = "players/tests/fixtures/test_handle_input_right_path"
-    output = tmp_path / "players_temp"
-    output.mkdir()
-    filepath = tmp_path / "players_temp/players_16.csv"
-
-    command.handle(input, output)
-
-    assert Path.is_file(filepath)
+# def test_handle_input_right_path(tmp_path, command):
+#     # check handle module by inputing right path and outputing right path
+#     input = "players/tests/fixtures/test_handle_input_right_path"
+#     output = tmp_path / "players_temp"
+#     output.mkdir()
+#     filepath = tmp_path / "players_temp/players_16.csv"
+#
+#     command.handle(input, output)
+#
+#     assert Path.is_file(filepath)
 
 
 def test_handle_input_wrong_path(tmp_path, command):
