@@ -65,8 +65,14 @@ Create a virtual environment to install dependencies in and activate it:
 
 Linux:
 ```sh
-$ python3 -m venv env
-$ source env/bin/activate
+$ python3 -m venv venv
+$ source venv/bin/activate
+```
+
+Windows:
+```sh
+$ python3 -m venv venv
+$ source venv\Scripts\activate
 ```
 
 Create a .env file in project root directory. The file format can be understood from the example below:
