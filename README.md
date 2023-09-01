@@ -65,8 +65,14 @@ Create a virtual environment to install dependencies in and activate it:
 
 Linux:
 ```sh
-$ python3 -m venv env
-$ source env/bin/activate
+$ python3 -m venv venv
+$ source venv/bin/activate
+```
+
+Windows:
+```sh
+$ python3 -m venv venv
+$ source venv\Scripts\activate
 ```
 
 Create a .env file in project root directory. The file format can be understood from the example below:
@@ -90,6 +96,14 @@ To test management commands during application running:
 (env)$ python3 -m pytest players/tests/tests_add_data.py
 (env)$ python3 -m pytest players/tests/tests_prepare_estimation_models.py
 
+```
+
+Please first create superuser and migrate database:
+```sh
+(env)$ docker exec -it docker_web_1 /bin/bash
+(env)$ python3 manage.py createsuperuser
+(env)$ python3 manage.py migrate
+(env)$ python3 manage.py makemigrations
 ```
 
 To transform data from input csv files:

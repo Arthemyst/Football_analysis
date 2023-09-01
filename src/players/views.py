@@ -1,21 +1,17 @@
 import os
 from math import floor, log
 from typing import Any, Dict
-from urllib import request
 
 import joblib
-from django.contrib.auth.forms import PasswordChangeForm
+import plotly.graph_objects as go
 from django.contrib.auth.views import PasswordChangeView
 from django.core.paginator import Paginator
-from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-
-import plotly.graph_objects as go
 from players.constants import DEFAULT_COLUMNS
 from players.models import Player, PlayerStatistics
 
@@ -40,7 +36,6 @@ else:
 
 
 class PlayerListView(ListView):
-
     model = Player
     paginate_by = 50
     context_object_name = "players"
@@ -52,7 +47,6 @@ class PlayerListView(ListView):
 
 
 class HomeView(ListView):
-
     model = Player
     context_object_name = "player"
 
@@ -123,7 +117,6 @@ def password_success(request):
 
 
 def search_player(request):
-
     if request.method == "GET":
         searched = request.GET.get("searched")
         players = Player.objects.filter(short_name__icontains=searched).order_by("id")
@@ -153,7 +146,6 @@ class ClubFinderView(TemplateView):
 
 
 def search_club(request):
-
     if request.method == "GET":
         searched = request.GET.get("searched_club")
         request.session["save_searched_club"] = searched
@@ -182,7 +174,6 @@ def search_club(request):
 
 
 def search_club_year(request):
-
     if request.method == "GET":
         searched = request.session["save_searched_club"]
         request.session["save_searched_club"] = searched
@@ -192,17 +183,14 @@ def search_club_year(request):
         if not years_distinct:
             last_year = 2020
         else:
-            last_year = years_distinct[-1]
+            last_year = max(years_distinct)
 
-        year = request.GET.get("year", False)
-        if not year:
-            year = last_year
+        year = request.GET.get("year", last_year)
+
         players = Player.objects.filter(
             playerstatistics__club__icontains=searched, playerstatistics__year=year
         ).order_by("id")
-        years = PlayerStatistics.objects.filter(club=searched).order_by()
-        years_distinct = list(set([year_item.year for year_item in years]))
-        club_name = list(set([player.club for player in years]))[0]
+        club_name = PlayerStatistics.objects.filter(club=searched).first().club
         context = {
             "players": players,
             "searched": searched,
@@ -229,7 +217,6 @@ class PlayersCompareView(ListView):
 
 
 def compare_players(request):
-
     if request.method == "GET":
 
         searched_player1 = request.GET.get("player1")
@@ -255,23 +242,23 @@ def compare_players(request):
             ).values_list("team_position")
             player1_position_per_year = (
                 PlayerStatistics.objects.filter(player__long_name=searched_player1)
-                .values_list("year", "team_position")
-                .order_by("year")
+                    .values_list("year", "team_position")
+                    .order_by("year")
             )
             player2_position_per_year = (
                 PlayerStatistics.objects.filter(player__long_name=searched_player2)
-                .values_list("year", "team_position")
-                .order_by("year")
+                    .values_list("year", "team_position")
+                    .order_by("year")
             )
             player1_club_per_year = (
                 PlayerStatistics.objects.filter(player__long_name=searched_player1)
-                .values_list("year", "club")
-                .order_by("year")
+                    .values_list("year", "club")
+                    .order_by("year")
             )
             player2_club_per_year = (
                 PlayerStatistics.objects.filter(player__long_name=searched_player2)
-                .values_list("year", "club")
-                .order_by("year")
+                    .values_list("year", "club")
+                    .order_by("year")
             )
             player1_long_name = Player.objects.filter(
                 long_name=searched_player1
@@ -293,13 +280,13 @@ def compare_players(request):
             ).values_list("nationality")
             player1_value_per_year = (
                 PlayerStatistics.objects.filter(player__long_name=searched_player1)
-                .values_list("value_eur", "year")
-                .order_by("year")
+                    .values_list("value_eur", "year")
+                    .order_by("year")
             )
             player2_value_per_year = (
                 PlayerStatistics.objects.filter(player__long_name=searched_player2)
-                .values_list("value_eur", "year")
-                .order_by("year")
+                    .values_list("value_eur", "year")
+                    .order_by("year")
             )
 
             fig = go.Figure()
@@ -564,4 +551,4 @@ def change_number_format(number):
     units = ["", " K", " MLN"]
     k = 1000.0
     magnitude = int(floor(log(number, k)))
-    return "%.3f%s" % (number / k**magnitude, units[magnitude])
+    return "%.3f%s" % (number / k ** magnitude, units[magnitude])
