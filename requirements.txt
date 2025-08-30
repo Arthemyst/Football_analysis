@@ -7,7 +7,7 @@ psycopg2-binary
 django-bootstrap-v5==1.0.11
 pre-commit==2.18.1
 plotly==5.9.0
-joblib==1.1.0
+joblib
 scikit-learn
 pandas
 djangorestframework
