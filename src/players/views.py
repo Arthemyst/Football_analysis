@@ -14,6 +14,10 @@ from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from players.constants import DEFAULT_COLUMNS
 from players.models import Player, PlayerStatistics
+from rest_framework.generics import RetrieveAPIView
+from rest_framework.response import Response
+from rest_framework import status
+from players.serializers import PlayersSerializer
 
 from .forms import EditProfileForm, PasswordChangingForm, SignUpForm
 
@@ -545,6 +549,25 @@ def midfielder_value_estimation(request):
             "euro": "",
         }
         return render(request, "players/midfielder_value_estimation.html", context)
+
+
+class PlayerDetailByNameAPI(RetrieveAPIView):
+    serializer_class = PlayersSerializer
+    lookup_field = "short_name"
+
+    def get_queryset(self):
+        return Player.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        short_name = kwargs.get("short_name")
+        try:
+            player = Player.objects.get(short_name__iexact=short_name)
+        except Player.DoesNotExist:
+            return Response({"error": f"Player '{short_name}' not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = self.get_serializer(player)
+        return Response(serializer.data)
+
 
 
 def change_number_format(number):
