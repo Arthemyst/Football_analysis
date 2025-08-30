@@ -4,11 +4,8 @@ from pathlib import Path
 import pandas as pd
 from django.core.management.base import BaseCommand
 
-from players.constants import DEFAULT_COLUMNS, UNOPTIMIZABLE_COLUMNS, VALUES_COLUMNS
 from players.exceptions import (
     NoFilesException,
-    NotExistingDirectoryException,
-    WrongFileTypeException,
 )
 from players.models import Player, PlayerStatistics
 
@@ -16,7 +13,7 @@ from players.models import Player, PlayerStatistics
 class Command(BaseCommand):
     help = "A command to add data from a csv file to the database."
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser) -> None:
         parser.add_argument(
             "input", type=str, help="Choose directory path with input csv files"
         )
@@ -29,7 +26,7 @@ class Command(BaseCommand):
             df = self.read_csv(path)
             self.load_to_db(df)
 
-    def list_csv_files(self, directory):
+    def list_csv_files(self, directory: str) -> list:
         # Directory validation and list matching csv files
         try:
             return sorted(
@@ -42,11 +39,11 @@ class Command(BaseCommand):
         except FileNotFoundError as e:
             raise NoFilesException("No such file or directory") from e
 
-    def read_csv(self, directory):
+    def read_csv(self, directory: str) -> pd.DataFrame:
         df = pd.read_csv(directory)
         return df
 
-    def load_to_db(self, df):
+    def load_to_db(self, df: pd.DataFrame) -> None:
         for _, row in df.iterrows():
             player, _ = Player.objects.get_or_create(
                 short_name=row["short_name"],

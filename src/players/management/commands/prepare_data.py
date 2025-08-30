@@ -10,7 +10,6 @@ from players.constants import DEFAULT_COLUMNS, UNOPTIMIZABLE_COLUMNS, VALUES_COL
 from players.exceptions import (
     NoFilesException,
     NotExistingDirectoryException,
-    WrongFileTypeException,
 )
 
 logger = logging.getLogger(__name__)
@@ -55,7 +54,7 @@ class Command(BaseCommand):
 
         return dataframe
 
-    def remove_goalkeepers(self, dataframe):
+    def remove_goalkeepers(self, dataframe: pd.DataFrame) -> pd.DataFrame:
         # remove goalkeepers from dataframe
         # goalkeepers have different parameters and is not able to compare it with field players
         dataframe.reset_index(inplace=True)
@@ -65,7 +64,7 @@ class Command(BaseCommand):
         dataframe.dropna(subset=["team_position"], inplace=True)
         return dataframe
 
-    def optimize_types(self, dataframe, path):
+    def optimize_types(self, dataframe: pd.DataFrame, path: str) -> pd.DataFrame:
         def sum_values(value: str) -> int:
             """remove '+' and '-' from columns with parameters values ex. '65+2'
             change data type to integer"""
@@ -96,7 +95,7 @@ class Command(BaseCommand):
 
         return dataframe
 
-    def save_file(self, dataframe, directory, path):
+    def save_file(self, dataframe: pd.DataFrame, directory: str, path: str) -> None:
         try:
             dataframe.to_csv(f"{Path(directory)}/{path.name}", sep=",", index=False)
             logging.info(
