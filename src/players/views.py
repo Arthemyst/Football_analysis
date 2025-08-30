@@ -12,8 +12,15 @@ from django.views import generic
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
+from rest_framework import status
+from rest_framework.generics import RetrieveAPIView
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+
 from players.constants import DEFAULT_COLUMNS
 from players.models import Player, PlayerStatistics
+from players.serializers import PlayersSerializer, PlayerBasicSerializer
 
 from .forms import EditProfileForm, PasswordChangingForm, SignUpForm
 
@@ -242,23 +249,23 @@ def compare_players(request):
             ).values_list("team_position")
             player1_position_per_year = (
                 PlayerStatistics.objects.filter(player__long_name=searched_player1)
-                    .values_list("year", "team_position")
-                    .order_by("year")
+                .values_list("year", "team_position")
+                .order_by("year")
             )
             player2_position_per_year = (
                 PlayerStatistics.objects.filter(player__long_name=searched_player2)
-                    .values_list("year", "team_position")
-                    .order_by("year")
+                .values_list("year", "team_position")
+                .order_by("year")
             )
             player1_club_per_year = (
                 PlayerStatistics.objects.filter(player__long_name=searched_player1)
-                    .values_list("year", "club")
-                    .order_by("year")
+                .values_list("year", "club")
+                .order_by("year")
             )
             player2_club_per_year = (
                 PlayerStatistics.objects.filter(player__long_name=searched_player2)
-                    .values_list("year", "club")
-                    .order_by("year")
+                .values_list("year", "club")
+                .order_by("year")
             )
             player1_long_name = Player.objects.filter(
                 long_name=searched_player1
@@ -280,13 +287,13 @@ def compare_players(request):
             ).values_list("nationality")
             player1_value_per_year = (
                 PlayerStatistics.objects.filter(player__long_name=searched_player1)
-                    .values_list("value_eur", "year")
-                    .order_by("year")
+                .values_list("value_eur", "year")
+                .order_by("year")
             )
             player2_value_per_year = (
                 PlayerStatistics.objects.filter(player__long_name=searched_player2)
-                    .values_list("value_eur", "year")
-                    .order_by("year")
+                .values_list("value_eur", "year")
+                .order_by("year")
             )
 
             fig = go.Figure()
@@ -546,6 +553,49 @@ def midfielder_value_estimation(request):
         }
         return render(request, "players/midfielder_value_estimation.html", context)
 
+
+class PlayerDetailByNameAPI(RetrieveAPIView):
+    serializer_class = PlayersSerializer
+    lookup_field = "short_name"
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Player.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        short_name = kwargs.get("short_name")
+        try:
+            player = Player.objects.get(short_name__iexact=short_name)
+        except Player.DoesNotExist:
+            return Response({"error": f"Player '{short_name}' not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = self.get_serializer(player)
+        return Response(serializer.data)
+
+
+class ClubPlayersAPI(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        club = request.GET.get("club")
+        year = request.GET.get("year")
+
+        if not club:
+            return Response({"error": "Missing 'club' parameter"}, status=status.HTTP_400_BAD_REQUEST)
+
+        queryset = Player.objects.filter(playerstatistics__club__icontains=club)
+
+        if year:
+            queryset = queryset.filter(playerstatistics__year=year)
+
+        queryset = queryset.distinct().order_by("id")
+
+        serializer = PlayerBasicSerializer(queryset, many=True)
+        return Response({
+            "club": club,
+            "year": year,
+            "players": serializer.data
+        })
 
 def change_number_format(number):
     units = ["", " K", " MLN"]
