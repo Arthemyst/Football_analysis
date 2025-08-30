@@ -16,6 +16,7 @@ from rest_framework import status
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 
 from players.constants import DEFAULT_COLUMNS
 from players.models import Player, PlayerStatistics
@@ -556,6 +557,7 @@ def midfielder_value_estimation(request):
 class PlayerDetailByNameAPI(RetrieveAPIView):
     serializer_class = PlayersSerializer
     lookup_field = "short_name"
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return Player.objects.all()
@@ -572,6 +574,8 @@ class PlayerDetailByNameAPI(RetrieveAPIView):
 
 
 class ClubPlayersAPI(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         club = request.GET.get("club")
         year = request.GET.get("year")
