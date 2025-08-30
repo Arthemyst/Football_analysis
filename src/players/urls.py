@@ -17,7 +17,7 @@ from players.views import (
     search_club,
     search_club_year,
     search_player,
-    PlayerDetailByNameAPI,
+    PlayerDetailByNameAPI, ClubPlayersAPI,
 )
 
 urlpatterns = [
@@ -59,4 +59,5 @@ urlpatterns = [
         name="defender-value-estimation",
     ),
     path("api/player/<str:short_name>/", PlayerDetailByNameAPI.as_view(), name="player-detail-api"),
+    path("api/club-players/", ClubPlayersAPI.as_view(), name="club-players-api"),
 ]
