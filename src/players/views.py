@@ -14,14 +14,14 @@ from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from rest_framework import status
 from rest_framework.generics import RetrieveAPIView
+from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
-
+from django.db.models import Count
 from players.constants import DEFAULT_COLUMNS
-from players.models import Player, PlayerStatistics
+from players.models import Player, PlayerStatistics, UserActivity
 from players.serializers import PlayersSerializer, PlayerBasicSerializer
-
 from .forms import EditProfileForm, PasswordChangingForm, SignUpForm
 
 mid_model_path = "players/models/model_midfield.pkl"
@@ -71,6 +71,14 @@ class PlayerDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         player = self.get_object()
+
+        if self.request.user.is_authenticated:
+            from .models import UserActivity
+            UserActivity.objects.create(
+                user=self.request.user,
+                action="viewed_player_by_website",
+                detail = {"short_name": player.short_name, "long_name": player.long_name}
+            )
 
         chosen_statistic = self.request.GET.get("chosen_statistic", "overall").replace(" ", "_")
 
@@ -359,6 +367,8 @@ class PlayerSearchView(ListView):
         return players
 
 
+
+
 def defender_value_estimation(request):
     if request.method == "POST":
         defending = request.POST.get("defending")
@@ -562,15 +572,16 @@ class PlayerDetailByNameAPI(RetrieveAPIView):
     def get_queryset(self):
         return Player.objects.all()
 
-    def get(self, request, *args, **kwargs):
-        short_name = kwargs.get("short_name")
-        try:
-            player = Player.objects.get(short_name__iexact=short_name)
-        except Player.DoesNotExist:
-            return Response({"error": f"Player '{short_name}' not found"}, status=status.HTTP_404_NOT_FOUND)
+    def retrieve(self, request, *args, **kwargs):
+        response = super().retrieve(request, *args, **kwargs)
 
-        serializer = self.get_serializer(player)
-        return Response(serializer.data)
+        UserActivity.objects.create(
+            user=request.user,
+            action="viewed_player_by_api",
+            detail={"short_name": kwargs.get("short_name")},
+        )
+
+        return response
 
 
 class ClubPlayersAPI(APIView):
@@ -591,11 +602,50 @@ class ClubPlayersAPI(APIView):
         queryset = queryset.distinct().order_by("id")
 
         serializer = PlayerBasicSerializer(queryset, many=True)
+
+        UserActivity.objects.create(
+            user=request.user,
+            action="searched_club_by_api",
+            detail={"club": club, "year": year}
+        )
         return Response({
             "club": club,
             "year": year,
             "players": serializer.data
         })
+
+
+class DashboardStatsAPI(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request):
+        top_players_by_api = (
+            UserActivity.objects.filter(action="viewed_player_by_api")
+            .values("detail__short_name")
+            .annotate(count=Count("id"))
+            .order_by("-count")[:10]
+        )
+
+        top_players_by_website = (
+            UserActivity.objects.filter(action="viewed_player_by_website")
+            .values("detail__short_name")
+            .annotate(count=Count("id"))
+            .order_by("-count")[:10]
+        )
+
+        top_clubs_by_api = (
+            UserActivity.objects.filter(action="searched_club_by_api")
+            .values("detail__club")
+            .annotate(count=Count("id"))
+            .order_by("-count")[:10]
+        )
+
+        return Response({
+            "top_players_by_api": list(top_players_by_api),
+            "top_clubs_by_api": list(top_clubs_by_api),
+            "top_players_by_website": list(top_players_by_website),
+        })
+
 
 def change_number_format(number):
     units = ["", " K", " MLN"]
