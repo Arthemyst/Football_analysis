@@ -21,3 +21,9 @@ class PlayerBasicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Player
         fields = ["id", "short_name", "long_name", "nationality"]
+
+
+class PlayerListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Player
+        fields = ["id", "short_name", "long_name", "nationality"]
