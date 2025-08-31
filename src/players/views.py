@@ -6,6 +6,7 @@ import joblib
 import plotly.graph_objects as go
 from django.contrib.auth.views import PasswordChangeView
 from django.core.paginator import Paginator
+from django.db.models import Count
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
@@ -13,15 +14,16 @@ from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from rest_framework import status
-from rest_framework.generics import RetrieveAPIView
+from rest_framework.generics import RetrieveAPIView, ListAPIView
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAdminUser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.db.models import Count
+
 from players.constants import DEFAULT_COLUMNS
 from players.models import Player, PlayerStatistics, UserActivity
-from players.serializers import PlayersSerializer, PlayerBasicSerializer
+from players.serializers import PlayersSerializer, PlayerBasicSerializer, PlayerListSerializer
 from .forms import EditProfileForm, PasswordChangingForm, SignUpForm
 
 mid_model_path = "players/models/model_midfield.pkl"
@@ -77,7 +79,7 @@ class PlayerDetailView(DetailView):
             UserActivity.objects.create(
                 user=self.request.user,
                 action="viewed_player_by_website",
-                detail = {"short_name": player.short_name, "long_name": player.long_name}
+                detail={"short_name": player.short_name, "long_name": player.long_name}
             )
 
         chosen_statistic = self.request.GET.get("chosen_statistic", "overall").replace(" ", "_")
@@ -367,8 +369,6 @@ class PlayerSearchView(ListView):
         return players
 
 
-
-
 def defender_value_estimation(request):
     if request.method == "POST":
         defending = request.POST.get("defending")
@@ -615,6 +615,24 @@ class ClubPlayersAPI(APIView):
         })
 
 
+class PlayersListAPI(ListAPIView):
+    queryset = Player.objects.all().order_by("id")
+    serializer_class = PlayerListSerializer
+    permission_classes = [IsAuthenticated]
+    pagination_class = LimitOffsetPagination
+
+    def list(self, request, *args, **kwargs):
+        UserActivity.objects.create(
+            user=request.user,
+            action="viewed_players_list_by_api",
+            detail={
+                "page": request.query_params.get("page", 1),
+                "page_size": request.query_params.get("page_size", 20),
+            },
+        )
+        return super().list(request, *args, **kwargs)
+
+
 class DashboardStatsAPI(APIView):
     permission_classes = [IsAdminUser]
 
@@ -640,10 +658,18 @@ class DashboardStatsAPI(APIView):
             .order_by("-count")[:10]
         )
 
+        players_list_usage = (
+            UserActivity.objects.filter(action="viewed_players_list_by_api")
+            .values("detail__page", "detail__page_size")
+            .annotate(count=Count("id"))
+            .order_by("-count")
+        )
+
         return Response({
             "top_players_by_api": list(top_players_by_api),
             "top_clubs_by_api": list(top_clubs_by_api),
             "top_players_by_website": list(top_players_by_website),
+            "players_list_usage": list(players_list_usage),
         })
 
 
