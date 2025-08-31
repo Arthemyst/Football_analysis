@@ -1,4 +1,7 @@
-from django.urls import path
+from django.urls import path, re_path
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions
 
 from players.views import (
     ClubFinderView,
@@ -20,6 +23,16 @@ from players.views import (
     PlayerDetailByNameAPI,
     ClubPlayersAPI,
     DashboardStatsAPI, PlayersListAPI,
+)
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Football API",
+        default_version="v1",
+        description="API for gathering information about Football players from Fifa game (years 2016-2019)",
+    ),
+    public=False,
+    permission_classes=[permissions.AllowAny],
 )
 
 urlpatterns = [
@@ -64,4 +77,7 @@ urlpatterns = [
     path("api/player/<str:short_name>/", PlayerDetailByNameAPI.as_view(), name="player-detail-api"),
     path("api/club-players/", ClubPlayersAPI.as_view(), name="club-players-api"),
     path("api/dashboard/", DashboardStatsAPI.as_view(), name="dashboard-stats-api"),
+    path("swagger-api/", schema_view.with_ui('swagger', cache_timeout=0), name="schema-swagger-ui"),
+    re_path(r'^swagger-api(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    path('redoc-api/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
