@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "bootstrap5",
     "players.apps.PlayersConfig",
     "rest_framework",
+    "drf_yasg",
 ]
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 LOGIN_REDIRECT_URL = "home"

@@ -13,6 +13,8 @@ from django.views import generic
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.generics import RetrieveAPIView, ListAPIView
 from rest_framework.pagination import LimitOffsetPagination
@@ -572,20 +574,81 @@ class PlayerDetailByNameAPI(RetrieveAPIView):
     def get_queryset(self):
         return Player.objects.all()
 
-    def retrieve(self, request, *args, **kwargs):
-        response = super().retrieve(request, *args, **kwargs)
+    @swagger_auto_schema(
+        operation_description="Returns detailed information about a player by their short_name.",
+        manual_parameters=[
+            openapi.Parameter(
+                name="short_name",
+                in_=openapi.IN_PATH,
+                description="The short name of the player (e.g., 'L. Messi').",
+                type=openapi.TYPE_STRING,
+                required=True
+            )
+        ],
+        responses={
+            200: PlayersSerializer,
+        },
+    )
+    def get(self, request, *args, **kwargs):
+        short_name = kwargs.get("short_name")
+        try:
+            player = Player.objects.get(short_name__iexact=short_name)
+            UserActivity.objects.create(
+                user=request.user,
+                action="viewed_player_by_api",
+                detail={"short_name": kwargs.get("short_name")},
+            )
+        except Player.DoesNotExist:
+            return Response({"error": f"Player '{short_name}' not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        UserActivity.objects.create(
-            user=request.user,
-            action="viewed_player_by_api",
-            detail={"short_name": kwargs.get("short_name")},
-        )
-
-        return response
+        serializer = self.get_serializer(player)
+        return Response(serializer.data)
 
 
 class ClubPlayersAPI(APIView):
     permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        operation_description=(
+            "Returns a list of players who played for a given club. "
+            "Optionally filter by year."
+        ),
+        manual_parameters=[
+            openapi.Parameter(
+                name="club",
+                in_=openapi.IN_QUERY,
+                description="Club name (required). Example: `Real Madrid`",
+                type=openapi.TYPE_STRING,
+                required=True,
+            ),
+            openapi.Parameter(
+                name="year",
+                in_=openapi.IN_QUERY,
+                description="Season year (optional). Example: `2020`",
+                type=openapi.TYPE_INTEGER,
+                required=False,
+            ),
+        ],
+        responses={
+            200: openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    "club": openapi.Schema(type=openapi.TYPE_STRING),
+                    "year": openapi.Schema(type=openapi.TYPE_STRING, nullable=True),
+                    "players": openapi.Schema(
+                        type=openapi.TYPE_ARRAY,
+                        items=openapi.Items(type=openapi.TYPE_OBJECT)
+                    ),
+                },
+            ),
+            400: openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    "error": openapi.Schema(type=openapi.TYPE_STRING)
+                },
+            ),
+        },
+    )
 
     def get(self, request):
         club = request.GET.get("club")
@@ -621,7 +684,27 @@ class PlayersListAPI(ListAPIView):
     permission_classes = [IsAuthenticated]
     pagination_class = LimitOffsetPagination
 
-    def list(self, request, *args, **kwargs):
+    @swagger_auto_schema(
+        operation_description="Returns list with all players with short name and long name (with pagination).",
+        manual_parameters=[
+            openapi.Parameter(
+                name="page",
+                in_=openapi.IN_QUERY,
+                description="Page number (default=1).",
+                type=openapi.TYPE_INTEGER
+            ),
+            openapi.Parameter(
+                name="page_size",
+                in_=openapi.IN_QUERY,
+                description="Page size (ex. 10, 20, 50).",
+                type=openapi.TYPE_INTEGER
+            ),
+        ],
+        responses={
+            200: PlayerListSerializer(many=True),
+        },
+    )
+    def get(self, request, *args, **kwargs):
         UserActivity.objects.create(
             user=request.user,
             action="viewed_players_list_by_api",
@@ -635,6 +718,24 @@ class PlayersListAPI(ListAPIView):
 
 class DashboardStatsAPI(APIView):
     permission_classes = [IsAdminUser]
+
+    @swagger_auto_schema(
+        operation_description="Returns aggregated user activity statistics for the dashboard. Only accessible by admins.",
+        responses={
+            200: openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    "top_players_by_api": openapi.Schema(type=openapi.TYPE_ARRAY,
+                                                         items=openapi.Items(type=openapi.TYPE_OBJECT)),
+                    "top_players_by_website": openapi.Schema(type=openapi.TYPE_ARRAY,
+                                                             items=openapi.Items(type=openapi.TYPE_OBJECT)),
+                    "top_clubs_by_api": openapi.Schema(type=openapi.TYPE_ARRAY,
+                                                       items=openapi.Items(type=openapi.TYPE_OBJECT)),
+                    "players_list_views": openapi.Schema(type=openapi.TYPE_INTEGER),
+                },
+            )
+        },
+    )
 
     def get(self, request):
         top_players_by_api = (
