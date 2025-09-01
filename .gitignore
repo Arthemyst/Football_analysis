@@ -139,3 +139,5 @@ dmypy.json
 
 #machine learning models
 *.pkl
+
+*.csv
