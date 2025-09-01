@@ -157,3 +157,10 @@ REST_FRAMEWORK = {
         "limit_offset": "rest_framework.pagination.LimitOffsetPagination",
     },
 }
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": "redis://redis:6379/0",  # "redis" to nazwa serwisu z docker-compose
+    }
+}

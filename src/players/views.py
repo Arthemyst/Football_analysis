@@ -6,10 +6,13 @@ import joblib
 import plotly.graph_objects as go
 from django.contrib.auth.views import PasswordChangeView
 from django.core.paginator import Paginator
+from django.core.cache import cache
 from django.db.models import Count
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views import generic
+from django.views.decorators.cache import cache_page
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
@@ -591,6 +594,12 @@ class PlayerDetailByNameAPI(RetrieveAPIView):
     )
     def get(self, request, *args, **kwargs):
         short_name = kwargs.get("short_name")
+
+        cache_key = f"player_detail:{short_name.lower()}"
+        cached_data = cache.get(cache_key)
+        if cached_data:
+            return Response(cached_data)
+
         try:
             player = Player.objects.get(short_name__iexact=short_name)
             UserActivity.objects.create(
@@ -602,16 +611,20 @@ class PlayerDetailByNameAPI(RetrieveAPIView):
             return Response({"error": f"Player '{short_name}' not found"}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = self.get_serializer(player)
-        return Response(serializer.data)
+        response_data = serializer.data
 
+
+        cache.set(cache_key, response_data, timeout=60 * 60 * 24)
+
+        return Response(response_data)
 
 class ClubPlayersAPI(APIView):
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
         operation_description=(
-            "Returns a list of players who played for a given club. "
-            "Optionally filter by year."
+                "Returns a list of players who played for a given club. "
+                "Optionally filter by year."
         ),
         manual_parameters=[
             openapi.Parameter(
@@ -649,13 +662,17 @@ class ClubPlayersAPI(APIView):
             ),
         },
     )
-
     def get(self, request):
         club = request.GET.get("club")
         year = request.GET.get("year")
 
         if not club:
             return Response({"error": "Missing 'club' parameter"}, status=status.HTTP_400_BAD_REQUEST)
+
+        cache_key = f"club_players:{club}:{year or 'all'}"
+        cached_data = cache.get(cache_key)
+        if cached_data:
+            return Response(cached_data)
 
         queryset = Player.objects.filter(playerstatistics__club__icontains=club)
 
@@ -665,17 +682,19 @@ class ClubPlayersAPI(APIView):
         queryset = queryset.distinct().order_by("id")
 
         serializer = PlayerBasicSerializer(queryset, many=True)
+        data = {
+            "club": club,
+            "year": year,
+            "players": serializer.data,
+        }
+        cache.set(cache_key, data, timeout=3600)
 
         UserActivity.objects.create(
             user=request.user,
             action="searched_club_by_api",
             detail={"club": club, "year": year}
         )
-        return Response({
-            "club": club,
-            "year": year,
-            "players": serializer.data
-        })
+        return Response(data)
 
 
 class PlayersListAPI(ListAPIView):
@@ -705,15 +724,27 @@ class PlayersListAPI(ListAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
+        page_number = request.query_params.get("page", 1)
+        page_size = request.query_params.get("page_size", 20)
+
+        cache_key = f"players_list:page:{page_number}:size:{page_size}"
+        cached_data = cache.get(cache_key)
+
+        if cached_data:
+            return Response(cached_data)
+
         UserActivity.objects.create(
             user=request.user,
             action="viewed_players_list_by_api",
             detail={
-                "page": request.query_params.get("page", 1),
-                "page_size": request.query_params.get("page_size", 20),
+                "page": page_number,
+                "page_size": page_size,
             },
         )
-        return super().list(request, *args, **kwargs)
+
+        response = super().list(request, *args, **kwargs)
+        cache.set(cache_key, response.data, 60 * 60 * 24)
+        return response
 
 
 class DashboardStatsAPI(APIView):
@@ -736,7 +767,7 @@ class DashboardStatsAPI(APIView):
             )
         },
     )
-
+    @method_decorator(cache_page(5 * 60))
     def get(self, request):
         top_players_by_api = (
             UserActivity.objects.filter(action="viewed_player_by_api")
