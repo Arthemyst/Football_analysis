@@ -11,3 +11,4 @@ scikit-learn
 pandas
 djangorestframework
 drf-yasg
+django-redis

@@ -84,14 +84,14 @@ ALLOWED_HOSTS=127.0.0.1,localhost
 ```
 Application runs on docker. Please run docker-compose to install dependiences and run application:
 ```sh
-$ docker-compose -f docker/docker-compose.yaml up --build
+$ docker-compose up -d
 ```
 
 To test management commands during application running:
 
 
 ```sh
-(env)$ docker exec -it docker_web_1 /bin/bash
+(env)$ docker exec -it football_analysis-web-1 /bin/bash
 (env)$ python3 -m pytest players/tests/tests_prepare_data.py
 (env)$ python3 -m pytest players/tests/tests_add_data.py
 (env)$ python3 -m pytest players/tests/tests_prepare_estimation_models.py
@@ -100,26 +100,26 @@ To test management commands during application running:
 
 Please first create superuser and migrate database:
 ```sh
-(env)$ docker exec -it docker_web_1 /bin/bash
-(env)$ python3 manage.py createsuperuser
+(env)$ docker exec -it football_analysis-web-1 /bin/bash
 (env)$ python3 manage.py migrate
 (env)$ python3 manage.py makemigrations
+(env)$ python3 manage.py createsuperuser
 ```
 
 To transform data from input csv files:
 Warning: need to download data from https://www.kaggle.com/stefanoleone992/fifa-20-complete-player-dataset and create directory in players/ named "input_data".
 ```sh
-(env)$ docker exec -it docker_web_1 /bin/bash
+(env)$ docker exec -it football_analysis-web-1 /bin/bash
 (env)$ python3 manage.py prepare_data players/input_data players/data
 ```
 
 To load data to database:
 ```sh
-(env)$ docker exec -it docker_web_1 /bin/bash
+(env)$ docker exec -it football_analysis-web-1 /bin/bash
 (env)$ python3 manage.py add_data players/data
 ```
 To prepare players value estimation models:
 ```sh
-(env)$ docker exec -it docker_web_1 /bin/bash
+(env)$ docker exec -it football_analysis-web-1 /bin/bash
 (env)$ python3 manage.py prepare_estimation_models players/data players/models
 ```
