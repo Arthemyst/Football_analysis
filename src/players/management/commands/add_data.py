@@ -2,6 +2,7 @@ import logging.config
 from pathlib import Path
 
 import pandas as pd
+from django.core.cache import cache
 from django.core.management.base import BaseCommand
 
 from players.exceptions import (
@@ -25,6 +26,10 @@ class Command(BaseCommand):
             logging.info(f"Preparing data from {path}...")
             df = self.read_csv(path)
             self.load_to_db(df)
+
+        logging.info("Clearing cache after loading players data...")
+        cache.clear()
+        logging.info("Cache cleared ✅")
 
     def list_csv_files(self, directory: str) -> list:
         # Directory validation and list matching csv files
