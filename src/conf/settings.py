@@ -156,6 +156,19 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS_OPTIONS": {
         "limit_offset": "rest_framework.pagination.LimitOffsetPagination",
     },
+    "DEFAULT_THROTTLE_CLASSES": [
+            "rest_framework.throttling.UserRateThrottle",
+            "rest_framework.throttling.AnonRateThrottle",
+        ],
+        "DEFAULT_THROTTLE_RATES": {
+            "user": "1000/day",
+            "anon": "100/day",
+            "players_list": "20/min",
+            "player_detail": "60/hour",
+            "club_players": "30/min",
+            "dashboard": "10/min",
+            "anon_api": "10/hour",
+        },
 }
 
 CACHES = {

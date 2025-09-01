@@ -5,8 +5,8 @@ from typing import Any, Dict
 import joblib
 import plotly.graph_objects as go
 from django.contrib.auth.views import PasswordChangeView
-from django.core.paginator import Paginator
 from django.core.cache import cache
+from django.core.paginator import Paginator
 from django.db.models import Count
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -25,7 +25,12 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from players.throttling import (
+    PlayersListThrottle,
+    PlayerDetailThrottle,
+    ClubPlayersThrottle,
+    DashboardThrottle,
+)
 from players.constants import DEFAULT_COLUMNS
 from players.models import Player, PlayerStatistics, UserActivity
 from players.serializers import PlayersSerializer, PlayerBasicSerializer, PlayerListSerializer
@@ -573,6 +578,7 @@ class PlayerDetailByNameAPI(RetrieveAPIView):
     serializer_class = PlayersSerializer
     lookup_field = "short_name"
     permission_classes = [IsAuthenticated]
+    throttle_classes = [PlayerDetailThrottle]
 
     def get_queryset(self):
         return Player.objects.all()
@@ -613,13 +619,14 @@ class PlayerDetailByNameAPI(RetrieveAPIView):
         serializer = self.get_serializer(player)
         response_data = serializer.data
 
-
         cache.set(cache_key, response_data, timeout=60 * 60 * 24)
 
         return Response(response_data)
 
+
 class ClubPlayersAPI(APIView):
     permission_classes = [IsAuthenticated]
+    throttle_classes = [ClubPlayersThrottle]
 
     @swagger_auto_schema(
         operation_description=(
@@ -702,6 +709,7 @@ class PlayersListAPI(ListAPIView):
     serializer_class = PlayerListSerializer
     permission_classes = [IsAuthenticated]
     pagination_class = LimitOffsetPagination
+    throttle_classes = [PlayersListThrottle]
 
     @swagger_auto_schema(
         operation_description="Returns list with all players with short name and long name (with pagination).",
@@ -749,6 +757,7 @@ class PlayersListAPI(ListAPIView):
 
 class DashboardStatsAPI(APIView):
     permission_classes = [IsAdminUser]
+    throttle_classes = [DashboardThrottle]
 
     @swagger_auto_schema(
         operation_description="Returns aggregated user activity statistics for the dashboard. Only accessible by admins.",
