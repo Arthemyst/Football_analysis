@@ -95,7 +95,7 @@ To test management commands during application running:
 (env)$ python3 -m pytest players/tests/tests_prepare_data.py
 (env)$ python3 -m pytest players/tests/tests_add_data.py
 (env)$ python3 -m pytest players/tests/tests_prepare_estimation_models.py
-
+(env)$ python3 -m pytest players/tests/tests_models.py
 ```
 
 Please first create superuser and migrate database:
