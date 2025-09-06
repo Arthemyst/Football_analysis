@@ -295,10 +295,10 @@ def compare_players(request):
             ).values_list("long_name")
             player1_short_name = Player.objects.filter(
                 long_name=searched_player1
-            ).values_list("short_name")
+            ).values_list("short_name", flat=True).first()
             player2_short_name = Player.objects.filter(
                 long_name=searched_player2
-            ).values_list("short_name")
+            ).values_list("short_name", flat=True).first()
             player1_nationality = Player.objects.filter(
                 long_name=searched_player1
             ).values_list("nationality")
@@ -354,6 +354,19 @@ def compare_players(request):
                 "player2_short_name": player2_short_name,
                 "chart": chart,
             }
+            player1_short_name_value = Player.objects.filter(
+                long_name=searched_player1
+            ).values_list("short_name", flat=True).first()
+
+            player2_short_name_value = Player.objects.filter(
+                long_name=searched_player2
+            ).values_list("short_name", flat=True).first()
+            UserActivity.objects.create(
+                user=request.user,
+                action="players_comparison_by_website",
+                detail={"player_1": player1_short_name, "player_2": player2_short_name}
+            )
+
         return render(request, "players/compare_chosen_players.html", context)
     else:
         return render(request, "players/compare_chosen_players.html.html", {})
@@ -806,11 +819,19 @@ class DashboardStatsAPI(APIView):
             .order_by("-count")
         )
 
+        players_comparison = (
+            UserActivity.objects.filter(action="players_comparison_by_website")
+            .values("detail__player_1", "detail__player_2")
+            .annotate(count=Count("id"))
+            .order_by("-count")
+        )
+
         return Response({
             "top_players_by_api": list(top_players_by_api),
             "top_clubs_by_api": list(top_clubs_by_api),
             "top_players_by_website": list(top_players_by_website),
             "players_list_usage": list(players_list_usage),
+            "players_comparison": list(players_comparison),
         })
 
 
