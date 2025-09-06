@@ -19,21 +19,23 @@ from django.views.generic.list import ListView
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.generics import RetrieveAPIView, ListAPIView
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAdminUser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from players.constants import DEFAULT_COLUMNS
+from players.models import Player, PlayerStatistics, UserActivity
+from players.serializers import PlayersSerializer, PlayerBasicSerializer, PlayerListSerializer
 from players.throttling import (
     PlayersListThrottle,
     PlayerDetailThrottle,
     ClubPlayersThrottle,
     DashboardThrottle,
 )
-from players.constants import DEFAULT_COLUMNS
-from players.models import Player, PlayerStatistics, UserActivity
-from players.serializers import PlayersSerializer, PlayerBasicSerializer, PlayerListSerializer
 from .forms import EditProfileForm, PasswordChangingForm, SignUpForm
 
 mid_model_path = "players/models/model_midfield.pkl"
@@ -718,6 +720,7 @@ class ClubPlayersAPI(APIView):
 
 
 class PlayersListAPI(ListAPIView):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
     queryset = Player.objects.all().order_by("id")
     serializer_class = PlayerListSerializer
     permission_classes = [IsAuthenticated]
