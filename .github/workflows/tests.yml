@@ -10,35 +10,35 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    env:
-      SECRET_KEY: secret # ${{ secrets.TEST_SECRET_KEY }}
-      DJANGO_SETTINGS_MODULE: conf.test_settings
-      POSTGRES_DB: postgres # ${{ secrets.TEST_DB_NAME }}
-      POSTGRES_USER: postgres # ${{ secrets.TEST_DB_USER }}
-      POSTGRES_PASSWORD: postgres # ${{ secrets.TEST_DB_PASSWORD }}
-      DB_HOST: localhost
-      DB_PORT: 5432
-      ALLOWED_HOSTS: localhost,127.0.0.1
-
     services:
       postgres:
         image: postgres:14.2
         env:
-          POSTGRES_USER: ${POSTGRES_USER}
-          POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-          POSTGRES_DB: ${POSTGRES_DB}
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U ${POSTGRES_USER}" 
-          --health-interval 10s 
-          --health-timeout 5s 
+          --health-cmd "pg_isready -U postgres -d postgres"
+          --health-interval 10s
+          --health-timeout 5s
           --health-retries 5
 
       redis:
         image: redis:7-alpine
         ports:
           - 6379:6379
+
+    env:
+      SECRET_KEY: secret
+      DJANGO_SETTINGS_MODULE: conf.test_settings
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      DB_HOST: localhost
+      DB_PORT: 5432
+      ALLOWED_HOSTS: localhost,127.0.0.1
 
     steps:
       - uses: actions/checkout@v3
@@ -51,11 +51,20 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements-dev.txt
 
-      - name: Run migrations and tests
-        working-directory: ./src
+      - name: Wait for DB
         run: |
-          python manage.py migrate --noinput
-          pytest --maxfail=1 --disable-warnings
+          until pg_isready -h localhost -p 5432 -U postgres; do
+            echo "Waiting for Postgres..."
+            sleep 2
+          done
+
+      - name: Run migrations
+        working-directory: ./src
+        run: python manage.py migrate --noinput
+
+      - name: Run tests
+        working-directory: ./src
+        run: pytest --maxfail=1 --disable-warnings
 
       - name: Comment PR with test results
         uses: marocchino/sticky-pull-request-comment@v2
