@@ -1,45 +1,37 @@
-name: CI Tests
+name: Run Django Tests
 
 on:
   pull_request:
     branches:
-      - develop
       - main
+      - develop
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
     services:
       postgres:
-        image: postgres:14.2
+        image: postgres:14.2-alpine
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: postgres
+          POSTGRES_DB: test_db
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_pass
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U postgres -d postgres"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
+          --health-cmd="pg_isready -U test_user -d test_db"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=5
       redis:
         image: redis:7-alpine
         ports:
           - 6379:6379
-
-    env:
-      SECRET_KEY: secret
-      DJANGO_SETTINGS_MODULE: conf.test_settings
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      DB_HOST: localhost
-      DB_PORT: 5432
-      ALLOWED_HOSTS: localhost,127.0.0.1
-
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=5
     steps:
       - uses: actions/checkout@v3
 
@@ -49,24 +41,31 @@ jobs:
           python-version: 3.9
 
       - name: Install dependencies
-        run: pip install -r requirements-dev.txt
-
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
       - name: Wait for DB
         run: |
-          until pg_isready -h localhost -p 5432 -U postgres; do
-            echo "Waiting for Postgres..."
+          until pg_isready -h localhost -p 5432 -U test_user; do
+            echo "Waiting for database..."
             sleep 2
           done
-
-      - name: Run migrations
-        working-directory: ./src
-        run: python manage.py migrate --noinput
-
-      - name: Run tests
-        working-directory: ./src
-        run: pytest --maxfail=1 --disable-warnings
-
-      - name: Comment PR with test results
-        uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          path: result.log
+      - name: Make migrations
+        working-directory: src
+        env:
+          DJANGO_SETTINGS_MODULE: conf.test_settings
+          DATABASE_URL_TEST: postgres://test_user:test_pass@localhost:5432/test_db
+          SECRET_KEY: test_secret
+          ALLOWED_HOSTS: localhost,127.0.0.1
+        run: |
+          python manage.py makemigrations --noinput
+      - name: Run tests with pytest
+        working-directory: src
+        env:
+          DJANGO_SETTINGS_MODULE: conf.test_settings
+          DATABASE_URL_TEST: postgres://test_user:test_pass@localhost:5432/test_db
+          REDIS_URL: redis://localhost:6379/0
+          SECRET_KEY: test_secret
+          ALLOWED_HOSTS: localhost,127.0.0.1
+        run: |
+          pytest -v --ds=conf.test_settings --migrations
