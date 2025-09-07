@@ -11,11 +11,11 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      SECRET_KEY: ${{ secrets.TEST_SECRET_KEY }}
+      SECRET_KEY: secret # ${{ secrets.TEST_SECRET_KEY }}
       DJANGO_SETTINGS_MODULE: conf.test_settings
-      POSTGRES_DB: ${{ secrets.TEST_DB_NAME }}
-      POSTGRES_USER: ${{ secrets.TEST_DB_USER }}
-      POSTGRES_PASSWORD: ${{ secrets.TEST_DB_PASSWORD }}
+      POSTGRES_DB: postgres # ${{ secrets.TEST_DB_NAME }}
+      POSTGRES_USER: postgres # ${{ secrets.TEST_DB_USER }}
+      POSTGRES_PASSWORD: postgres # ${{ secrets.TEST_DB_PASSWORD }}
       DB_HOST: localhost
       DB_PORT: 5432
       ALLOWED_HOSTS: localhost,127.0.0.1
