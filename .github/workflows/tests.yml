@@ -6,10 +6,6 @@ on:
       - main
       - develop
 
-defaults:
-  run:
-    working-directory: src
-
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -49,7 +45,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements-dev.txt
+          pip install -r requirements-dev.txt   # 👈 plik z root
 
       - name: Wait for DB
         run: |
@@ -59,12 +55,14 @@ jobs:
           done
 
       - name: Run migrations
+        working-directory: src   # 👈 manage.py jest w src
         env:
           DATABASE_URL: postgres://test_user:test_pass@localhost:5432/test_db
         run: |
           python manage.py migrate --noinput
 
       - name: Run tests
+        working-directory: src   # 👈 testy też w src
         env:
           DJANGO_SETTINGS_MODULE: conf.settings
           DATABASE_URL: postgres://test_user:test_pass@localhost:5432/test_db
