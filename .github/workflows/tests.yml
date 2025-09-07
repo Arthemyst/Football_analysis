@@ -63,4 +63,4 @@ jobs:
           SECRET_KEY: test_secret
           ALLOWED_HOSTS: localhost,127.0.0.1
         run: |
-          pytest -v --ds=conf.test_settings
+          pytest -v --ds=conf.test_settings --migrations
