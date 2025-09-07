@@ -4,10 +4,14 @@ import environ
 env = environ.Env()
 
 DATABASES = {
-    "default": env.db(
-        "DATABASE_URL_TEST",
-        default="postgres://test_user:test_pass@localhost:5432/test_db"
-    )
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "test_db",
+        "USER": "test_user",
+        "PASSWORD": "test_pass",
+        "HOST": "localhost",
+        "PORT": "5432",
+    }
 }
 
 PASSWORD_HASHERS = [

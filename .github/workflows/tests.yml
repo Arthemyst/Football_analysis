@@ -54,6 +54,14 @@ jobs:
             sleep 2
           done
 
+      - name: Make migrations
+        working-directory: src
+        env:
+          DJANGO_SETTINGS_MODULE: conf.test_settings
+          DATABASE_URL_TEST: postgres://test_user:test_pass@localhost:5432/test_db
+        run: |
+          python manage.py makemigrations --noinput
+
       - name: Run tests with pytest
         working-directory: src
         env:
