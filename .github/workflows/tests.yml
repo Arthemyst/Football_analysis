@@ -19,6 +19,7 @@ jobs:
       DJANGO_SETTINGS_MODULE: conf.test_settings
       DATABASE_URL: postgres://${{ secrets.TEST_DB_USER }}:${{ secrets.TEST_DB_PASSWORD }}@localhost:5432/${{ secrets.TEST_DB_NAME }}
       DB_HOST: localhost
+      DB_PORT: 5432
 
     services:
       postgres:
