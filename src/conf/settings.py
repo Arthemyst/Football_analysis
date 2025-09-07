@@ -174,6 +174,6 @@ REST_FRAMEWORK = {
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": "redis://redis:6379/0",  # "redis" to nazwa serwisu z docker-compose
+        "LOCATION": "redis://redis:6379/0",
     }
 }
