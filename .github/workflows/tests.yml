@@ -18,6 +18,7 @@ jobs:
       POSTGRES_PASSWORD: ${{ secrets.TEST_DB_PASSWORD }}
       DB_HOST: localhost
       DB_PORT: 5432
+      ALLOWED_HOSTS: localhost,127.0.0.1
 
     services:
       postgres:
