@@ -51,6 +51,7 @@ jobs:
         run: pip install -r requirements-dev.txt
 
       - name: Run migrations and tests
+        working-directory: ./src
         run: |
           python manage.py migrate --noinput
           pytest --maxfail=1 --disable-warnings
