@@ -57,21 +57,20 @@ jobs:
       - name: Run migrations
         working-directory: src
         env:
-          DJANGO_SETTINGS_MODULE: conf.settings
-          DATABASE_URL: postgres://test_user:test_pass@localhost:5432/test_db
-          REDIS_URL: redis://localhost:6379/0
-          SECRET_KEY: test-secret-key
-          ALLOWED_HOSTS: localhost,127.0.0.1,0.0.0.0
+          DJANGO_SETTINGS_MODULE: conf.test_settings
+          DATABASE_URL_TEST: postgres://test_user:test_pass@localhost:5432/test_db
+          SECRET_KEY: test_secret
+          ALLOWED_HOSTS: localhost,127.0.0.1
         run: |
           python manage.py migrate --noinput
 
       - name: Run tests
         working-directory: src
         env:
-          DJANGO_SETTINGS_MODULE: conf.settings
-          DATABASE_URL: postgres://test_user:test_pass@localhost:5432/test_db
+          DJANGO_SETTINGS_MODULE: conf.test_settings
+          DATABASE_URL_TEST: postgres://test_user:test_pass@localhost:5432/test_db
           REDIS_URL: redis://localhost:6379/0
-          SECRET_KEY: test-secret-key
-          ALLOWED_HOSTS: localhost,127.0.0.1,0.0.0.0
+          SECRET_KEY: test_secret
+          ALLOWED_HOSTS: localhost,127.0.0.1
         run: |
           pytest -v
