@@ -55,6 +55,7 @@ jobs:
 
       - name: Run tests
         env:
+          DJANGO_SETTINGS_MODULE: conf.settings
           DATABASE_URL: postgres://test_user:test_pass@localhost:5432/test_db
           REDIS_URL: redis://localhost:6379/0
         run: |
