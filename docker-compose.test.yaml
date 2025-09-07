@@ -2,9 +2,9 @@ services:
   database:
     image: postgres:14.2-alpine
     environment:
-      POSTGRES_USER: ${{ secrets.TEST_DB_USER }}
-      POSTGRES_PASSWORD: ${{ secrets.TEST_DB_PASSWORD }}
-      POSTGRES_DB: ${{ secrets.TEST_DB_NAME }}
+      POSTGRES_USER: ${TEST_DB_USER}
+      POSTGRES_PASSWORD: ${TEST_DB_PASSWORD}
+      POSTGRES_DB: ${TEST_DB_NAME}
     ports:
       - "5432:5432"
     volumes:
@@ -27,13 +27,13 @@ services:
     ports:
       - "8000:8000"
     environment:
-      SECRET_KEY: ${{ secrets.TEST_SECRET_KEY }}
-      DATABASE_NAME: ${{ secrets.TEST_DB_NAME }}
-      DATABASE_USER: ${{ secrets.TEST_DB_USER }}
-      DATABASE_PASSWORD: ${{ secrets.TEST_DB_PASSWORD }}
+      SECRET_KEY: ${TEST_SECRET_KEY}
+      DATABASE_NAME: ${TEST_DB_NAME}
+      DATABASE_USER: ${TEST_DB_USER}
+      DATABASE_PASSWORD: ${TEST_DB_PASSWORD}
       DATABASE_HOST: database
       DATABASE_PORT: 5432
-      ALLOWED_HOSTS: ${{ secrets.TEST_ALLOWED_HOST }}
+      ALLOWED_HOSTS: ${TEST_ALLOWED_HOST}
     depends_on:
       - database
       - redis
