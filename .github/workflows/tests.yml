@@ -54,17 +54,7 @@ jobs:
             sleep 2
           done
 
-      - name: Run migrations
-        working-directory: src
-        env:
-          DJANGO_SETTINGS_MODULE: conf.test_settings
-          DATABASE_URL_TEST: postgres://test_user:test_pass@localhost:5432/test_db
-          SECRET_KEY: test_secret
-          ALLOWED_HOSTS: localhost,127.0.0.1
-        run: |
-          python manage.py migrate --noinput
-
-      - name: Run tests
+      - name: Run tests with pytest
         working-directory: src
         env:
           DJANGO_SETTINGS_MODULE: conf.test_settings
@@ -73,4 +63,4 @@ jobs:
           SECRET_KEY: test_secret
           ALLOWED_HOSTS: localhost,127.0.0.1
         run: |
-          pytest -v
+          pytest -v --ds=conf.test_settings
