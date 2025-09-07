@@ -59,6 +59,7 @@ jobs:
         env:
           DJANGO_SETTINGS_MODULE: conf.test_settings
           DATABASE_URL_TEST: postgres://test_user:test_pass@localhost:5432/test_db
+          SECRET_KEY: test_secret
         run: |
           python manage.py makemigrations --noinput
 
