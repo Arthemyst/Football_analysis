@@ -9,6 +9,16 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    services:
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
       - uses: actions/checkout@v3
 
@@ -30,18 +40,19 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements-dev.txt
 
-      - name: Run migrations
+      - name: Make and apply migrations
         working-directory: src
         env:
           DJANGO_SETTINGS_MODULE: conf.test_settings
           SECRET_KEY: test_secret
-          ALLOWED_HOSTS: localhost,127.0.0.1
           POSTGRES_DB: test_db
           POSTGRES_USER: test_user
           POSTGRES_PASSWORD: test_pass
           DB_HOST: localhost
           DB_PORT: 5432
+          ALLOWED_HOSTS: localhost,127.0.0.1
         run: |
+          python manage.py makemigrations --noinput
           python manage.py migrate --noinput
 
       - name: Run tests with pytest
