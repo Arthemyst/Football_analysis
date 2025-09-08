@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:14
+        image: postgres:15
         env:
           POSTGRES_DB: test_db
           POSTGRES_USER: test_user
@@ -27,6 +27,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: Debug running containers (before waiting)
+        run: |
+          echo "=== Docker ps ==="
+          docker ps -a
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -54,23 +59,17 @@ jobs:
             count=$((count+1))
             echo "[$count/$retries] postgres:5432 - not ready yet..."
             if [ $count -ge $retries ]; then
-              echo "Postgres didn't become ready in time."
+              echo "Postgres didn't become ready in time. Dumping logs:"
+              docker ps -a
+              PG_CONTAINER=$(docker ps -q --filter "ancestor=postgres:15")
+              if [ -n "$PG_CONTAINER" ]; then
+                docker logs "$PG_CONTAINER" || true
+              fi
               exit 1
             fi
             sleep 2
           done
           echo "Postgres is ready."
-
-      - name: Show Postgres logs
-        run: |
-          echo "=== Postgres container logs ==="
-          docker ps -a --format 'table {{.ID}}\t{{.Image}}\t{{.Names}}\t{{.Status}}'
-          PG_CONTAINER=$(docker ps -q --filter "ancestor=postgres:14")
-          if [ -n "$PG_CONTAINER" ]; then
-            docker logs "$PG_CONTAINER" || true
-          else
-            echo "No Postgres container found."
-          fi
 
       - name: Make migrations
         working-directory: src
