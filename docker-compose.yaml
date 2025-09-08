@@ -7,7 +7,6 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
 
-
   redis:
     image: redis:7-alpine
     ports:
@@ -25,8 +24,11 @@ services:
       - ./src:/app
     depends_on:
       - database
+      - redis
     restart: on-failure
-    env_file: .env
+    env_file:
+      - .env
+      - .env-db
 
 volumes:
   db-data:
