@@ -1,0 +1,66 @@
+name: Run Django Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Start Postgres
+        uses: Harmon758/postgresql-action@v1
+        with:
+          postgresql version: '15'
+          postgresql db: test_db
+          postgresql user: test_user
+          postgresql password: test_pass
+
+      - name: Start Redis
+        run: |
+          docker run -d -p 6379:6379 redis:7-alpine
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      - name: Make and apply migrations
+        working-directory: src
+        env:
+          DJANGO_SETTINGS_MODULE: conf.test_settings
+          SECRET_KEY: test_secret
+          POSTGRES_DB: test_db
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_pass
+          DB_HOST: localhost
+          DB_PORT: 5432
+          ALLOWED_HOSTS: localhost,127.0.0.1
+        run: |
+          python manage.py makemigrations --noinput
+          python manage.py migrate --noinput
+
+      - name: Run tests with pytest
+        working-directory: src
+        env:
+          DJANGO_SETTINGS_MODULE: conf.test_settings
+          REDIS_URL: redis://localhost:6379/0
+          SECRET_KEY: test_secret
+          ALLOWED_HOSTS: localhost,127.0.0.1
+          POSTGRES_DB: test_db
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_pass
+          DB_HOST: localhost
+          DB_PORT: 5432
+        run: |
+          pytest -v --ds=conf.test_settings --migrations

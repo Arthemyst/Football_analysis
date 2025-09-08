@@ -92,14 +92,14 @@ To test management commands during application running:
 
 ```sh
 (env)$ docker exec -it football_analysis-web-1 /bin/bash
-(env)$ python3 -m pytest players/tests/tests_add_data.py
-(env)$ python3 -m pytest players/tests/tests_club_players_api.py
-(env)$ python3 -m pytest players/tests/tests_dashboard_stats_api.py
-(env)$ python3 -m pytest players/tests/tests_models.py
-(env)$ python3 -m pytest players/tests/tests_player_detail_by_name_api.py
-(env)$ python3 -m pytest players/tests/tests_players_list_api.py
-(env)$ python3 -m pytest players/tests/tests_prepare_data.py
-(env)$ python3 -m pytest players/tests/tests_prepare_estimation_models.py
+(env)$ python3 -m pytest players/tests/test_add_data.py
+(env)$ python3 -m pytest players/tests/test_club_players_api.py
+(env)$ python3 -m pytest players/tests/test_dashboard_stats_api.py
+(env)$ python3 -m pytest players/tests/test_models.py
+(env)$ python3 -m pytest players/tests/test_player_detail_by_name_api.py
+(env)$ python3 -m pytest players/tests/test_players_list_api.py
+(env)$ python3 -m pytest players/tests/test_prepare_data.py
+(env)$ python3 -m pytest players/tests/test_prepare_estimation_models.py
 ```
 
 Please first create superuser and migrate database:
