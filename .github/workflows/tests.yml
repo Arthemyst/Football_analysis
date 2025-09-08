@@ -60,7 +60,6 @@ jobs:
           POSTGRES_PASSWORD: test_pass
           DB_HOST: database
           DB_PORT: 5432
-
           ALLOWED_HOSTS: localhost,127.0.0.1
         run: |
           python manage.py makemigrations --noinput
@@ -68,9 +67,14 @@ jobs:
         working-directory: src
         env:
           DJANGO_SETTINGS_MODULE: conf.test_settings
-          DATABASE_URL_TEST: postgres://test_user:test_pass@localhost:5432/test_db
           REDIS_URL: redis://localhost:6379/0
           SECRET_KEY: test_secret
           ALLOWED_HOSTS: localhost,127.0.0.1
+          POSTGRES_DB: test_db
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_pass
+          DB_HOST: database
+          DB_PORT: 5432
+
         run: |
           pytest -v --ds=conf.test_settings --migrations
