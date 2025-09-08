@@ -77,11 +77,24 @@ $ source venv\Scripts\activate
 
 Create a .env file in project root directory. The file format can be understood from the example below:
 ```sh
-DEBUG=True
+DEBUG=True # or False if production
 SECRET_KEY=your-secret-key # generate your own secret key
 DATABASE_URL=psql://postgres:postgres@database:5432/postgres
 ALLOWED_HOSTS=127.0.0.1,localhost
+POSTGRES_PASSWORD=postgres_password
+POSTGRES_USER=postgres_user_name
+POSTGRES_DB=postgres_db_name
+DB_HOST=database
+DB_PORT=5432
 ```
+
+Create a .env-db file in project root directory. The file format can be understood from the example below:
+```sh
+POSTGRES_PASSWORD=postgres_password
+POSTGRES_USER=postgres_user_name
+POSTGRES_DB=postgres_db_name
+```
+
 Application runs on docker. Please run docker-compose to install dependiences and run application:
 ```sh
 $ docker-compose up -d
