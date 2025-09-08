@@ -10,15 +10,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    services:
-      redis:
-        image: redis:7-alpine
-        options: >-
-          --health-cmd="redis-cli ping"
-          --health-interval=5s
-          --health-timeout=5s
-          --health-retries=5
-
     steps:
       - uses: actions/checkout@v3
 
@@ -29,6 +20,10 @@ jobs:
           postgresql db: test_db
           postgresql user: test_user
           postgresql password: test_pass
+
+      - name: Start Redis
+        run: |
+          docker run -d -p 6379:6379 redis:7-alpine
 
       - name: Set up Python
         uses: actions/setup-python@v4
