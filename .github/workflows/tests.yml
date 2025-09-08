@@ -16,6 +16,11 @@ jobs:
           POSTGRES_DB: test_db
           POSTGRES_USER: test_user
           POSTGRES_PASSWORD: test_pass
+        options: >-
+          --health-cmd="pg_isready -U test_user -d test_db"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=10
 
       redis:
         image: redis:7-alpine
