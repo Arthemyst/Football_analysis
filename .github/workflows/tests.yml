@@ -58,6 +58,8 @@ jobs:
           POSTGRES_DB: test_db
           POSTGRES_USER: test_user
           POSTGRES_PASSWORD: test_pass
+          DB_HOST: database
+          DB_PORT: 5432
 
           ALLOWED_HOSTS: localhost,127.0.0.1
         run: |
