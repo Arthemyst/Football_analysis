@@ -9,34 +9,16 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_DB: test_db
-          POSTGRES_USER: test_user
-          POSTGRES_PASSWORD: test_pass
-        options: >-
-          --health-cmd="pg_isready -U test_user -d test_db"
-          --health-interval=5s
-          --health-timeout=5s
-          --health-retries=10
-
-      redis:
-        image: redis:7-alpine
-        options: >-
-          --health-cmd="redis-cli ping"
-          --health-interval=5s
-          --health-timeout=5s
-          --health-retries=5
-
     steps:
       - uses: actions/checkout@v3
 
-      - name: Debug running containers (before waiting)
-        run: |
-          echo "=== Docker ps ==="
-          docker ps -a
+      - name: Start Postgres
+        uses: Harmon758/postgresql-action@v1
+        with:
+          postgresql version: '15'
+          postgresql db: test_db
+          postgresql user: test_user
+          postgresql password: test_pass
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -48,35 +30,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements-dev.txt
 
-      - name: Install PostgreSQL client (pg_isready)
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y postgresql-client
-
-      - name: Wait for Postgres to be ready
-        env:
-          PGPASSWORD: test_pass
-        run: |
-          echo "Checking Postgres readiness on host 'postgres'..."
-          retries=60
-          count=0
-          until pg_isready -h postgres -p 5432 -U test_user -d test_db; do
-            count=$((count+1))
-            echo "[$count/$retries] postgres:5432 - not ready yet..."
-            if [ $count -ge $retries ]; then
-              echo "Postgres didn't become ready in time. Dumping logs:"
-              docker ps -a
-              PG_CONTAINER=$(docker ps -q --filter "ancestor=postgres:15")
-              if [ -n "$PG_CONTAINER" ]; then
-                docker logs "$PG_CONTAINER" || true
-              fi
-              exit 1
-            fi
-            sleep 2
-          done
-          echo "Postgres is ready."
-
-      - name: Make migrations
+      - name: Run migrations
         working-directory: src
         env:
           DJANGO_SETTINGS_MODULE: conf.test_settings
@@ -84,23 +38,22 @@ jobs:
           POSTGRES_DB: test_db
           POSTGRES_USER: test_user
           POSTGRES_PASSWORD: test_pass
-          DB_HOST: postgres
+          DB_HOST: localhost
           DB_PORT: 5432
-          ALLOWED_HOSTS: localhost,127.0.0.1
         run: |
-          python manage.py makemigrations --noinput
+          python manage.py migrate --noinput
 
       - name: Run tests with pytest
         working-directory: src
         env:
           DJANGO_SETTINGS_MODULE: conf.test_settings
-          REDIS_URL: redis://redis:6379/0
+          REDIS_URL: redis://localhost:6379/0
           SECRET_KEY: test_secret
           ALLOWED_HOSTS: localhost,127.0.0.1
           POSTGRES_DB: test_db
           POSTGRES_USER: test_user
           POSTGRES_PASSWORD: test_pass
-          DB_HOST: postgres
+          DB_HOST: localhost
           DB_PORT: 5432
         run: |
           pytest -v --ds=conf.test_settings --migrations
