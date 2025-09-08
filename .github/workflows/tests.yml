@@ -16,11 +16,9 @@ jobs:
           POSTGRES_DB: test_db
           POSTGRES_USER: test_user
           POSTGRES_PASSWORD: test_pass
-        # usunąłem ports: - 5432:5432, żeby uniknąć konfliktów z hostem runnera
 
       redis:
         image: redis:7-alpine
-        # usunąłem ports tutaj też — dostęp po hostname 'redis' będzie działać
         options: >-
           --health-cmd="redis-cli ping"
           --health-interval=5s
@@ -45,8 +43,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y postgresql-client
 
-      - name: Wait for Postgres to be ready (with logs on failure)
-        # PGPASSWORD potrzebne do sprawdzenia stanu serwera gdy jest auth
+      - name: Wait for Postgres to be ready
         env:
           PGPASSWORD: test_pass
         run: |
@@ -57,24 +54,23 @@ jobs:
             count=$((count+1))
             echo "[$count/$retries] postgres:5432 - not ready yet..."
             if [ $count -ge $retries ]; then
-              echo "Postgres didn't become ready in time. Dumping containers and logs for debugging:"
-              docker ps -a --format 'table {{.ID}}\t{{.Image}}\t{{.Names}}\t{{.Status}}'
-              # spróbuj znaleźć kontener postgresa po obrazie
-              PG_CONTAINER=$(docker ps -q --filter ancestor=postgres:14 || true)
-              if [ -z "$PG_CONTAINER" ]; then
-                PG_CONTAINER=$(docker ps -q --filter ancestor=postgres:14.2-alpine || true)
-              fi
-              if [ -n "$PG_CONTAINER" ]; then
-                echo "=== Postgres container logs ==="
-                docker logs "$PG_CONTAINER" || true
-              else
-                echo "No Postgres container found (ancestor filter)."
-              fi
+              echo "Postgres didn't become ready in time."
               exit 1
             fi
             sleep 2
           done
           echo "Postgres is ready."
+
+      - name: Show Postgres logs
+        run: |
+          echo "=== Postgres container logs ==="
+          docker ps -a --format 'table {{.ID}}\t{{.Image}}\t{{.Names}}\t{{.Status}}'
+          PG_CONTAINER=$(docker ps -q --filter "ancestor=postgres:14")
+          if [ -n "$PG_CONTAINER" ]; then
+            docker logs "$PG_CONTAINER" || true
+          else
+            echo "No Postgres container found."
+          fi
 
       - name: Make migrations
         working-directory: src
