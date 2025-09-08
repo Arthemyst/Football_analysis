@@ -35,6 +35,7 @@ jobs:
         env:
           DJANGO_SETTINGS_MODULE: conf.test_settings
           SECRET_KEY: test_secret
+          ALLOWED_HOSTS: localhost,127.0.0.1
           POSTGRES_DB: test_db
           POSTGRES_USER: test_user
           POSTGRES_PASSWORD: test_pass
